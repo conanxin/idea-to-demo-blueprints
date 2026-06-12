@@ -12,7 +12,7 @@
       <a href="index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
       <nav class="nav-links">
         <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
-        <a href="../docs/writing-guide.md">写作指南</a>
+        <a href="writing-guide.md">写作指南</a>
       </nav>
     </div>
   </header>
@@ -59,25 +59,31 @@
     <div class="container">
       <h2 class="section-title">方案库 <small>Blueprints</small></h2>
       <div class="blueprint-grid" id="blueprint-grid">
-        <!-- Blueprint cards rendered by JS or inline below -->
-        <a href="blueprints/project-memory-meeting-assistant.html" class="blueprint-card">
-          <div class="card-header">
-            <div class="card-title">项目记忆型会议助手</div>
-            <div class="card-summary">基于项目知识库的 AI 会后推进系统。让 AI 不是简单记录"会上说了什么"，而是回答"这场会对项目意味着什么"。</div>
-          </div>
-          <div class="card-meta">
-            <span class="meta-tag">AI Workflow</span>
-            <span class="meta-tag difficulty">中等</span>
-            <span class="meta-tag time">1-2 天</span>
-            <span class="meta-tag">项目负责人</span>
-            <span class="meta-tag">研发团队</span>
-          </div>
-        </a>
+        <!-- Cards rendered by JS from data/blueprints.json -->
       </div>
     </div>
   </section>
 
   <section class="section">
+    <div class="container">
+      <h2 class="section-title">新增一个方案</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
+        有一个想法？按以下步骤把它变成 Blueprint：
+      </p>
+      <div class="article">
+        <ol>
+          <li>复制 <code>docs/blueprint-template.md</code> 作为起点</li>
+          <li>填写所有必填章节，保留原始想法</li>
+          <li>在 <code>data/blueprints.json</code> 中补充元数据</li>
+          <li>生成 HTML 页面放入 <code>public/blueprints/</code> 和 <code>docs/blueprints/</code></li>
+          <li>本地预览，检查链接和样式</li>
+          <li>提交并 push</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-primary);">
     <div class="container">
       <h2 class="section-title">什么是 Blueprint</h2>
       <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">

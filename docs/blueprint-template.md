@@ -8,11 +8,12 @@
 
 - **英文名：** 
 - **类型：** AI Workflow / 工具 / 平台 / 集成
-- **难度：** 简单 / 中等 / 困难
+- **难度：** 简单 / 中等 / 中高 / 困难
 - **Demo 周期：** X 天 / 周
 - **适合对象：** 
 - **标签：** 
 - **状态：** 草案 / 完成
+- **创建阶段：** IDB-X
 
 ---
 
@@ -82,6 +83,10 @@
 
 用最少的时间和资源，验证核心假设。
 
+### 第一版策略（可选）
+
+如果完整方案需要较长时间，描述如何用一个简化版本先验证。
+
 ### 输入
 
 1. 输入 1
@@ -113,12 +118,10 @@
 
 ### 架构图
 
-用文字描述架构，或插入简易 Mermaid 图：
+用文字描述架构，或插入简易 ASCII 图：
 
-```mermaid
-graph LR
-    A[输入] --> B[处理]
-    B --> C[输出]
+```
+[输入] --> [处理] --> [输出]
 ```
 
 ---
@@ -240,6 +243,24 @@ graph LR
 
 ---
 
+## 人工确认点
+
+列出方案中必须由人工确认的关键决策点：
+
+- [ ] 确认点 1：说明
+- [ ] 确认点 2：说明
+
+---
+
+## 项目沉淀方式
+
+说明这个方案完成后，哪些内容可以沉淀为项目资产：
+
+- 沉淀物 1：说明
+- 沉淀物 2：说明
+
+---
+
 ## 参考资源
 
 - 链接 1
@@ -248,4 +269,4 @@ graph LR
 
 ---
 
-*Created following the [Idea-to-Demo Blueprints](https://github.com/conanxin/idea-to-demo-blueprints) format.*
+*Created following the [Idea-to-Demo Blueprints](https://github.com/conanxin/idea-to-demo-blueprints) format. Phase: IDB-X.*

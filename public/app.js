@@ -1,8 +1,41 @@
 // Idea-to-Demo Blueprints - App Logic
 // Minimal JS, no framework needed
+// Supports data-driven rendering from data/blueprints.json with static fallback
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Highlight current TOC item on scroll
+  // --- 1. Render blueprint cards from JSON (data-driven) ---
+  const grid = document.getElementById('blueprint-grid');
+  if (grid) {
+    fetch('data/blueprints.json')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.blueprints || !data.blueprints.length) return;
+        grid.innerHTML = '';
+        data.blueprints.forEach(bp => {
+          const card = document.createElement('a');
+          card.href = bp.page_url || `blueprints/${bp.slug}.html`;
+          card.className = 'blueprint-card';
+          card.innerHTML = `
+            <div class="card-header">
+              <div class="card-title">${bp.title}</div>
+              <div class="card-summary">${bp.summary}</div>
+            </div>
+            <div class="card-meta">
+              <span class="meta-tag">${bp.category}</span>
+              <span class="meta-tag difficulty">${bp.difficulty}</span>
+              <span class="meta-tag time">${bp.demo_time}</span>
+              ${(bp.audience || []).slice(0, 3).map(a => `<span class="meta-tag">${a}</span>`).join('')}
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      })
+      .catch(() => {
+        // Fallback: keep static cards already in HTML
+      });
+  }
+
+  // --- 2. Highlight current TOC item on scroll ---
   const tocLinks = document.querySelectorAll('.toc a');
   const headings = document.querySelectorAll('.article h2[id]');
 
@@ -21,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     headings.forEach(h => observer.observe(h));
   }
 
-  // Copy code blocks
+  // --- 3. Copy code blocks ---
   document.querySelectorAll('.article pre').forEach(pre => {
     const btn = document.createElement('button');
     btn.textContent = '复制';
@@ -36,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pre.appendChild(btn);
   });
 
-  // Smooth scroll for anchor links
+  // --- 4. Smooth scroll for anchor links ---
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
