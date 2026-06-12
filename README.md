@@ -98,6 +98,17 @@ demos/<slug>/
 
 ---
 
+## Screenshots
+
+| Catalog | Project Memory Demo |
+|---|---|
+| ![Homepage](docs/media/homepage.png) | ![Project Memory Meeting Assistant Demo](docs/media/demo-project-memory-meeting-assistant.png) |
+| Customer Meeting Demo | Multi-Agent Dashboard Demo |
+|---|---|
+| ![Customer Meeting Autonomous Build Demo](docs/media/demo-customer-meeting-autonomous-build.png) | ![Multi-Agent Project Dashboard Demo](docs/media/demo-multi-agent-project-dashboard.png) |
+
+---
+
 ## How to read a Blueprint
 
 每个 Blueprint 页面包含完整章节：

@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.1.1-alpha
+
+### Added
+- Added screenshots for the homepage and 3 demo-ready Blueprints
+- Added Showcase section on the public homepage
+- Updated README with screenshots
+- Updated media documentation
+
+### Notes
+- This release focuses on visual polish and public showcase readiness.
+
 ## v0.1.0-alpha
 
 ### Added
