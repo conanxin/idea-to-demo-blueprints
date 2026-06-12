@@ -1,7 +1,7 @@
 # Idea-to-Demo Blueprints
 
 > **中文名：** 想法到 Demo 方案库  
-> **状态：** v0.1.0-alpha  
+> **状态：** v0.1.1-alpha  
 > **类型：** 可复现 Demo 蓝图库  
 > **License:** MIT
 
@@ -213,6 +213,18 @@ idea-to-demo-blueprints/
 - **本地预览：** `cd public && python3 -m http.server 8080`
 
 每次 push 后 Pages 需要 1-2 分钟重新构建。
+
+---
+
+## Catalog maintenance check
+
+Run:
+
+```bash
+bash scripts/check-catalog.sh
+```
+
+This checks blueprint metadata sync, Demo Pack completeness, screenshots, key pages, release notes, and obvious secret leaks.
 
 ---
 
