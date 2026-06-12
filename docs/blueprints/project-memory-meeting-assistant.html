@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目记忆型会议助手 · Idea-to-Demo Blueprints</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-hero">
+      <div class="container">
+        <a href="../index.html" class="back-link">← 返回方案库</a>
+        <h1>项目记忆型会议助手</h1>
+        <div class="meta">
+          <span class="accent">AI Workflow</span>
+          <span>难度：中等</span>
+          <span>Demo 周期：1-2 天</span>
+          <span>适合：项目负责人 / 研发团队</span>
+        </div>
+        <p class="intro">基于项目知识库的 AI 会后推进系统。让 AI 不是简单记录"会上说了什么"，而是回答"这场会对项目意味着什么"，并输出可直接执行的会议纪要、决策记录和下一步行动。</p>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container">
+        <nav class="toc">
+          <div class="toc-title">目录</div>
+          <ul>
+            <li><a href="#original-idea">原始想法</a></li>
+            <li><a href="#background">背景与问题</a></li>
+            <li><a href="#why-matters">为什么重要</a></li>
+            <li><a href="#users">目标用户</a></li>
+            <li><a href="#overview">方案概述</a></li>
+            <li><a href="#mvp">Demo MVP</a></li>
+            <li><a href="#architecture">技术架构</a></li>
+            <li><a href="#workflow">数据流</a></li>
+            <li><a href="#system">系统设计</a></li>
+            <li><a href="#steps">实施步骤</a></li>
+            <li><a href="#acceptance">验收标准</a></li>
+            <li><a href="#risks">风险与限制</a></li>
+            <li><a href="#extensions">扩展方向</a></li>
+            <li><a href="#prompt">Prompt 模板</a></li>
+          </ul>
+        </nav>
+
+        <article class="article">
+          <h2 id="original-idea">原始想法</h2>
+          <blockquote>
+            <p>我把本地一个中型项目的知识库搭建好了。把 Hermes Agent 接入到知识库里边。今天上午在公司开了一上午的会，用飞书妙记。开完会以后，把飞书妙记转成文本，扔给 Hermes Agent。让它基于我的项目知识库生成会议纪要。出来的会议纪要把我震惊了，特别牛逼。简直就是项目里边的一个全能项目助手，它记的会议纪要比我们自己还懂自己。我坚信，这就是以后 AI workflow 的方式。我的一个目标就是把这套牛逼的方式给铺开到我们整体的团队乃至公司。狠狠的震惊一下他们。</p>
+          </blockquote>
+
+          <h2 id="background">背景与问题</h2>
+          <h3>当前场景</h3>
+          <p>在项目管理中，会议是最常见的信息同步和决策场景。但传统的会议纪要存在以下问题：</p>
+          <ul>
+            <li>记录的是"会上说了什么"，而不是"这对项目意味着什么"</li>
+            <li>缺少项目上下文，导致决策记录孤立</li>
+            <li>行动项与项目文档、代码状态脱节</li>
+            <li>重复开会，因为之前的决策没有沉淀到知识库</li>
+          </ul>
+
+          <h3>现有痛点</h3>
+          <ul>
+            <li><strong>痛点 1：信息孤岛</strong> — 会议记录、项目文档、代码仓库、Bug 追踪各自为政，没有人把它们连接起来</li>
+            <li><strong>痛点 2：上下文丢失</strong> — 新成员加入项目时，不知道之前的决策为什么是这样的</li>
+            <li><strong>痛点 3：重复讨论</strong> — 同样的议题反复讨论，因为之前的结论没有系统性地沉淀和关联</li>
+            <li><strong>痛点 4：行动项失控</strong> — 会议中的行动项散落在聊天记录、邮件、文档中，无法追踪完成情况</li>
+          </ul>
+
+          <h3>为什么需要解决</h3>
+          <p>一个中型项目的知识库（文档、代码、历史记录）通常包含数百甚至数千条信息。人类不可能记住所有内容，但 AI 可以。如果 AI 能基于项目知识库理解会议内容，它可以：</p>
+          <ul>
+            <li>自动关联相关文档和历史决策</li>
+            <li>指出与现有结论的冲突</li>
+            <li>建议遗漏的参与者或需要同步的模块</li>
+            <li>预测对项目时间表的影响</li>
+          </ul>
+
+          <h2 id="why-matters">为什么这个想法重要</h2>
+          <p>这个想法不是"做一个更好的会议纪要工具"，而是<strong>重新定义会议在项目中的角色</strong>。</p>
+          <p><strong>传统会议：</strong>信息同步 → 人工记录 → 遗忘</p>
+          <p><strong>项目记忆型会议：</strong>信息同步 → AI 理解 → 自动关联知识库 → 生成决策记录 → 回写知识库 → 增强项目记忆</p>
+          <p>每一次会议都在增强项目的"记忆"，而不是增加信息噪音。</p>
+
+          <h2 id="users">目标用户与使用场景</h2>
+          <h3>目标用户</h3>
+          <table>
+            <thead>
+              <tr><th>用户角色</th><th>使用场景</th><th>价值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>项目负责人</td><td>每周项目例会、里程碑评审</td><td>自动生成项目级洞察，减少手动整理时间</td></tr>
+              <tr><td>研发团队 Lead</td><td>技术方案评审、代码评审会</td><td>自动关联技术文档和历史决策</td></tr>
+              <tr><td>产品经理</td><td>需求评审、用户反馈讨论</td><td>自动关联需求文档和用户反馈记录</td></tr>
+              <tr><td>新成员</td><td>加入项目后的第一次会议</td><td>快速理解项目上下文，不需要反复询问</td></tr>
+            </tbody>
+          </table>
+
+          <h3>使用场景</h3>
+          <ol>
+            <li><strong>项目例会</strong> — 每周团队同步，AI 基于项目知识库生成包含项目状态变化、风险预警的会议纪要</li>
+            <li><strong>技术评审</strong> — 评审新技术方案时，AI 自动关联现有架构文档和之前的技术决策</li>
+            <li><strong>客户会议</strong> — 与客户讨论需求变更时，AI 自动关联原始需求文档和已承诺的交付范围</li>
+          </ol>
+
+          <h2 id="overview">方案概述</h2>
+          <p>项目记忆型会议助手是一个 AI Workflow，连接三个核心组件：</p>
+          <ol>
+            <li><strong>项目知识库</strong> — 包含项目文档、代码、历史记录、决策日志</li>
+            <li><strong>会议转写</strong> — 通过飞书妙记等工具将会议音频转为文本</li>
+            <li><strong>AI 项目助手</strong> — 基于项目知识库理解会议内容，生成项目级会议纪要</li>
+          </ol>
+          <p><strong>核心差异：</strong>普通会议纪要回答"这场会说了什么"，项目记忆型会议助手回答"这场会对项目意味着什么"。</p>
+          <p>它不只是记录，而是<strong>理解、关联、推理、建议</strong>。</p>
+
+          <h2 id="mvp">Demo 最小可行版本</h2>
+          <h3>目标</h3>
+          <p>用 1-2 天验证核心假设：AI 基于项目知识库生成的会议纪要是否比人工整理的更有价值。</p>
+
+          <h3>输入</h3>
+          <ol>
+            <li><strong>项目知识库</strong> — 一个包含项目文档、代码 README、阶段报告的文件夹（或向量数据库）</li>
+            <li><strong>会议转写文本</strong> — 飞书妙记导出的会议文本（或任何会议转写工具）</li>
+            <li><strong>固定 Prompt 模板</strong> — 定义 AI 的理解框架和输出格式</li>
+          </ol>
+
+          <h3>输出</h3>
+          <ol>
+            <li><strong>项目级会议纪要</strong> — 包含会议核心摘要、项目背景关联、决策记录</li>
+            <li><strong>决策记录</strong> — 明确列出本次会议做出的决策</li>
+            <li><strong>行动项</strong> — 具体的下一步行动，含负责人、截止时间、关联文档</li>
+            <li><strong>风险与阻塞</strong> — 本次会议暴露的新风险或阻塞点</li>
+            <li><strong>对现有文档的影响</strong> — 哪些现有文档需要更新或补充</li>
+            <li><strong>项目状态变化</strong> — 本次会议对项目整体状态的影响</li>
+            <li><strong>下一步建议</strong> — 给项目负责人的具体建议</li>
+          </ol>
+
+          <h3>验证标准</h3>
+          <ul class="checklist">
+            <li>AI 输出的会议纪要包含至少 3 个基于项目知识库的关联（如"这与文档 X 中的结论一致/冲突"）</li>
+            <li>行动项明确到可以执行（含"谁做什么"）</li>
+            <li>决策记录可以被后续会议引用</li>
+            <li>输出适合直接发给团队成员阅读，不需要二次整理</li>
+          </ul>
+
+          <h2 id="architecture">技术架构</h2>
+          <h3>最小技术栈</h3>
+          <table>
+            <thead>
+              <tr><th>组件</th><th>技术</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>项目知识库</td><td>本地 Markdown + 向量数据库（Chroma/Qdrant）</td><td>存储项目文档和代码的向量表示</td></tr>
+              <tr><td>会议转写</td><td>飞书妙记 / 讯飞听见 / 通义听悟</td><td>将音频转为文本</td></tr>
+              <tr><td>AI 项目助手</td><td>OpenAI GPT-4 / Claude / 本地 LLM</td><td>基于项目知识库理解会议内容</td></tr>
+              <tr><td>输出格式</td><td>Markdown</td><td>生成结构化的会议纪要</td></tr>
+              <tr><td>可选集成层</td><td>Python 脚本 / n8n / Make</td><td>自动化流程</td></tr>
+            </tbody>
+          </table>
+
+          <h3>架构图</h3>
+          <div class="workflow-box">
+┌─────────────────────────────────────────────────────────┐
+│                      项目知识库                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
+│  │ 项目文档  │  │ 代码仓库  │  │ 阶段报告  │  │ 历史决策  │ │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘ │
+└─────────────────────────┬───────────────────────────────┘
+                          │ 向量化存储
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│                   AI 项目助手（Hermes Agent）              │
+│                                                         │
+│  输入：会议转写文本 + 项目知识库（向量检索 Top-K）        │
+│  处理：理解会议内容 → 关联项目知识 → 推理项目影响          │
+│  输出：项目级会议纪要（Markdown）                          │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│                      输出                                │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
+│  │ 会议纪要  │  │ 决策记录  │  │ 行动项   │  │ 风险预警  │ │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘ │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
+│  │ 文档影响  │  │ 状态变化  │  │ 下一步建议 │              │
+│  └──────────┘  └──────────┘  └──────────┘              │
+└─────────────────────────────────────────────────────────┘</div>
+
+          <h2 id="workflow">数据流 / 工作流</h2>
+          <h3>核心流程</h3>
+          <div class="workflow-box">
+项目文档/代码/阶段报告 → 项目知识库 → 飞书妙记会议转写 → Hermes Agent → 项目级会议纪要 → 人工确认 → 回写知识库 → 下一轮项目记忆增强</div>
+
+          <h3>每个步骤说明</h3>
+          <ol>
+            <li><strong>项目知识库构建</strong> — 收集项目文档、代码 README、阶段报告、历史决策。将文本向量化，存储到向量数据库。建立文档间的关联关系（可选）。</li>
+            <li><strong>会议转写</strong> — 使用飞书妙记录制会议（或导入录音）。导出文本格式的会议转写。清理格式，保留说话人标识（可选）。</li>
+            <li><strong>AI 生成会议纪要</strong> — 将会议转写文本输入 AI 项目助手。AI 从项目知识库检索相关文档（Top-K）。AI 基于会议内容 + 项目知识生成结构化输出。</li>
+            <li><strong>人工确认</strong> — 负责人审查 AI 生成的会议纪要。修正事实错误。确认行动项和负责人。标记"待确认"项。</li>
+            <li><strong>回写知识库</strong> — 将确认的会议纪要存入知识库。更新相关文档（如需要）。将决策记录标记为"已确认"。</li>
+            <li><strong>记忆增强</strong> — 下一轮会议时，AI 可以引用之前的决策记录。项目知识库持续增长，AI 理解越来越深。</li>
+          </ol>
+
+          <h2 id="system">页面或系统设计</h2>
+          <h3>页面结构</h3>
+          <table>
+            <thead>
+              <tr><th>页面</th><th>功能</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>首页</td><td>方案库入口</td><td>展示所有方案卡片</td></tr>
+              <tr><td>方案详情页</td><td>完整方案阅读</td><td>包含所有章节，可打印</td></tr>
+              <tr><td>演示页（可选）</td><td>交互式 Demo</td><td>上传会议转写，查看 AI 输出</td></tr>
+            </tbody>
+          </table>
+
+          <h3>关键界面元素（假设做一个简单 Web UI）</h3>
+          <ul>
+            <li><strong>输入区</strong>：上传会议转写文本（文本框或文件上传）</li>
+            <li><strong>知识库状态</strong>：显示当前知识库包含的文档数量</li>
+            <li><strong>生成按钮</strong>：触发 AI 生成会议纪要</li>
+            <li><strong>输出区</strong>：结构化展示 10 个输出项</li>
+            <li><strong>复制按钮</strong>：一键复制完整 Markdown 输出</li>
+            <li><strong>导出按钮</strong>：下载为 .md 文件</li>
+          </ul>
+
+          <h2 id="steps">实施步骤</h2>
+          <h3>步骤 1：准备工作（30 分钟）</h3>
+          <ul class="checklist">
+            <li>准备一个本地文件夹，包含项目文档（Markdown 格式）</li>
+            <li>安装 Python 环境</li>
+            <li>安装依赖：<code>pip install openai chromadb</code>（或使用的向量数据库）</li>
+            <li>准备 OpenAI API Key（或本地 LLM 接入方式）</li>
+          </ul>
+
+          <h3>步骤 2：构建项目知识库（1-2 小时）</h3>
+          <ul class="checklist">
+            <li>将项目文档向量化</li>
+            <li>存储到向量数据库</li>
+            <li>验证检索效果：输入一个项目关键词，检查 Top-K 结果是否相关</li>
+          </ul>
+
+          <h3>步骤 3：准备会议转写（30 分钟）</h3>
+          <ul class="checklist">
+            <li>使用飞书妙记录制一次真实会议</li>
+            <li>导出文本格式的转写</li>
+            <li>清理格式，确保文本清晰可读</li>
+          </ul>
+
+          <h3>步骤 4：生成会议纪要（30 分钟）</h3>
+          <ul class="checklist">
+            <li>使用下方 Prompt 模板，将会议转写 + 项目知识库输入 AI</li>
+            <li>检查输出是否包含项目关联</li>
+            <li>对比人工整理的会议纪要，评估质量差异</li>
+          </ul>
+
+          <h3>步骤 5：验证与优化（1 小时）</h3>
+          <ul class="checklist">
+            <li>将 AI 输出给团队成员阅读，收集反馈</li>
+            <li>调整 Prompt 模板，优化输出质量</li>
+            <li>验证行动项是否可以执行</li>
+            <li>验证决策记录是否准确</li>
+          </ul>
+
+          <h2 id="acceptance">验收标准</h2>
+          <h3>功能验收</h3>
+          <ul class="checklist">
+            <li>AI 输出的会议纪要包含至少 3 个基于项目知识库的关联</li>
+            <li>行动项明确到可以执行（含"谁做什么"）</li>
+            <li>决策记录可以被后续会议引用</li>
+            <li>输出适合直接发给团队成员阅读，不需要二次整理</li>
+          </ul>
+
+          <h3>质量验收</h3>
+          <ul class="checklist">
+            <li>区分"会议明确提到的内容"和"基于知识库推断的内容"</li>
+            <li>没有编造负责人、时间、数据</li>
+            <li>不确定的地方标记为"待确认"</li>
+            <li>语言适合团队成员阅读，不过度技术化</li>
+          </ul>
+
+          <h3>性能验收（可选）</h3>
+          <ul class="checklist">
+            <li>从会议结束到生成会议纪要，不超过 10 分钟</li>
+            <li>知识库检索时间在 5 秒以内</li>
+          </ul>
+
+          <h2 id="risks">风险与限制</h2>
+          <table>
+            <thead>
+              <tr><th>风险</th><th>影响</th><th>应对</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>AI 幻觉</td><td>高</td><td>要求区分"会议内容"和"知识库推断"，不确定标记"待确认"</td></tr>
+              <tr><td>知识库不完整</td><td>中</td><td>初期接受不完美，逐步补充文档</td></tr>
+              <tr><td>项目隐私泄露</td><td>高</td><td>使用本地 LLM 或确保 API 调用不泄露敏感信息</td></tr>
+              <tr><td>团队成员不接受 AI 输出</td><td>中</td><td>强调"辅助"而非"替代"，人工确认环节不可跳过</td></tr>
+              <tr><td>知识库维护成本</td><td>中</td><td>建立文档更新流程，确保知识库与项目同步</td></tr>
+            </tbody>
+          </table>
+
+          <h3>已知限制</h3>
+          <ul>
+            <li>当前方案依赖外部 AI API，可能产生费用</li>
+            <li>向量数据库的检索质量取决于文档质量和分块策略</li>
+            <li>需要人工确认环节，不能完全自动化</li>
+            <li>适合中型及以上项目，小项目可能知识库内容不足</li>
+          </ul>
+
+          <h2 id="extensions">后续扩展方向</h2>
+          <ol>
+            <li><strong>多模态输入</strong> — 支持会议视频、PPT、白板内容的理解</li>
+            <li><strong>实时会议助手</strong> — 会议进行中实时提供相关文档和决策提醒</li>
+            <li><strong>行动项追踪</strong> — 自动追踪行动项完成情况，在下次会议前提醒</li>
+            <li><strong>跨项目关联</strong> — 多个项目的知识库关联，识别跨项目依赖和影响</li>
+            <li><strong>智能会议摘要</strong> — 根据参会人角色生成定制化摘要（技术视角、管理视角、客户视角）</li>
+            <li><strong>历史趋势分析</strong> — 分析多次会议的趋势，预测项目风险</li>
+            <li><strong>集成项目管理工具</strong> — 自动在 Jira/Linear/Notion 中创建任务</li>
+          </ol>
+
+          <h2 id="prompt">可直接复制给 Agent 的 Prompt 模板</h2>
+          <p>以下 Prompt 可以直接复制给 AI Agent 使用：</p>
+
+<pre><code>你是当前项目的 AI 项目助手。
+
+请基于以下会议转写文本和项目知识库，生成项目级会议纪要。
+
+## 会议转写文本
+
+[在此粘贴会议转写文本]
+
+## 项目知识库（已检索相关文档）
+
+[在此粘贴向量数据库检索到的 Top-K 相关文档]
+
+## 请输出以下内容
+
+1. **会议核心摘要** — 用 3-5 句话概括会议的核心议题和结论
+
+2. **本次会议涉及的项目背景** — 基于项目知识库，列出与本次会议相关的项目背景信息（如相关模块、历史决策、当前状态）
+
+3. **明确决策** — 列出本次会议做出的所有明确决策。格式：
+   - 决策内容
+   - 决策依据（引用知识库中的相关文档或会议中的讨论）
+   - 影响范围
+
+4. **待确认问题** — 列出会议中提出但尚未明确结论的问题。格式：
+   - 问题描述
+   - 需要谁确认
+   - 建议的确认方式
+
+5. **行动项** — 列出所有需要执行的行动项。格式：
+   - 行动内容
+   - 建议负责人（如果不确定，标记为"待确认"）
+   - 建议截止时间（如果会议中提到）
+   - 关联文档/代码/任务
+
+6. **对现有项目文档的影响** — 基于知识库，分析本次会议是否会影响现有文档。格式：
+   - 需要更新的文档
+   - 需要新增的文档
+   - 需要废弃或归档的文档
+
+7. **对代码、产品、测试或交付的影响** — 分析本次会议对技术实现的影响。格式：
+   - 代码层面：需要修改/新增的模块
+   - 产品层面：需求变更、功能调整
+   - 测试层面：测试范围变化
+   - 交付层面：时间表、里程碑影响
+
+8. **风险与阻塞** — 列出本次会议暴露的新风险或阻塞点。格式：
+   - 风险/阻塞描述
+   - 影响程度（高/中/低）
+   - 建议应对措施
+
+9. **项目状态变化** — 基于知识库，分析本次会议对项目整体状态的影响。格式：
+   - 状态变化描述（如：从"按计划"变为"有风险"）
+   - 变化原因
+   - 需要关注的关键指标
+
+10. **给项目负责人的下一步建议** — 基于以上分析，给出 3-5 条具体建议。格式：
+    - 建议内容
+    - 优先级（高/中/低）
+    - 预期效果
+
+## 要求
+
+- **区分来源**：明确区分"会议明确提到的内容"和"基于知识库推断的内容"，后者用 [推断] 标记
+- **不要编造**：不要编造负责人、时间、数据。如果不确定，标记为"待确认"
+- **标记不确定**：所有不确定的信息用 [待确认] 标记
+- **适合阅读**：输出适合直接发给团队成员阅读，语言简洁，结构清晰
+- **引用知识库**：在适当位置引用知识库中的相关文档，增强可信度
+
+## 输出格式
+
+请用 Markdown 格式输出，包含标题、列表、表格等结构化元素。确保可以直接复制到飞书文档或 Notion 中使用。</code></pre>
+
+          <h2>参考资源</h2>
+          <ul>
+            <li><a href="https://www.feishu.cn/product/minutes" target="_blank">飞书妙记</a> — 会议转写工具</li>
+            <li><a href="https://www.trychroma.com/" target="_blank">Chroma</a> — 开源向量数据库</li>
+            <li><a href="https://qdrant.tech/" target="_blank">Qdrant</a> — 开源向量数据库</li>
+            <li><a href="https://platform.openai.com/" target="_blank">OpenAI API</a> — AI 模型接入</li>
+            <li><a href="https://github.com/openclaw/openclaw" target="_blank">OpenClaw</a> — 本地 AI Agent 框架</li>
+          </ul>
+
+          <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem;">
+            Created following the <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">Idea-to-Demo Blueprints</a> format.
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        开源方案库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+
+  <script src="../app.js"></script>
+</body>
+</html>

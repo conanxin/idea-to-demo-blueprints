@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idea-to-Demo Blueprints · 想法到 Demo 方案库</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+        <a href="../docs/writing-guide.md">写作指南</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>想法到 Demo 方案库</h1>
+      <p class="subtitle">Idea-to-Demo Blueprints</p>
+      <p class="tagline">把一个想法变成别人可以照着做出 Demo 的方案</p>
+      <div class="hero-badges">
+        <span class="badge accent">📋 开源方案库</span>
+        <span class="badge">🚀 快速验证</span>
+        <span class="badge">📝 可执行蓝图</span>
+        <span class="badge">🤖 AI Workflow</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">项目解决的问题</h2>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <h4>💡 想法停留在脑子里</h4>
+          <p>每个人都有"如果这样做会怎么样"的想法，但大多数停留在聊天记录或脑海中，没有结构化梳理。</p>
+        </div>
+        <div class="problem-card">
+          <h4>📄 缺少上下文</h4>
+          <p>想法缺少完整的背景、问题定义和实施路径，导致其他人无法理解和复用。</p>
+        </div>
+        <div class="problem-card">
+          <h4>🔧 没有可执行方案</h4>
+          <p>大多数想法文档只有"做什么"，没有"怎么做"和"验证什么"，导致无法落地。</p>
+        </div>
+        <div class="problem-card">
+          <h4>🔄 重复造轮子</h4>
+          <p>同样的思考在不同团队、不同时间被重复，缺少共享的场景和已验证的方案。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-primary);">
+    <div class="container">
+      <h2 class="section-title">方案库 <small>Blueprints</small></h2>
+      <div class="blueprint-grid" id="blueprint-grid">
+        <!-- Blueprint cards rendered by JS or inline below -->
+        <a href="blueprints/project-memory-meeting-assistant.html" class="blueprint-card">
+          <div class="card-header">
+            <div class="card-title">项目记忆型会议助手</div>
+            <div class="card-summary">基于项目知识库的 AI 会后推进系统。让 AI 不是简单记录"会上说了什么"，而是回答"这场会对项目意味着什么"。</div>
+          </div>
+          <div class="card-meta">
+            <span class="meta-tag">AI Workflow</span>
+            <span class="meta-tag difficulty">中等</span>
+            <span class="meta-tag time">1-2 天</span>
+            <span class="meta-tag">项目负责人</span>
+            <span class="meta-tag">研发团队</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">什么是 Blueprint</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
+        一个 Blueprint 包含完整的可执行要素：原始想法、背景与问题、方案概述、技术架构、实施步骤、验收标准、Prompt 模板和后续扩展方向。
+      </p>
+      <div class="article">
+        <table>
+          <thead>
+            <tr><th>要素</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>原始想法</td><td>记录这个想法最初是如何产生的，保留原始文本</td></tr>
+            <tr><td>背景与问题</td><td>这个想法要解决什么问题？当前的真实痛点是什么？</td></tr>
+            <tr><td>方案概述</td><td>核心思路，用一两句话讲清楚</td></tr>
+            <tr><td>技术架构</td><td>最小技术栈，描述组件和它们的关系</td></tr>
+            <tr><td>实施步骤</td><td>具体到每一步可以执行的操作</td></tr>
+            <tr><td>验收标准</td><td>怎么判断这个 Demo 做成功了？</td></tr>
+            <tr><td>Prompt 模板</td><td>可以直接复制给 AI Agent 使用的提示词</td></tr>
+            <tr><td>后续扩展</td><td>验证成功后可以往哪些方向继续</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        开源方案库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
