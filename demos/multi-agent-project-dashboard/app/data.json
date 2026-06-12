@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "generated_at": "2026-06-13T00:30:00+08:00",
+    "note": "本数据为模拟数据，用于演示 AgentOps Control Tower。请勿误认为真实项目状态。",
+    "total_projects": 6,
+    "by_status": {
+      "active": 3,
+      "blocked": 1,
+      "done": 1,
+      "needs_review": 1,
+      "planned": 0
+    },
+    "by_risk": {
+      "low": 4,
+      "medium": 1,
+      "high": 1
+    }
+  },
+  "projects": [
+    {
+      "id": "idea-to-demo-blueprints",
+      "name": "idea-to-demo-blueprints",
+      "agent": "OpenClaw (kimi-coding/k2p5)",
+      "machine": "VM-0-4-ubuntu",
+      "phase": "IDB-2R 完成 (6a89bef)",
+      "status": "active",
+      "risk": "low",
+      "latest_commit": {
+        "hash": "6a89bef",
+        "message": "IDB-2R: Add reproducible demo pack system",
+        "branch": "main",
+        "pushed": true,
+        "timestamp": "2026-06-13T00:05:00+08:00"
+      },
+      "latest_report": "reports/PHASE_IDB_2R_REPRODUCIBLE_DEMO_PACK_SYSTEM_REPORT.md",
+      "blocker": "",
+      "next_action": "等待 IDB-3 启动"
+    },
+    {
+      "id": "medium-archive-astro",
+      "name": "medium-archive-astro",
+      "agent": "Codex (local)",
+      "machine": "MacBook Pro",
+      "phase": "Phase 2: Astro 站点搭建",
+      "status": "blocked",
+      "risk": "medium",
+      "latest_commit": {
+        "hash": "a1b2c3d",
+        "message": "feat: add archive page layout",
+        "branch": "main",
+        "pushed": true,
+        "timestamp": "2026-06-10T15:20:00+08:00"
+      },
+      "latest_report": "",
+      "blocker": "设计师休假，UI 设计稿延迟",
+      "next_action": "等待设计稿确认后继续"
+    },
+    {
+      "id": "conan-vps-control-tower",
+      "name": "conan-vps-control-tower",
+      "agent": "Hermes (OpenClaw)",
+      "machine": "VPS-1 (新加坡)",
+      "phase": "Phase 1: 基础设施搭建",
+      "status": "active",
+      "risk": "low",
+      "latest_commit": {
+        "hash": "f7e8d9c",
+        "message": "infra: setup monitoring stack",
+        "branch": "main",
+        "pushed": true,
+        "timestamp": "2026-06-11T20:00:00+08:00"
+      },
+      "latest_report": "本周部署完成",
+      "blocker": "",
+      "next_action": "配置监控告警规则"
+    },
+    {
+      "id": "claimlens",
+      "name": "claimlens",
+      "agent": "Claude Code (云端)",
+      "machine": "VM-0-3-ubuntu",
+      "phase": "Phase 3: AI 集成",
+      "status": "needs-review",
+      "risk": "high",
+      "latest_commit": {
+        "hash": "d4e5f6a",
+        "message": "WIP: AI model integration",
+        "branch": "feature/ai-integration",
+        "pushed": false,
+        "timestamp": "2026-06-11T11:00:00+08:00"
+      },
+      "latest_report": "AI 模型选择待确认",
+      "blocker": "用户 3 天未回复模型选择问题",
+      "next_action": "等待用户确认 AI 模型方案"
+    },
+    {
+      "id": "artvee-library",
+      "name": "artvee-library",
+      "agent": "OpenClaw (kimi)",
+      "machine": "MacBook Pro",
+      "phase": "Phase 1: 数据收集",
+      "status": "active",
+      "risk": "low",
+      "latest_commit": {
+        "hash": "1a2b3c4",
+        "message": "feat: data collection script",
+        "branch": "main",
+        "pushed": true,
+        "timestamp": "2026-06-12T18:00:00+08:00"
+      },
+      "latest_report": "已完成 30% 数据收集",
+      "blocker": "",
+      "next_action": "继续数据收集，预计下周完成"
+    },
+    {
+      "id": "booktrans-desk",
+      "name": "booktrans-desk",
+      "agent": "Codex + Hermes",
+      "machine": "VPS-2 (东京)",
+      "phase": "Phase 4: 测试与发布",
+      "status": "done",
+      "risk": "low",
+      "latest_commit": {
+        "hash": "9z8y7x6",
+        "message": "release: v1.0.0 production launch",
+        "branch": "main",
+        "pushed": true,
+        "timestamp": "2026-06-11T22:00:00+08:00"
+      },
+      "latest_report": "已发布到生产环境",
+      "blocker": "",
+      "next_action": "监控首周用户反馈"
+    }
+  ]
+}

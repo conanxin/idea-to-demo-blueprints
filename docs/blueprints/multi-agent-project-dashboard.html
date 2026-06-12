@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多 Agent 项目管理面板 · Idea-to-Demo Blueprints</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-hero">
+      <div class="container">
+        <a href="../index.html" class="back-link">← 返回方案库</a>
+        <h1>多 Agent 项目管理面板</h1>
+        <div class="meta">
+          <span class="accent">AI Workflow / AgentOps</span>
+          <span>难度：中等</span>
+          <span>Demo 周期：2-3 天</span>
+          <span>适合：项目负责人 / 多项目管理者</span>
+        </div>
+        <p class="intro">把多个 agent、多个机器和多个项目的进展、阶段、报告、commit、风险和下一步动作统一汇总到一个可观察的项目管理面板中。</p>
+        <div style="margin-top: 16px;">
+          <a href="../demos/multi-agent-project-dashboard/" class="btn" style="display:inline-block;padding:8px 16px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:500;">🚀 查看 Demo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container">
+        <nav class="toc">
+          <div class="toc-title">目录</div>
+          <ul>
+            <li><a href="#overview">方案概览</a></li>
+            <li><a href="#original-idea">原始想法</a></li>
+            <li><a href="#background">背景与问题</a></li>
+            <li><a href="#why-matters">为什么重要</a></li>
+            <li><a href="#users">目标用户</a></li>
+            <li><a href="#demo">Demo 最终效果</a></li>
+            <li><a href="#mvp">MVP 范围</a></li>
+            <li><a href="#architecture">技术架构</a></li>
+            <li><a href="#workflow">数据流</a></li>
+            <li><a href="#steps">实施步骤</a></li>
+            <li><a href="#build-process">构建过程</a></li>
+            <li><a href="#prompt">关键 Prompt</a></li>
+            <li><a href="#risks">风险</a></li>
+            <li><a href="#acceptance">验收</a></li>
+            <li><a href="#reproduce">复现</a></li>
+            <li><a href="#extensions">扩展</a></li>
+          </ul>
+        </nav>
+
+        <article class="article">
+          <h2 id="overview">方案概览</h2>
+          <p><strong>中文标题：</strong>多 Agent 项目管理面板</p>
+          <p><strong>英文标题：</strong>Multi-Agent Project Dashboard</p>
+          <p><strong>一句话介绍：</strong>把多个 agent、多个机器和多个项目的进展、阶段、报告、commit、风险和下一步动作统一汇总到一个可观察的项目管理面板中。</p>
+
+          <h2 id="original-idea">原始想法</h2>
+          <blockquote>
+            <p>"你现在同时使用多个 agent 在不同机器上推进多个项目，需要一个统一项目管理面板，自动汇总每个项目的进展、阶段、报告、commit、风险和下一步动作。"</p>
+          </blockquote>
+
+          <h2 id="background">背景与问题</h2>
+          <h3>当前场景</h3>
+          <p>使用多个 agent 同时推进项目时，项目状态容易分散在不同机器、不同报告、不同 Telegram 消息、不同 Git commit 中。项目负责人很难快速知道每个项目现在处于哪个阶段。</p>
+
+          <h3>现有痛点</h3>
+          <ul>
+            <li><strong>痛点 1：</strong>任务完成、失败、阻塞、风险和下一步动作容易被埋在长报告里</li>
+            <li><strong>痛点 2：</strong>多项目并行时，人类缺少一个统一观察层</li>
+            <li><strong>痛点 3：</strong>需要把 agent 输出转成可视化、可追踪、可复盘的项目状态</li>
+            <li><strong>痛点 4：</strong>分散在 Telegram / report / commit 中的状态难以汇总</li>
+            <li><strong>痛点 5：</strong>多机器部署的项目状态难以追踪</li>
+            <li><strong>痛点 6：</strong>缺少项目优先级判断依据</li>
+          </ul>
+
+          <h2 id="why-matters">为什么值得做</h2>
+          <p>普通 agent 工作流回答："这个任务完成了吗？"</p>
+          <p>多 Agent 项目管理面板回答："所有项目现在分别处于什么状态，哪个项目需要我介入，哪个项目可以继续自动推进？"</p>
+          <p><strong>核心价值：</strong></p>
+          <ul>
+            <li>降低多项目管理成本</li>
+            <li>减少 Telegram / report / commit 来回翻找</li>
+            <li>形成 agent 工作的可观察层</li>
+            <li>帮助项目负责人快速判断优先级</li>
+            <li>为未来自动调度 agent 打基础</li>
+          </ul>
+
+          <h2 id="users">目标用户与场景</h2>
+          <h3>目标用户</h3>
+          <ul>
+            <li>同时运行多个 agent 的个人开发者</li>
+            <li>管理多个 AI 项目的项目负责人</li>
+            <li>多机器部署 OpenClaw / Hermes / Codex / Claude Code 的用户</li>
+            <li>小团队研发负责人</li>
+            <li>AI Workflow 实验者</li>
+            <li>需要统一查看项目进度的人</li>
+          </ul>
+          <h3>使用场景</h3>
+          <ol>
+            <li>本地 agent 和云端 agent 同时运行</li>
+            <li>多个 GitHub 项目并行推进</li>
+            <li>每个项目都有阶段报告和 commit</li>
+            <li>每天需要快速查看所有项目状态</li>
+            <li>需要知道哪个项目 blocked、哪个项目 ready、哪个项目需要人工确认</li>
+            <li>需要把阶段报告沉淀成统一项目状态数据</li>
+          </ol>
+
+          <h2 id="demo">Demo 最终效果</h2>
+          <p>本 Demo 是一个真实可交互的静态 HTML Dashboard：</p>
+          <ul>
+            <li>顶部标题 + 总体说明 + Demo 限制说明</li>
+            <li>5 个统计卡片（Total / Active / Blocked / Done / High Risk）</li>
+            <li>6 个筛选按钮（All / Active / Blocked / Done / Needs Review / High Risk）</li>
+            <li>6 个项目卡片，每个显示 10 个字段（name / agent / machine / phase / status / risk / latest commit / latest report / blocker / next action）</li>
+            <li>底部说明（数据来源、复现方法、限制、后续扩展）</li>
+          </ul>
+          <p><strong>Demo URL：</strong><a href="../demos/multi-agent-project-dashboard/">https://conanxin.github.io/idea-to-demo-blueprints/demos/multi-agent-project-dashboard/</a></p>
+
+          <h2 id="mvp">MVP 范围</h2>
+          <p>MVP 只需要静态数据，不需要后端。</p>
+          <h3>输入</h3>
+          <ol>
+            <li>模拟 agent 状态报告（6 个项目）</li>
+            <li>模拟 git commit 列表</li>
+            <li>模拟风险记录</li>
+            <li>一个 dashboard build prompt</li>
+            <li>一个静态 JSON 数据文件</li>
+          </ol>
+          <h3>输出</h3>
+          <ol>
+            <li>多项目总览（统计卡片）</li>
+            <li>项目卡片（6 个）</li>
+            <li>Agent 来源（每张卡片显示）</li>
+            <li>当前阶段（每张卡片显示）</li>
+            <li>最近 commit（每张卡片显示）</li>
+            <li>最近报告（每张卡片显示）</li>
+            <li>风险等级（每张卡片显示）</li>
+            <li>阻塞事项（每张卡片显示）</li>
+            <li>下一步动作（每张卡片显示）</li>
+            <li>可筛选的静态管理面板（6 个筛选按钮）</li>
+          </ol>
+
+          <h2 id="architecture">技术架构</h2>
+          <h3>最小技术栈</h3>
+          <table>
+            <thead><tr><th>组件</th><th>技术</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>数据采集层</td><td>Agent 报告 + Telegram + Git commit + 阶段报告</td><td>多源数据采集</td></tr>
+              <tr><td>数据标准化层</td><td>JSON 数据结构</td><td>把不同来源整理成统一 JSON</td></tr>
+              <tr><td>项目状态模型</td><td>meta + projects 结构</td><td>单一数据源</td></tr>
+              <tr><td>展示层</td><td>HTML + CSS + 原生 JS</td><td>静态 Dashboard</td></tr>
+              <tr><td>人工确认层</td><td>手动审查 + 筛选交互</td><td>项目负责人确认状态</td></tr>
+              <tr><td>沉淀层</td><td>静态 JSON 文件</td><td>保存状态快照</td></tr>
+            </tbody>
+          </table>
+
+          <h2 id="workflow">数据流 / 工作流</h2>
+          <div class="workflow-box">Agent 执行报告
+→ Git commit
+→ 阶段报告
+→ 风险记录
+→ 状态标准化
+→ dashboard data.json
+→ 静态面板
+→ 人工确认
+→ 下一步调度建议
+→ 状态快照归档</div>
+
+          <h2 id="steps">实施步骤</h2>
+          <ol>
+            <li>收集多个 agent 项目的阶段报告</li>
+            <li>提取项目名、agent、机器、阶段、状态、commit、风险、下一步</li>
+            <li>设计统一 JSON 数据结构</li>
+            <li>编写 Dashboard Build Prompt</li>
+            <li>生成 data.json</li>
+            <li>构建静态 HTML Dashboard</li>
+            <li>增加筛选交互</li>
+            <li>人工确认项目状态</li>
+            <li>发布到 GitHub Pages</li>
+            <li>将状态数据和 Demo Pack 写回仓库</li>
+          </ol>
+
+          <h2 id="build-process">构建过程记录</h2>
+          <h3>为什么选择静态 Demo</h3>
+          <p>部署最简单（无需后端），任何浏览器可直接打开 index.html，适合 GitHub Pages 部署，便于演示和分享，维护成本低。</p>
+
+          <h3>为什么使用模拟数据</h3>
+          <p>不依赖真实 API 权限，避免泄漏真实项目状态（含内部信息），演示效果稳定，易于扩展到真实数据。</p>
+
+          <h3>数据字段如何设计</h3>
+          <p>核心思想：单一数据源（meta 自动从 projects 计算）、可读优先（字段名清晰）、可扩展（新增字段不影响现有字段）、人工可确认（所有状态字段都对应人工判断）。</p>
+
+          <h3>面板布局如何设计</h3>
+          <p>顶部标题 + Demo 限制说明 → 统计卡片（5 个自动计算）→ 筛选按钮（6 个覆盖所有状态）→ 项目卡片网格（auto-fill，每张卡片显示 10 个字段）→ 底部说明（数据来源、复现、限制、扩展）。</p>
+
+          <h3>筛选功能如何实现</h3>
+          <p>使用纯 JS + DOM 操作，不引入框架。点击筛选按钮 → 切换 currentFilter → 重新渲染。支持组合筛选（status + risk）。</p>
+
+          <h3>哪些部分是本阶段不做的</h3>
+          <ul>
+            <li>真实 GitHub API 集成</li>
+            <li>报告自动解析</li>
+            <li>历史快照</li>
+            <li>Telegram bot 接入</li>
+            <li>自动调度建议</li>
+            <li>趋势分析图</li>
+          </ul>
+
+          <h3>如何从 Demo 演进到真实系统</h3>
+          <ol>
+            <li>第二阶段（半自动）：数据采集脚本 + 手动触发更新</li>
+            <li>第三阶段（自动）：GitHub API + 报告解析 + 定时刷新</li>
+            <li>第四阶段（智能）：历史快照 + 趋势分析 + 调度建议</li>
+            <li>第五阶段（生态）：Telegram bot + 自动派单 + 跨平台集成</li>
+          </ol>
+
+          <h2 id="prompt">关键 Prompt</h2>
+          <p>完整 Prompt 请参见 <a href="../demos/multi-agent-project-dashboard/prompts/dashboard-build-prompt.md">dashboard-build-prompt.md</a>。</p>
+          <p>Prompt 要求 AI 输出：</p>
+          <ol>
+            <li>项目状态摘要</li>
+            <li>每个项目的当前阶段</li>
+            <li>每个项目的状态</li>
+            <li>最近 commit</li>
+            <li>最近报告路径</li>
+            <li>风险等级</li>
+            <li>阻塞事项</li>
+            <li>下一步动作</li>
+            <li>统一 JSON 数据结构</li>
+            <li>Dashboard 页面结构</li>
+            <li>Agent 构建任务</li>
+            <li>验收标准</li>
+            <li>每日复盘建议</li>
+          </ol>
+
+          <h2>人工确认点</h2>
+          <ul>
+            <li>项目是否真的完成</li>
+            <li>commit 是否已 push</li>
+            <li>Pages 或 Demo 是否可访问</li>
+            <li>blocked 是否真实存在</li>
+            <li>下一步动作是否需要人类决策</li>
+            <li>风险等级是否合理</li>
+            <li>项目是否可以继续自动推进</li>
+          </ul>
+
+          <h2 id="risks">遇到的问题与修复</h2>
+          <p>本 Demo 使用静态模拟数据，因此没有真实 API 权限问题。</p>
+          <p>真实系统会遇到报告格式不统一、commit 解析不稳定、agent 状态不一致等问题。</p>
+          <p>在 Dashboard 设计中通过以下方式缓解：</p>
+          <ul>
+            <li><strong>字段标准化：</strong>严格定义 JSON 数据结构</li>
+            <li><strong>关键字段突出：</strong>status / risk / blocker / next action 单独高亮</li>
+            <li><strong>筛选功能：</strong>帮助快速定位需要关注的项目</li>
+            <li><strong>Demo 限制说明：</strong>明确标注静态数据，避免误用</li>
+          </ul>
+
+          <h2 id="acceptance">验收标准</h2>
+          <ul class="checklist">
+            <li>Demo 页面可打开</li>
+            <li>页面展示不少于 5 个模拟项目（实际 6 个）</li>
+            <li>每个项目都有 agent、机器、阶段、状态、风险、commit、报告和下一步</li>
+            <li>能按状态或风险进行筛选</li>
+            <li>JSON 数据合法</li>
+            <li>方案页包含 Demo 地址、构建过程和复现步骤</li>
+            <li>Demo Pack 包含 README、inputs、prompts、outputs、app、validation</li>
+            <li>页面不包含真实 token、secret、私密路径</li>
+          </ul>
+
+          <h2 id="reproduce">复现步骤</h2>
+          <ol>
+            <li>准备多个项目阶段报告</li>
+            <li>准备 commit 摘要</li>
+            <li>准备风险记录</li>
+            <li>使用 Prompt 生成 dashboard brief</li>
+            <li>生成统一 JSON</li>
+            <li>复制 Demo app</li>
+            <li>替换 data.json</li>
+            <li>本地打开 index.html</li>
+            <li>发布到 GitHub Pages</li>
+            <li>根据验收清单检查</li>
+          </ol>
+
+          <h2 id="extensions">后续扩展方向</h2>
+          <ol>
+            <li>接入真实 GitHub API</li>
+            <li>自动解析 reports 目录</li>
+            <li>接入 Telegram bot 状态消息</li>
+            <li>增加历史状态快照</li>
+            <li>增加项目趋势图</li>
+            <li>增加 agent 调度建议</li>
+            <li>增加风险自动归因</li>
+            <li>增加每日自动项目摘要</li>
+            <li>增加"需要我介入"的队列</li>
+            <li>与项目记忆型会议助手联动</li>
+          </ol>
+
+          <h2>本方案沉淀出的通用方法</h2>
+          <p>多 Agent 管理的关键不是让每个 agent 单独更强，而是建立一个统一的可观察层，把分散在报告、commit、消息和机器里的状态整理成可读、可判断、可复盘的项目视图。</p>
+
+          <h2>参考资源</h2>
+          <ul>
+            <li><a href="https://github.com/openclaw/openclaw" target="_blank">OpenClaw</a> — 本地 AI Agent 框架</li>
+            <li><a href="https://docs.github.com/rest" target="_blank">GitHub API</a> — 项目状态数据源</li>
+            <li><a href="https://claude.ai/code" target="_blank">Claude Code</a> — Anthropic 编码助手</li>
+          </ul>
+
+          <h2>🎯 Demo: 真实可复现</h2>
+          <div class="demo-card" style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:16px;margin:12px 0;">
+            <h4>Demo 场景：AgentOps Control Tower</h4>
+            <p>统一查看多个 agent 项目的进展、风险、commit 和下一步动作。</p>
+            <p><strong>Demo 地址：</strong> <a href="../demos/multi-agent-project-dashboard/">查看 Demo 页面</a></p>
+            <p><strong>Demo Pack：</strong> <code>demos/multi-agent-project-dashboard/</code></p>
+            <p><strong>状态：</strong> <span class="tag tag-green">demo-ready</span></p>
+          </div>
+
+          <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem;">
+            Created following the <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">Idea-to-Demo Blueprints</a> format. Phase: IDB-3.
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        可复现 Demo 蓝图库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+
+  <script src="../app.js"></script>
+</body>
+</html>

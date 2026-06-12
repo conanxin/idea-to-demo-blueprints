@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentOps Control Tower Demo · Multi-Agent Project Dashboard</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    body { background: var(--bg-secondary); }
+    .demo-hero { background: var(--bg-primary); padding: 60px 0 40px; border-bottom: 1px solid var(--border); }
+    .demo-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .demo-hero .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .demo-hero .meta span { font-size: 0.85rem; color: var(--text-muted); }
+    .demo-hero .meta .accent { color: var(--accent); font-weight: 500; }
+    .demo-hero .intro { font-size: 1.05rem; color: var(--text-secondary); max-width: 700px; }
+    .dashboard-container { padding: 30px 0; }
+    .generated-info { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 16px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow); }
+    .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--text-primary); line-height: 1; }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+    .stat-card.total .stat-number { color: var(--accent); }
+    .stat-card.active .stat-number { color: #10b981; }
+    .stat-card.blocked .stat-number { color: #ef4444; }
+    .stat-card.done .stat-number { color: #6366f1; }
+    .stat-card.high-risk .stat-number { color: #ef4444; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .filter-btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg-primary); color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+    .project-card { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+    .card-header { padding: 16px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); word-break: break-all; }
+    .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .status-badge, .risk-badge { font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; font-weight: 500; }
+    .card-body { padding: 14px 16px; }
+    .card-field { display: flex; gap: 10px; font-size: 0.82rem; padding: 6px 0; border-bottom: 1px dashed var(--border-light); }
+    .card-field:last-child { border-bottom: none; }
+    .card-field.blocker { background: #fef2f2; margin: 8px -16px -14px; padding: 10px 16px; border-top: 1px solid #fee2e2; border-bottom: none; }
+    .card-field.next-action { background: var(--accent-light); margin: 8px -16px -14px; padding: 10px 16px; border-top: 1px solid var(--accent-light); border-bottom: none; }
+    .field-label { color: var(--text-muted); font-weight: 500; min-width: 80px; flex-shrink: 0; }
+    .commit-hash { font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-tertiary); padding: 1px 6px; border-radius: 3px; color: var(--accent); margin-right: 6px; }
+    .commit-msg { color: var(--text-secondary); }
+    .muted { color: var(--text-muted); font-style: italic; }
+    .text-danger { color: #b91c1c; font-weight: 500; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    .error { padding: 30px; text-align: center; color: #b91c1c; background: #fef2f2; border-radius: var(--radius); }
+    .info-footer { background: var(--bg-primary); border-top: 1px solid var(--border); padding: 30px 0; margin-top: 40px; }
+    .info-footer h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); }
+    .info-footer p, .info-footer li { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+    .info-footer ol, .info-footer ul { padding-left: 20px; margin-top: 8px; }
+    .info-section { margin-bottom: 24px; }
+    .demo-notice { background: #fef3c7; border: 1px solid #fbbf24; border-radius: var(--radius); padding: 12px 16px; margin: 16px 0; font-size: 0.85rem; color: #92400e; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 0.9rem; margin-bottom: 20px; }
+    .visible-info { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
+    @media (max-width: 768px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .demo-hero h1 { font-size: 1.5rem; }
+      .card-field { flex-direction: column; gap: 2px; }
+      .field-label { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../../blueprints/multi-agent-project-dashboard.html">方案页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="demo-hero">
+    <div class="container">
+      <a href="../../blueprints/multi-agent-project-dashboard.html" class="back-link">← 返回方案页</a>
+      <h1>AgentOps Control Tower Demo</h1>
+      <div class="meta">
+        <span class="accent">🚀 Multi-Agent Project Dashboard</span>
+        <span>统一项目管理面板</span>
+        <span class="tag tag-green">demo-ready</span>
+      </div>
+      <p class="intro">统一查看多个 agent 项目的进展、风险、commit 和下一步动作。把分散在 GitHub、Telegram、报告和机器日志中的状态，整合到一个可观察的面板中。</p>
+      <div class="demo-notice">
+        ⚠️ <strong>Demo 限制：</strong>本演示使用静态模拟数据，不会自动更新。所有项目和状态均为示例，用于展示面板结构。
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-container">
+    <div class="container">
+      <div class="generated-info">数据生成时间：<span id="generated-at">-</span></div>
+      
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <div class="stat-number" id="stat-total">-</div>
+          <div class="stat-label">Total Projects</div>
+        </div>
+        <div class="stat-card active">
+          <div class="stat-number" id="stat-active">-</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-card blocked">
+          <div class="stat-number" id="stat-blocked">-</div>
+          <div class="stat-label">Blocked</div>
+        </div>
+        <div class="stat-card done">
+          <div class="stat-number" id="stat-done">-</div>
+          <div class="stat-label">Done</div>
+        </div>
+        <div class="stat-card high-risk">
+          <div class="stat-number" id="stat-high-risk">-</div>
+          <div class="stat-label">High Risk</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="blocked">Blocked</button>
+        <button class="filter-btn" data-filter="done">Done</button>
+        <button class="filter-btn" data-filter="needs-review">Needs Review</button>
+        <button class="filter-btn" data-filter="high-risk">High Risk</button>
+      </div>
+
+      <div class="visible-info">显示 <strong id="visible-count">-</strong> / <span id="total-count">-</span> 个项目</div>
+
+      <div class="project-grid" id="project-grid"></div>
+      <div class="empty-state" id="empty-state" style="display:none;">当前筛选条件下没有项目。</div>
+    </div>
+  </div>
+
+  <footer class="info-footer">
+    <div class="container">
+      <div class="info-section">
+        <h3>📊 数据来源</h3>
+        <ul>
+          <li>项目状态：模拟 6 个 agent 项目的状态报告（见 <code>inputs/sample-agent-status-reports.md</code>）</li>
+          <li>Commit 数据：模拟 git commit 列表（见 <code>inputs/sample-git-commits.md</code>）</li>
+          <li>风险记录：通用风险 + 项目特定风险（见 <code>inputs/sample-project-risk-notes.md</code>）</li>
+          <li>所有数据为模拟数据，请勿误认为真实项目状态</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>🔄 如何复现</h3>
+        <ol>
+          <li>准备多个项目阶段报告（实际使用时替换为真实数据）</li>
+          <li>提取项目名、agent、机器、阶段、状态、commit、风险、下一步</li>
+          <li>设计统一 JSON 数据结构（参考 <code>outputs/data-model.md</code>）</li>
+          <li>使用 <code>prompts/dashboard-build-prompt.md</code> 生成 Dashboard Brief</li>
+          <li>生成 <code>data.json</code></li>
+          <li>替换本 Demo 的 <code>data.json</code></li>
+          <li>本地打开 <code>index.html</code> 或发布到 GitHub Pages</li>
+          <li>根据 <code>validation/acceptance-checklist.md</code> 验收</li>
+        </ol>
+      </div>
+
+      <div class="info-section">
+        <h3>⚠️ 本 Demo 的限制</h3>
+        <ul>
+          <li>静态数据：不会自动更新，需要手动替换 data.json</li>
+          <li>无 API 集成：不会连接 GitHub API 拉取真实 commit</li>
+          <li>无历史快照：不保存历史状态，无法看趋势</li>
+          <li>无通知机制：blocked 不会主动提醒</li>
+          <li>无调度建议：不会主动建议下一步该做什么</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>📦 后续扩展</h3>
+        <ul>
+          <li>接入真实 GitHub API</li>
+          <li>自动解析 reports 目录</li>
+          <li>接入 Telegram bot 状态消息</li>
+          <li>增加历史状态快照</li>
+          <li>增加项目趋势图</li>
+          <li>增加 agent 调度建议</li>
+          <li>与项目记忆型会议助手联动</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:24px;font-size:0.8rem;color:var(--text-muted);">
+        Demo Pack for <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> · Phase: IDB-3
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

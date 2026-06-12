@@ -17,8 +17,8 @@
       "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
-      "page_url": "blueprints/project-memory-meeting-assistant.html",
-      "demo_url": "demos/project-memory-meeting-assistant/",
+      "page_url": "./blueprints/project-memory-meeting-assistant.html",
+      "demo_url": "./demos/project-memory-meeting-assistant/",
       "demo_pack_path": "demos/project-memory-meeting-assistant/",
       "md_url": "docs/project-memory-meeting-assistant.md",
       "created_phase": "IDB-1",
@@ -41,17 +41,41 @@
       "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
-      "page_url": "blueprints/customer-meeting-autonomous-build.html",
-      "demo_url": "demos/customer-meeting-autonomous-build/",
+      "page_url": "./blueprints/customer-meeting-autonomous-build.html",
+      "demo_url": "./demos/customer-meeting-autonomous-build/",
       "demo_pack_path": "demos/customer-meeting-autonomous-build/",
       "md_url": "docs/customer-meeting-autonomous-build.md",
       "created_phase": "IDB-2",
       "updated_phase": "IDB-2R"
+    },
+    {
+      "id": "idb-3",
+      "title": "多 Agent 项目管理面板",
+      "title_en": "Multi-Agent Project Dashboard",
+      "slug": "multi-agent-project-dashboard",
+      "summary": "把多个 agent、多个机器和多个项目的进展、阶段、报告、commit、风险和下一步动作统一汇总到一个可观察的项目管理面板中。",
+      "category": "AI Workflow / AgentOps / Project Management",
+      "difficulty": "中等",
+      "difficulty_en": "Medium",
+      "demo_time": "2-3 天",
+      "demo_time_en": "2-3 days",
+      "audience": ["项目负责人", "AI Agent 使用者", "独立开发者", "研发团队", "多项目管理者"],
+      "audience_en": ["Project Lead", "AI Agent User", "Indie Developer", "R&D Team", "Multi-project Manager"],
+      "tags": ["AI Agent", "AgentOps", "Project Dashboard", "Git", "Reports", "Workflow"],
+      "status": "demo-ready",
+      "created_at": "2026-06-13",
+      "updated_at": "2026-06-13",
+      "page_url": "./blueprints/multi-agent-project-dashboard.html",
+      "demo_url": "./demos/multi-agent-project-dashboard/",
+      "demo_pack_path": "demos/multi-agent-project-dashboard/",
+      "md_url": "docs/multi-agent-project-dashboard.md",
+      "created_phase": "IDB-3",
+      "updated_phase": "IDB-3"
     }
   ],
   "meta": {
-    "version": "3.0",
-    "total": 2,
-    "last_updated": "2026-06-12"
+    "version": "4.0",
+    "total": 3,
+    "last_updated": "2026-06-13"
   }
 }
