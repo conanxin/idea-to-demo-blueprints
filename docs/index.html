@@ -12,34 +12,35 @@
       <a href="index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
       <nav class="nav-links">
         <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
-        <a href="writing-guide.md">写作指南</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints/blob/main/README.md">README</a>
+        <a href="ROADMAP.md">Roadmap</a>
+        <a href="writing-guide.md">Guide</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
     <div class="container">
-      <h1>可复现 Demo 蓝图库</h1>
-      <p class="subtitle">Idea-to-Demo Blueprints</p>
+      <div class="version-badge">v0.1.0-alpha</div>
+      <h1>Idea-to-Demo Blueprints</h1>
+      <p class="subtitle">想法到 Demo 方案库</p>
       <p class="tagline">把想法变成真实 Demo，并把 Demo 的制作过程变成别人可以复现的路线图</p>
+      <p style="max-width:700px;margin:0 auto 24px;color:var(--text-secondary);font-size:0.95rem;">
+        一个可复现 Demo 蓝图库：每个 Blueprint 都包含原始想法、方案设计、Demo Pack、可运行 Demo、关键 Prompt、构建过程和验收记录。
+      </p>
       <div class="hero-badges">
         <span class="badge accent">📋 开源方案库</span>
         <span class="badge">🚀 快速验证</span>
         <span class="badge">📝 可执行蓝图</span>
         <span class="badge">🤖 AI Workflow</span>
+        <span class="badge accent">✅ 3 个 demo-ready</span>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <h2 class="section-title">项目定位</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        <strong>这不是灵感收藏夹，而是可复现 Demo 蓝图库。</strong>
-      </p>
-      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        每个 Blueprint 不只记录一个想法和方案，还包含一个真实做出来的最小 Demo、完整构建过程、关键 Prompt、文件结构、验收标准和复现步骤，让其他人可以根据记录复现同类 Demo。
-      </p>
+      <h2 class="section-title">不是灵感收藏夹，而是可复现 Demo 蓝图库</h2>
       <div class="problem-grid">
         <div class="problem-card">
           <h4>💡 想法停留在脑子里</h4>
@@ -47,11 +48,11 @@
         </div>
         <div class="problem-card">
           <h4>📄 只写方案还不够</h4>
-          <p>方案文档只有"做什么"，没有"怎么做"和"做出来什么样"，导致无法落地和验证。</p>
+          <p>方案文档只有"做什么"，没有"做出来什么样"，无法验证可行性，也无法让别人理解和复用。</p>
         </div>
         <div class="problem-card">
           <h4>🔧 缺少可复现 Demo</h4>
-          <p>没有真实 Demo，就无法验证方案是否可行，也无法让别人理解和复用。</p>
+          <p>没有真实 Demo，无法验证方案是否可行，也无法让别人根据记录复现同类 Demo。</p>
         </div>
         <div class="problem-card">
           <h4>🔄 重复造轮子</h4>
@@ -63,9 +64,21 @@
 
   <section class="section" style="background: var(--bg-primary);">
     <div class="container">
+      <h2 class="section-title">Three Demo-Ready Blueprints</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
+        当前已收录的 3 个 demo-ready Blueprint。每个都包含真实可运行的 Demo。
+      </p>
+      <div class="blueprint-grid" id="blueprint-grid">
+        <!-- Cards rendered by JS from data/blueprints.json -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
       <h2 class="section-title">Demo Pack 标准</h2>
       <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        每个完整 Blueprint 必须包含 Demo Pack：
+        每个完整 Blueprint 必须包含标准化的 Demo Pack：
       </p>
       <div class="article">
         <table>
@@ -73,47 +86,62 @@
             <tr><th>目录</th><th>内容</th><th>说明</th></tr>
           </thead>
           <tbody>
-            <tr><td>inputs/</td><td>原始想法、背景材料、会议转写</td><td>保存所有输入材料</td></tr>
-            <tr><td>prompts/</td><td>关键 Prompt</td><td>驱动 Agent 的核心提示词</td></tr>
-            <tr><td>outputs/</td><td>Brief、任务计划、生成说明</td><td>Agent 生成的中间产物</td></tr>
-            <tr><td>app/</td><td>可运行的最小 Demo</td><td>真实做出来的原型</td></tr>
-            <tr><td>validation/</td><td>验收清单</td><td>判断 Demo 是否成功</td></tr>
-            <tr><td>README.md</td><td>复现说明</td><td>让别人可以照着复现</td></tr>
+            <tr><td><code>inputs/</code></td><td>原始想法、背景材料、会议转写或需求文本</td><td>保存所有输入材料</td></tr>
+            <tr><td><code>prompts/</code></td><td>关键 Prompt</td><td>驱动 Agent 的核心提示词</td></tr>
+            <tr><td><code>outputs/</code></td><td>Brief、任务计划、生成说明</td><td>Agent 生成的中间产物</td></tr>
+            <tr><td><code>app/</code></td><td>可运行的最小 Demo</td><td>真实做出来的原型</td></tr>
+            <tr><td><code>validation/</code></td><td>验收清单</td><td>判断 Demo 是否成功</td></tr>
+            <tr><td><code>README.md</code></td><td>复现说明</td><td>让别人可以照着复现</td></tr>
           </tbody>
         </table>
       </div>
       <p style="color: var(--text-secondary); margin-top: 16px; font-size: 0.9rem;">
-        <strong>规则：</strong>没有 Demo Pack 的方案只能标记为 draft；有完整 Demo Pack 且可打开 Demo 页面，才能标记为 demo-ready。
+        <strong>规则：</strong>没有 Demo Pack 的方案只能标记为 <code>draft</code>；有完整 Demo Pack 且可打开 Demo 页面，才能标记为 <code>demo-ready</code>。
       </p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">方案库 <small>Blueprints</small></h2>
-      <div class="blueprint-grid" id="blueprint-grid">
-        <!-- Cards rendered by JS from data/blueprints.json -->
-      </div>
     </div>
   </section>
 
   <section class="section" style="background: var(--bg-primary);">
     <div class="container">
-      <h2 class="section-title">新增一个 Blueprint</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        有一个想法？按以下步骤把它变成可复现的 Blueprint：
-      </p>
+      <h2 class="section-title">如何使用</h2>
       <div class="article">
-        <ol>
-          <li>复制 <code>docs/blueprint-template.md</code> 作为起点</li>
-          <li>填写所有必填章节，保留原始想法，构建最小 Demo</li>
-          <li>创建 Demo Pack（inputs/ prompts/ outputs/ app/ validation/）</li>
-          <li>在 <code>data/blueprints.json</code> 中补充元数据（含 demo_url）</li>
-          <li>生成 HTML 页面放入 <code>public/blueprints/</code> 和 <code>docs/blueprints/</code></li>
-          <li>同步 Demo app 到 <code>docs/demos/</code></li>
-          <li>本地预览，检查链接和样式</li>
-          <li>提交并 push</li>
+        <ol style="font-size:1rem;line-height:1.8;">
+          <li><strong>选择一个 Blueprint</strong> — 浏览下方 3 个方案，选择最感兴趣的</li>
+          <li><strong>先看 Demo，再看构建过程</strong> — 直接打开 Demo 页面体验效果，然后阅读方案页的"构建过程"章节</li>
+          <li><strong>复制 Demo Pack，用自己的项目材料替换 inputs</strong> — 下载整个 <code>demos/&lt;slug&gt;/</code> 目录，用你自己的输入材料替换 <code>inputs/</code>，重新运行 Prompt</li>
         </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">链接入口</h2>
+      <div class="problem-grid">
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>📦 GitHub Repo</h4>
+          <p>查看源码、Issues、PR</p>
+        </a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints/blob/main/README.md" target="_blank" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>📖 README</h4>
+          <p>5 分钟理解项目</p>
+        </a>
+        <a href="writing-guide.md" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>✍️ Writing Guide</h4>
+          <p>如何把想法变成 Demo</p>
+        </a>
+        <a href="blueprint-template.md" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>📋 Blueprint Template</h4>
+          <p>新增方案的标准模板</p>
+        </a>
+        <a href="ROADMAP.md" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>🗺 Roadmap</h4>
+          <p>未来发展方向</p>
+        </a>
+        <a href="CONTRIBUTING.md" class="problem-card" style="text-decoration:none;color:inherit;">
+          <h4>🤝 Contributing</h4>
+          <p>如何贡献代码或文档</p>
+        </a>
       </div>
     </div>
   </section>
@@ -122,7 +150,7 @@
     <div class="container">
       <p>
         <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
-        可复现 Demo 蓝图库 · MIT License · 2026
+        可复现 Demo 蓝图库 · <a href="CHANGELOG.md">v0.1.0-alpha</a> · MIT License · 2026
       </p>
     </div>
   </footer>
