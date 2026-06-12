@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: 项目记忆型会议纪要生成 · TeamFlow Dashboard</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    .demo-hero { background: var(--bg-primary); padding: 60px 0 40px; border-bottom: 1px solid var(--border); }
+    .demo-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .demo-hero .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .demo-hero .meta span { font-size: 0.85rem; color: var(--text-muted); }
+    .demo-hero .meta .accent { color: var(--accent); font-weight: 500; }
+    .demo-hero .intro { font-size: 1.05rem; color: var(--text-secondary); max-width: 700px; }
+    .demo-section { padding: 40px 0; border-bottom: 1px solid var(--border-light); }
+    .demo-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; }
+    .demo-section h3 { font-size: 1rem; font-weight: 600; margin-top: 20px; margin-bottom: 8px; }
+    .demo-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 12px 0; }
+    .demo-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .demo-card p, .demo-card li { font-size: 0.85rem; color: var(--text-secondary); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 6px; }
+    .tag-green { background: #dcfce7; color: #166534; }
+    .tag-yellow { background: #fef3c7; color: #92400e; }
+    .tag-red { background: #fee2e2; color: #991b1b; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .file-tree { font-family: var(--font-mono); font-size: 0.85rem; background: var(--bg-tertiary); padding: 16px; border-radius: var(--radius); line-height: 1.8; }
+    .highlight { background: #fef3c7; padding: 2px 4px; border-radius: 3px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 0.9rem; margin-bottom: 20px; }
+    .btn { display: inline-block; padding: 8px 16px; background: var(--accent); color: #fff; border-radius: var(--radius); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--accent-light); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../../blueprints/project-memory-meeting-assistant.html">方案页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="demo-hero">
+    <div class="container">
+      <a href="../../blueprints/project-memory-meeting-assistant.html" class="back-link">← 返回方案页</a>
+      <h1>Demo: 项目记忆型会议纪要生成</h1>
+      <div class="meta">
+        <span class="accent">📋 Project Memory Meeting Assistant</span>
+        <span>虚拟项目: TeamFlow Dashboard</span>
+        <span class="tag tag-green">demo-ready</span>
+      </div>
+      <p class="intro">基于虚拟项目知识库（5 个文档）和模拟会议转写，生成完整的项目级会议纪要。展示 AI 如何将"会上说了什么"转化为"这场会对项目意味着什么"。</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="demo-section">
+      <h2>🎯 Demo 场景</h2>
+      <div class="demo-card">
+        <h4>虚拟项目：TeamFlow Dashboard</h4>
+        <p>一个团队项目管理看板，帮助中小团队追踪任务、风险、会议和项目阶段。当前处于 MVP 开发阶段。</p>
+        <p><strong>会议场景：</strong>项目周会，讨论 MVP 进度、客户反馈、权限系统复杂度。</p>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📥 输入材料</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">模拟的项目知识库（5 个文档）+ 会议转写文本</p>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>项目知识库</h4>
+          <ul>
+            <li>project-overview.md — 项目定位、目标用户、技术栈</li>
+            <li>roadmap.md — 三阶段路线图、已知约束</li>
+            <li>architecture.md — 系统架构、关键设计决策</li>
+            <li>phase-report.md — Phase 1 完成项、进行中、阻塞项</li>
+            <li>sample-meeting-transcript.md — 模拟会议转写</li>
+          </ul>
+        </div>
+        <div class="demo-card">
+          <h4>会议转写要点</h4>
+          <ul>
+            <li>客户希望看到风险提醒</li>
+            <li>权限系统太复杂，需要简化</li>
+            <li>决策：先做只读看板，不做复杂权限</li>
+            <li>行动项：更新 Roadmap、补充风险卡片</li>
+            <li>待确认问题：风险触发规则、试用客户筛选</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📝 关键 Prompt</h2>
+      <div class="demo-card">
+        <p><strong>角色：</strong>当前项目的 AI 项目助手</p>
+        <p><strong>输入：</strong>会议转写文本 + 项目知识库（Top-K 相关文档）</p>
+        <p><strong>输出：</strong>10 项结构化会议纪要（摘要、背景、决策、行动项、风险、状态变化等）</p>
+        <p><strong>要求：</strong>区分来源 [推断] / [待确认]、不编造、适合直接发给团队</p>
+        <a href="../prompts/meeting-brief-prompt.md" class="btn btn-outline" style="margin-top: 10px;">查看完整 Prompt</a>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📤 生成结果</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">AI 基于知识库 + 会议转写生成的 10 项结构化输出</p>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>1. 会议核心摘要</h4>
+          <p>本次项目周会围绕 MVP 进度、客户反馈和权限系统复杂度展开。核心结论：风险提醒（简化版）加入 MVP，权限系统简化为两角色，6 月底前试用只读看板。</p>
+        </div>
+        <div class="demo-card">
+          <h4>2. 项目背景关联</h4>
+          <p>当前 Phase 1: MVP 阶段。已完成原型设计、架构确定、团队组建。前端进度 50%，权限系统复杂度是已知阻塞。</p>
+        </div>
+        <div class="demo-card">
+          <h4>3. 明确决策 <span class="tag tag-blue">4 项</span></h4>
+          <p>① 风险标签加入 MVP（简化版）<br>② 权限系统从 RBAC 简化为两角色<br>③ 增加只读看板试用目标<br>④ 风险标签手动标注</p>
+        </div>
+        <div class="demo-card">
+          <h4>4. 待确认问题 <span class="tag tag-yellow">4 项</span></h4>
+          <p>风险触发规则（手动 vs 自动）、试用客户筛选标准、反馈收集方式、只读看板数据来源。</p>
+        </div>
+        <div class="demo-card">
+          <h4>5. 行动项 <span class="tag tag-blue">5 项</span></h4>
+          <p>王芳：完成数据对接 + 风险 UI（6/14）<br>赵强：风险后端字段 + API（6/14）<br>张伟：权限简化方案文档（6/13）<br>陈静：只读看板 UI（6/15）<br>李明：试用客户名单（6/16）</p>
+        </div>
+        <div class="demo-card">
+          <h4>6. 对文档的影响</h4>
+          <p>需更新：roadmap.md（风险加入 MVP、权限延后）、architecture.md（权限简化）。<br>需新增：权限简化方案、只读看板设计、试用客户筛选标准。</p>
+        </div>
+        <div class="demo-card">
+          <h4>7. 对代码/产品/测试/交付的影响</h4>
+          <p>代码：新增风险字段、简化权限接口。<br>产品：风险功能从复杂登记简化为标签。<br>测试：新增风险标签测试，权限测试简化。<br>交付：可能提前 3 天（权限简化省 5 天，风险增加 2 天）。</p>
+        </div>
+        <div class="demo-card">
+          <h4>8. 风险与阻塞 <span class="tag tag-red">5 项</span></h4>
+          <p>前端进度延迟（中）、设计师请假（中）、试用反馈可能推翻需求（高）、风险标签手动标注不准确（低）、权限简化影响未来扩展（低）。</p>
+        </div>
+        <div class="demo-card">
+          <h4>9. 项目状态变化</h4>
+          <p>从"按计划推进"变为"有风险但可控"。正面：权限简化加速发布；负面：前端延迟仍需关注，试用反馈可能带来变更。</p>
+        </div>
+        <div class="demo-card">
+          <h4>10. 下一步建议 <span class="tag tag-blue">5 项</span></h4>
+          <p>① 优先确认试用客户名单（高）<br>② 监控前端进度（高）<br>③ 编写风险标签使用指南（中）<br>④ 准备试用反馈模板（中）<br>⑤ 记录权限简化决策（低）</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📂 Demo Pack 文件结构</h2>
+      <div class="file-tree">
+demos/project-memory-meeting-assistant/
+├── README.md                          # 复现说明
+├── inputs/
+│   ├── source-idea.md                 # 原始想法
+│   ├── project-overview.md            # 项目概览
+│   ├── roadmap.md                     # 路线图
+│   ├── architecture.md                # 架构文档
+│   ├── phase-report.md                # 阶段报告
+│   └── sample-meeting-transcript.md   # 会议转写
+├── prompts/
+│   └── meeting-brief-prompt.md        # 关键 Prompt
+├── outputs/
+│   ├── generated-project-meeting-brief.md  # 生成会议纪要
+│   ├── decisions.md                   # 决策记录
+│   ├── action-items.md                # 行动项
+│   └── project-state-update.md      # 状态更新
+├── app/
+│   └── index.html                     # 本 Demo 页面
+└── validation/
+    └── acceptance-checklist.md        # 验收清单
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>✅ 验收清单</h2>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>功能验收</h4>
+          <p>✅ 输出包含 3+ 个知识库关联<br>✅ 行动项明确到可执行<br>✅ 决策记录可引用<br>✅ 输出适合直接发给团队</p>
+        </div>
+        <div class="demo-card">
+          <h4>质量验收</h4>
+          <p>✅ 区分 [推断] 和 [待确认]<br>✅ 无编造内容<br>✅ 4 个待确认问题已标记<br>✅ 语言简洁结构化</p>
+        </div>
+      </div>
+      <p style="margin-top: 12px;"><span class="tag tag-green">验收结果：PASS</span></p>
+    </div>
+
+    <div class="demo-section">
+      <h2>🔄 复现步骤</h2>
+      <ol>
+        <li>准备项目知识库（5 个 Markdown 文档）</li>
+        <li>准备会议转写文本</li>
+        <li>使用 <code>prompts/meeting-brief-prompt.md</code> 驱动 AI</li>
+        <li>检查输出是否符合 <code>validation/acceptance-checklist.md</code></li>
+        <li>人工确认关键决策和负责人</li>
+        <li>将确认的会议纪要回写知识库</li>
+      </ol>
+      <a href="../README.md" class="btn" style="margin-top: 12px;">查看完整复现说明</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        可复现 Demo 蓝图库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

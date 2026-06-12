@@ -12,9 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!data.blueprints || !data.blueprints.length) return;
         grid.innerHTML = '';
         data.blueprints.forEach(bp => {
-          const card = document.createElement('a');
-          card.href = bp.page_url || `blueprints/${bp.slug}.html`;
+          const card = document.createElement('div');
           card.className = 'blueprint-card';
+          card.style.display = 'block';
+          card.style.textDecoration = 'none';
+          card.style.color = 'inherit';
+          
+          const statusClass = bp.status === 'demo-ready' ? 'tag-green' : 
+                             bp.status === 'draft' ? 'tag-yellow' : 'tag-blue';
+          const statusText = bp.status === 'demo-ready' ? 'demo-ready' : bp.status;
+          
+          let links = '';
+          if (bp.page_url) {
+            links += `<a href="${bp.page_url}" class="btn" style="margin-right:8px;">查看方案</a>`;
+          }
+          if (bp.demo_url) {
+            links += `<a href="${bp.demo_url}" class="btn btn-outline">查看 Demo</a>`;
+          }
+          
           card.innerHTML = `
             <div class="card-header">
               <div class="card-title">${bp.title}</div>
@@ -24,7 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="meta-tag">${bp.category}</span>
               <span class="meta-tag difficulty">${bp.difficulty}</span>
               <span class="meta-tag time">${bp.demo_time}</span>
+              <span class="meta-tag ${statusClass}" style="font-weight:500;">${statusText}</span>
               ${(bp.audience || []).slice(0, 3).map(a => `<span class="meta-tag">${a}</span>`).join('')}
+            </div>
+            <div style="padding: 0 20px 20px;">
+              ${links}
             </div>
           `;
           grid.appendChild(card);

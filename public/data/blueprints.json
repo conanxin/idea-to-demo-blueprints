@@ -14,12 +14,15 @@
       "audience": ["项目负责人", "研发团队", "AI Agent 使用者"],
       "audience_en": ["Project Lead", "R&D Team", "AI Agent User"],
       "tags": ["AI", "会议纪要", "知识库", "项目助理", "RAG"],
-      "status": "complete",
+      "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
       "page_url": "blueprints/project-memory-meeting-assistant.html",
+      "demo_url": "demos/project-memory-meeting-assistant/",
+      "demo_pack_path": "demos/project-memory-meeting-assistant/",
       "md_url": "docs/project-memory-meeting-assistant.md",
-      "created_phase": "IDB-1"
+      "created_phase": "IDB-1",
+      "updated_phase": "IDB-2R"
     },
     {
       "id": "customer-meeting-autonomous-build",
@@ -35,16 +38,19 @@
       "audience": ["产品经理", "售前团队", "研发团队", "AI Agent 使用者", "创业团队"],
       "audience_en": ["Product Manager", "Sales Engineer", "R&D Team", "AI Agent User", "Startup Team"],
       "tags": ["AI", "客户会议", "需求验证", "Agent Automation", "原型构建", "Demo"],
-      "status": "complete",
+      "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
       "page_url": "blueprints/customer-meeting-autonomous-build.html",
+      "demo_url": "demos/customer-meeting-autonomous-build/",
+      "demo_pack_path": "demos/customer-meeting-autonomous-build/",
       "md_url": "docs/customer-meeting-autonomous-build.md",
-      "created_phase": "IDB-2"
+      "created_phase": "IDB-2",
+      "updated_phase": "IDB-2R"
     }
   ],
   "meta": {
-    "version": "2.0",
+    "version": "3.0",
     "total": 2,
     "last_updated": "2026-06-12"
   }

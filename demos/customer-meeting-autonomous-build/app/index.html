@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: 客户跟进看板 · Customer Meeting Autonomous Build</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    .demo-hero { background: var(--bg-primary); padding: 60px 0 40px; border-bottom: 1px solid var(--border); }
+    .demo-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .demo-hero .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .demo-hero .meta span { font-size: 0.85rem; color: var(--text-muted); }
+    .demo-hero .meta .accent { color: var(--accent); font-weight: 500; }
+    .demo-hero .intro { font-size: 1.05rem; color: var(--text-secondary); max-width: 700px; }
+    .demo-section { padding: 40px 0; border-bottom: 1px solid var(--border-light); }
+    .demo-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; }
+    .demo-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 12px 0; }
+    .demo-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .demo-card p, .demo-card li { font-size: 0.85rem; color: var(--text-secondary); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 6px; }
+    .tag-green { background: #dcfce7; color: #166534; }
+    .tag-yellow { background: #fef3c7; color: #92400e; }
+    .tag-red { background: #fee2e2; color: #991b1b; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .file-tree { font-family: var(--font-mono); font-size: 0.85rem; background: var(--bg-tertiary); padding: 16px; border-radius: var(--radius); line-height: 1.8; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 0.9rem; margin-bottom: 20px; }
+    .btn { display: inline-block; padding: 8px 16px; background: var(--accent); color: #fff; border-radius: var(--radius); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--accent-light); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* Dashboard styles */
+    .dashboard { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin: 20px 0; }
+    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .dashboard-title { font-size: 1.1rem; font-weight: 700; }
+    .dashboard-badge { font-size: 0.75rem; padding: 4px 10px; background: #fef3c7; color: #92400e; border-radius: 4px; }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+    .stat-number { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .customer-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .customer-table th { background: var(--bg-tertiary); padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
+    .customer-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); }
+    .risk-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 500; }
+    .risk-low { background: #dcfce7; color: #166534; }
+    .risk-medium { background: #fef3c7; color: #92400e; }
+    .risk-high { background: #fee2e2; color: #991b1b; }
+    .stage-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; background: var(--bg-tertiary); color: var(--text-secondary); }
+    .notes-cell { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .notes-cell:hover { white-space: normal; overflow: visible; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../../blueprints/customer-meeting-autonomous-build.html">方案页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="demo-hero">
+    <div class="container">
+      <a href="../../blueprints/customer-meeting-autonomous-build.html" class="back-link">← 返回方案页</a>
+      <h1>Demo: 客户跟进看板</h1>
+      <div class="meta">
+        <span class="accent">🚀 Customer Meeting Triggered Autonomous Build</span>
+        <span>场景: 销售团队客户跟进</span>
+        <span class="tag tag-green">demo-ready</span>
+      </div>
+      <p class="intro">基于客户会议需求实时构建的可演示原型。客户描述“想知道客户跟进到哪一步”，会议结束后立即展示这个跟进看板。</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="demo-section">
+      <h2>🎯 Demo 场景</h2>
+      <div class="demo-card">
+        <h4>客户会议</h4>
+        <p>张总（销售总监）描述：销售团队12人，经常不知道客户跟进到哪一步，主管没法快速看到风险状态。希望有一个简单页面，看到客户列表、当前阶段、下次跟进时间、风险提醒和备注。</p>
+        <p><strong>客户约束：</strong>团队12人，客户约200个，先手动维护，不做复杂CRM集成，本周内要原型。</p>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📤 Demo 原型</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">以下看板基于客户会议需求，由 Agent 自动构建。数据为模拟数据。</p>
+      
+      <div class="dashboard">
+        <div class="dashboard-header">
+          <div class="dashboard-title">客户跟进看板</div>
+          <div class="dashboard-badge">⚠️ 原型验证 — 非正式产品</div>
+        </div>
+        
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">8</div>
+            <div class="stat-label">总客户数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #92400e;">2</div>
+            <div class="stat-label">有风险</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #991b1b;">1</div>
+            <div class="stat-label">危险</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #2563eb;">3</div>
+            <div class="stat-label">本周需跟进</div>
+          </div>
+        </div>
+        
+        <table class="customer-table">
+          <thead>
+            <tr>
+              <th>客户名称</th>
+              <th>当前阶段</th>
+              <th>风险</th>
+              <th>下次跟进</th>
+              <th>负责人</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ABC科技</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">李经理</span></td>
+              <td><span class="stage-tag">需求沟通</span></td>
+              <td><span class="risk-badge risk-low">正常</span></td>
+              <td>2026-06-15</td>
+              <td>张三</td>
+              <td class="notes-cell">预算50万，决策人：王总</td>
+            </tr>
+            <tr>
+              <td><strong>XYZ贸易</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">陈主任</span></td>
+              <td><span class="stage-tag">方案报价</span></td>
+              <td><span class="risk-badge risk-medium">有风险</span></td>
+              <td>2026-06-11</td>
+              <td>李四</td>
+              <td class="notes-cell">竞品报价更低，需强调服务优势</td>
+            </tr>
+            <tr>
+              <td><strong>大华集团</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">赵总监</span></td>
+              <td><span class="stage-tag">初次接触</span></td>
+              <td><span class="risk-badge risk-high">危险</span></td>
+              <td>2026-06-05</td>
+              <td>王五</td>
+              <td class="notes-cell">超过1周未跟进，需立即联系</td>
+            </tr>
+            <tr>
+              <td><strong>金石软件</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">刘经理</span></td>
+              <td><span class="stage-tag">合同谈判</span></td>
+              <td><span class="risk-badge risk-low">正常</span></td>
+              <td>2026-06-18</td>
+              <td>张三</td>
+              <td class="notes-cell">合同条款已确认，等待法务审核</td>
+            </tr>
+            <tr>
+              <td><strong>远见教育</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">孙校长</span></td>
+              <td><span class="stage-tag">需求沟通</span></td>
+              <td><span class="risk-badge risk-low">正常</span></td>
+              <td>2026-06-16</td>
+              <td>李四</td>
+              <td class="notes-cell">预算30万，需要分期付款方案</td>
+            </tr>
+            <tr>
+              <td><strong>远洋物流</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">周总</span></td>
+              <td><span class="stage-tag">成交</span></td>
+              <td><span class="risk-badge risk-low">正常</span></td>
+              <td>2026-06-20</td>
+              <td>王五</td>
+              <td class="notes-cell">已签约，安排实施团队对接</td>
+            </tr>
+            <tr>
+              <td><strong>明德医疗</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">吴主任</span></td>
+              <td><span class="stage-tag">方案报价</span></td>
+              <td><span class="risk-badge risk-medium">有风险</span></td>
+              <td>2026-06-12</td>
+              <td>张三</td>
+              <td class="notes-cell">需要合规证明，正在准备材料</td>
+            </tr>
+            <tr>
+              <td><strong>新锐网络</strong><br><span style="font-size:0.7rem;color:var(--text-muted)">郑经理</span></td>
+              <td><span class="stage-tag">初次接触</span></td>
+              <td><span class="risk-badge risk-low">正常</span></td>
+              <td>2026-06-17</td>
+              <td>李四</td>
+              <td class="notes-cell">朋友介绍，有初步意向</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">
+        数据为模拟数据，仅用于原型演示。风险颜色基于下次跟进时间自动计算：绿色（正常）、黄色（到期未跟进）、红色（超过1周）。
+      </p>
+    </div>
+
+    <div class="demo-section">
+      <h2>📥 输入材料</h2>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>客户会议转写</h4>
+          <p>张总描述：销售团队12人，需要看到客户列表、阶段、风险、下次跟进时间、负责人和备注。手动维护，不做复杂CRM。</p>
+          <a href="../inputs/sample-customer-meeting-transcript.md" class="btn btn-outline" style="margin-top:8px;">查看完整转写</a>
+        </div>
+        <div class="demo-card">
+          <h4>产品背景</h4>
+          <p>纯前端演示，静态HTML/CSS/JS，模拟数据，任何浏览器直接打开，标注"原型验证"。</p>
+          <a href="../inputs/product-background.md" class="btn btn-outline" style="margin-top:8px;">查看背景</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📝 关键 Prompt</h2>
+      <div class="demo-card">
+        <p><strong>角色：</strong>客户需求的 AI 分析助手 + Demo 构建规划者</p>
+        <p><strong>输入：</strong>客户会议转写 + 产品背景</p>
+        <p><strong>输出：</strong>13 项结构化 Demo Brief（客户目标、痛点、用户故事、工作流、Demo范围、页面结构、数据模型、Agent任务等）</p>
+        <a href="../prompts/demo-brief-and-build-prompt.md" class="btn btn-outline" style="margin-top:10px;">查看完整 Prompt</a>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📤 生成输出</h2>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>Demo Brief</h4>
+          <p>结构化需求：客户列表表格、6列、统计卡片、风险颜色、模拟数据、非目标。</p>
+          <a href="../outputs/demo-brief.md" class="btn btn-outline" style="margin-top:8px;">查看 Brief</a>
+        </div>
+        <div class="demo-card">
+          <h4>用户故事</h4>
+          <p>4个用户故事：销售查看列表、主管查看状态、销售更新状态、销售记录备注。</p>
+          <a href="../outputs/user-stories.md" class="btn btn-outline" style="margin-top:8px;">查看用户故事</a>
+        </div>
+        <div class="demo-card">
+          <h4>Agent 任务计划</h4>
+          <p>10个任务：HTML结构、CSS样式、数据模型、表格渲染、统计卡片、风险计算、悬停详情、原型标注、测试、验证。</p>
+          <a href="../outputs/agent-task-plan.md" class="btn btn-outline" style="margin-top:8px;">查看任务计划</a>
+        </div>
+        <div class="demo-card">
+          <h4>演示讲解稿</h4>
+          <p>开场→场景对应→核心演示→待确认→下一步。5分钟讲解稿。</p>
+          <a href="../outputs/demo-presentation-script.md" class="btn btn-outline" style="margin-top:8px;">查看讲解稿</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📂 Demo Pack 文件结构</h2>
+      <div class="file-tree">
+demos/customer-meeting-autonomous-build/
+├── README.md                          # 复现说明
+├── inputs/
+│   ├── source-idea.md                 # 原始想法
+│   ├── product-background.md            # 产品背景
+│   └── sample-customer-meeting-transcript.md  # 客户会议转写
+├── prompts/
+│   └── demo-brief-and-build-prompt.md   # 关键 Prompt
+├── outputs/
+│   ├── demo-brief.md                    # Demo Brief
+│   ├── user-stories.md                  # 用户故事
+│   ├── agent-task-plan.md               # Agent 任务计划
+│   └── demo-presentation-script.md      # 演示讲解稿
+├── app/
+│   └── index.html                       # 本 Demo 页面（客户跟进看板）
+└── validation/
+    └── acceptance-checklist.md          # 验收清单
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>✅ 验收清单</h2>
+      <div class="grid-2">
+        <div class="demo-card">
+          <h4>功能验收</h4>
+          <p>✅ 提取客户目标<br>✅ 识别痛点和约束<br>✅ 生成用户故事<br>✅ 生成 Agent 任务<br>✅ 构建可打开页面<br>✅ 对应客户真实表达<br>✅ 标记待确认问题<br>✅ 生成沟通材料</p>
+        </div>
+        <div class="demo-card">
+          <h4>质量验收</h4>
+          <p>✅ 区分 [推断]<br>✅ 不承诺正式交付<br>✅ 不编造功能<br>✅ 标记 [待确认]<br>✅ 适合 Agent 使用<br>✅ 讲解稿适合客户</p>
+        </div>
+      </div>
+      <p style="margin-top: 12px;"><span class="tag tag-green">验收结果：PASS</span></p>
+    </div>
+
+    <div class="demo-section">
+      <h2>🔄 复现步骤</h2>
+      <ol>
+        <li>准备客户会议转写文本</li>
+        <li>准备产品/项目背景文档</li>
+        <li>使用 <code>prompts/demo-brief-and-build-prompt.md</code> 驱动 AI 生成 Demo Brief</li>
+        <li>让 Agent 基于 Brief 生成任务计划</li>
+        <li>让 Agent 构建最小原型（HTML/CSS/JS）</li>
+        <li>人工检查原型是否符合客户表达</li>
+        <li>将会议、Brief、Demo 和反馈回写知识库</li>
+      </ol>
+      <a href="../README.md" class="btn" style="margin-top: 12px;">查看完整复现说明</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        可复现 Demo 蓝图库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

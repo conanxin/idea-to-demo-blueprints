@@ -406,6 +406,47 @@
 
 请用 Markdown 格式输出，包含标题、列表、表格等结构化元素。确保可以直接复制到飞书文档或 Notion 中使用。</code></pre>
 
+          <h2>🎯 Demo: 真实可复现</h2>
+          <p>本项目不仅记录方案，还包含真实构建的 Demo 和完整的复现过程。</p>
+          <div class="demo-card">
+            <h4>Demo 场景：TeamFlow Dashboard 项目周会</h4>
+            <p>基于虚拟项目知识库（5 个文档）和模拟会议转写，生成完整的项目级会议纪要。</p>
+            <p><strong>Demo 地址：</strong> <a href="../../demos/project-memory-meeting-assistant/">查看 Demo 页面</a></p>
+            <p><strong>Demo Pack：</strong> <code>demos/project-memory-meeting-assistant/</code></p>
+            <p><strong>状态：</strong> <span class="tag tag-green">demo-ready</span></p>
+          </div>
+          <h3>Demo 文件结构</h3>
+          <div class="workflow-box">
+demos/project-memory-meeting-assistant/
+├── README.md                          # 复现说明
+├── inputs/                            # 输入材料
+│   ├── source-idea.md
+│   ├── project-overview.md
+│   ├── roadmap.md
+│   ├── architecture.md
+│   ├── phase-report.md
+│   └── sample-meeting-transcript.md
+├── prompts/
+│   └── meeting-brief-prompt.md        # 关键 Prompt
+├── outputs/                           # 生成结果
+│   ├── generated-project-meeting-brief.md
+│   ├── decisions.md
+│   ├── action-items.md
+│   └── project-state-update.md
+├── app/
+│   └── index.html                     # 可运行 Demo 页面
+└── validation/
+    └── acceptance-checklist.md        # 验收清单</div>
+          <h3>复现步骤</h3>
+          <ol>
+            <li>准备项目知识库（5 个 Markdown 文档）</li>
+            <li>准备会议转写文本</li>
+            <li>使用 <code>prompts/meeting-brief-prompt.md</code> 驱动 AI</li>
+            <li>检查输出是否符合 <code>validation/acceptance-checklist.md</code></li>
+            <li>人工确认关键决策和负责人</li>
+            <li>将确认的会议纪要回写知识库</li>
+          </ol>
+
           <h2>参考资源</h2>
           <ul>
             <li><a href="https://www.feishu.cn/product/minutes" target="_blank">飞书妙记</a> — 会议转写工具</li>

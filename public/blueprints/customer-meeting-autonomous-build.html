@@ -603,6 +603,45 @@
 请用 Markdown 格式输出，包含标题、列表、表格、代码块等结构化元素。确保可以直接复制到飞书文档、Notion 或 Agent 工具中使用。
 </code></pre>
 
+          <h2>🎯 Demo: 真实可复现</h2>
+          <p>本项目不仅记录方案，还包含真实构建的 Demo 和完整的复现过程。</p>
+          <div class="demo-card">
+            <h4>Demo 场景：客户跟进看板原型</h4>
+            <p>基于客户会议需求（销售团队需要客户跟进看板），实时构建的可演示原型。包含客户列表、阶段、风险等级、统计卡片。</p>
+            <p><strong>Demo 地址：</strong> <a href="../../demos/customer-meeting-autonomous-build/">查看 Demo 页面</a></p>
+            <p><strong>Demo Pack：</strong> <code>demos/customer-meeting-autonomous-build/</code></p>
+            <p><strong>状态：</strong> <span class="tag tag-green">demo-ready</span></p>
+          </div>
+          <h3>Demo 文件结构</h3>
+          <div class="workflow-box">
+demos/customer-meeting-autonomous-build/
+├── README.md                          # 复现说明
+├── inputs/                            # 输入材料
+│   ├── source-idea.md
+│   ├── product-background.md
+│   └── sample-customer-meeting-transcript.md
+├── prompts/
+│   └── demo-brief-and-build-prompt.md # 关键 Prompt
+├── outputs/                           # 生成结果
+│   ├── demo-brief.md
+│   ├── user-stories.md
+│   ├── agent-task-plan.md
+│   └── demo-presentation-script.md
+├── app/
+│   └── index.html                     # 可运行 Demo 页面
+└── validation/
+    └── acceptance-checklist.md        # 验收清单</div>
+          <h3>复现步骤</h3>
+          <ol>
+            <li>准备客户会议转写文本</li>
+            <li>准备产品/项目背景文档</li>
+            <li>使用 <code>prompts/demo-brief-and-build-prompt.md</code> 驱动 AI 生成 Demo Brief</li>
+            <li>让 Agent 基于 Brief 生成任务计划</li>
+            <li>让 Agent 构建最小原型（HTML/CSS/JS）</li>
+            <li>人工检查原型是否符合客户表达</li>
+            <li>将会议、Brief、Demo 和反馈回写知识库</li>
+          </ol>
+
           <h2>参考资源</h2>
           <ul>
             <li><a href="https://www.feishu.cn/product/minutes" target="_blank">飞书妙记</a> — 会议转写工具</li>
