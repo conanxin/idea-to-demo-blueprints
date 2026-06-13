@@ -11,6 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (!data.blueprints || !data.blueprints.length) return;
         grid.innerHTML = '';
+
+        // 动态更新顶部 badge / 标题 / 描述，避免数据与文案漂移
+        const readyCount = data.blueprints.filter(bp => bp.status === 'demo-ready').length;
+        const badge = document.getElementById('badge-demo-count');
+        if (badge) badge.textContent = '✅ ' + readyCount + ' 个 demo-ready';
+        const secTitle = document.getElementById('bp-section-title');
+        if (secTitle) secTitle.textContent = readyCount + ' Demo-Ready Blueprints';
+        const secDesc = document.getElementById('bp-section-desc');
+        if (secDesc) {
+          secDesc.textContent = '当前已收录 ' + data.blueprints.length + ' 个 Blueprint，其中 ' + readyCount + ' 个 demo-ready，每个都包含真实可运行的 Demo 与完整的复现说明。';
+        }
+
         data.blueprints.forEach(bp => {
           const card = document.createElement('div');
           card.className = 'blueprint-card';

@@ -71,11 +71,35 @@
       "md_url": "docs/multi-agent-project-dashboard.md",
       "created_phase": "IDB-3",
       "updated_phase": "IDB-3"
+    },
+    {
+      "id": "gesture-visual-lab",
+      "title": "手势实时视觉实验室",
+      "title_en": "GestureVisual Lab",
+      "slug": "gesture-visual-lab",
+      "summary": "用摄像头、MediaPipe、TouchDesigner 和 AI 辅助脚本，把双手动作映射为实时 3D 故障视觉控制，帮助创意技术人员快速做出可表演、可复现的互动视觉 Demo。",
+      "category": "Creative Coding / Realtime Visual / AI Workflow",
+      "difficulty": "中高",
+      "difficulty_en": "Medium-High",
+      "demo_time": "2-3 天",
+      "demo_time_en": "2-3 days",
+      "audience": ["创意技术人员", "设计师", "AI Agent 使用者", "互动装置创作者", "实时视觉学习者"],
+      "audience_en": ["Creative Technologist", "Designer", "AI Agent User", "Interactive Installation Creator", "Realtime Visual Learner"],
+      "tags": ["TouchDesigner", "MediaPipe", "Gesture Control", "Realtime Visual", "Creative Coding", "Claude Code"],
+      "status": "demo-ready",
+      "created_at": "2026-06-13",
+      "updated_at": "2026-06-13",
+      "page_url": "./blueprints/gesture-visual-lab.html",
+      "demo_url": "./demos/gesture-visual-lab/",
+      "demo_pack_path": "demos/gesture-visual-lab/",
+      "md_url": "docs/gesture-visual-lab.md",
+      "created_phase": "IDB-5",
+      "updated_phase": "IDB-5"
     }
   ],
   "meta": {
-    "version": "4.1",
-    "total": 3,
+    "version": "4.2",
+    "total": 4,
     "last_updated": "2026-06-13"
   }
 }

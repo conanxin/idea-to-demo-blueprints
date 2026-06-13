@@ -33,7 +33,7 @@
         <span class="badge">🚀 快速验证</span>
         <span class="badge">📝 可执行蓝图</span>
         <span class="badge">🤖 AI Workflow</span>
-        <span class="badge accent">✅ 3 个 demo-ready</span>
+        <span class="badge accent" id="badge-demo-count">✅ 4 个 demo-ready</span>
       </div>
     </div>
   </section>
@@ -64,9 +64,9 @@
 
   <section class="section" style="background: var(--bg-primary);">
     <div class="container">
-      <h2 class="section-title">Three Demo-Ready Blueprints</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        当前已收录的 3 个 demo-ready Blueprint。每个都包含真实可运行的 Demo。
+      <h2 class="section-title" id="bp-section-title">Demo-Ready Blueprints</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;" id="bp-section-desc">
+        当前收录的 demo-ready Blueprint，每个都包含真实可运行的 Demo 与完整的复现说明。
       </p>
       <div class="blueprint-grid" id="blueprint-grid">
         <!-- Cards rendered by JS from data/blueprints.json -->
@@ -106,7 +106,7 @@
       <h2 class="section-title">如何使用</h2>
       <div class="article">
         <ol style="font-size:1rem;line-height:1.8;">
-          <li><strong>选择一个 Blueprint</strong> — 浏览下方 3 个方案，选择最感兴趣的</li>
+          <li><strong>选择一个 Blueprint</strong> — 浏览下方 demo-ready 方案，选择最感兴趣的</li>
           <li><strong>先看 Demo，再看构建过程</strong> — 直接打开 Demo 页面体验效果，然后阅读方案页的"构建过程"章节</li>
           <li><strong>复制 Demo Pack，用自己的项目材料替换 inputs</strong> — 下载整个 <code>demos/&lt;slug&gt;/</code> 目录，用你自己的输入材料替换 <code>inputs/</code>，重新运行 Prompt</li>
         </ol>
@@ -118,7 +118,7 @@
     <div class="container">
       <h2 class="section-title">Showcase</h2>
       <p style="color: var(--text-secondary); margin-bottom: 20px; max-width: 700px;">
-        以下是首页和 3 个 Demo 页的实际截图。点击可跳转到对应页面。
+        以下是首页和 Demo 页的实际截图。点击可跳转到对应页面。
       </p>
       <div class="screenshot-grid">
         <a href="./" class="screenshot-card">

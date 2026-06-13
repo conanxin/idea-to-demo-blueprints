@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手势实时视觉实验室 · Idea-to-Demo Blueprints</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-hero">
+      <div class="container">
+        <a href="../index.html" class="back-link">← 返回方案库</a>
+        <h1>手势实时视觉实验室</h1>
+        <div class="meta">
+          <span class="accent">Creative Coding / Realtime Visual / AI Workflow</span>
+          <span>难度：中高</span>
+          <span>Demo 周期：2-3 天</span>
+          <span>适合：创意技术人员 / 设计师 / AI Agent 使用者</span>
+          <span class="tag tag-green" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-size:0.75rem;">demo-ready</span>
+        </div>
+        <p class="intro">用摄像头、MediaPipe 手部追踪、TouchDesigner 和 AI 辅助脚本，把双手的 21 个关键点动作映射为实时 3D 故障视觉控制，让创意技术人员能在 2-3 天内做出可表演、可复现、可讲解的互动视觉 Demo。</p>
+        <p style="margin-top:16px;">
+          <a href="../demos/gesture-visual-lab/" class="btn" style="display:inline-block;padding:10px 18px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:500;">查看 Demo →</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container">
+        <nav class="toc">
+          <div class="toc-title">目录</div>
+          <ul>
+            <li><a href="#design-rationale">设计理由</a></li>
+            <li><a href="#impact-analysis">修改影响分析</a></li>
+            <li><a href="#original-idea">原始想法</a></li>
+            <li><a href="#background">背景与问题</a></li>
+            <li><a href="#users">目标用户</a></li>
+            <li><a href="#overview">方案概述</a></li>
+            <li><a href="#mvp">Demo MVP</a></li>
+            <li><a href="#architecture">技术架构</a></li>
+            <li><a href="#workflow">数据流</a></li>
+            <li><a href="#mapping">交互映射</a></li>
+            <li><a href="#demo-pack">Demo Pack</a></li>
+            <li><a href="#prompt">关键 Prompt</a></li>
+            <li><a href="#risks">风险与限制</a></li>
+            <li><a href="#acceptance">验收</a></li>
+            <li><a href="#reproduce">复现</a></li>
+            <li><a href="#extensions">扩展</a></li>
+          </ul>
+        </nav>
+
+        <article class="article">
+          <h2 id="design-rationale">设计理由</h2>
+          <p><strong>为什么这个方案是必要的？</strong></p>
+          <p>"手势实时视觉"是 2026 年社交媒体上的爆款技术叙事。一双手在摄像头前快速变换动作，屏幕上就跟着出现夸张的 3D 故障视觉——画面挤压、扭曲、闪烁、色彩切换，看起来像把 Figma 和 Photoshop 打垮了一样。</p>
+          <p>这个叙事很有传播力，但它有一个致命的副作用：<strong>观众看到的是结果，但不知道底层链路</strong>。真实链路是：</p>
+          <div class="workflow-box">
+摄像头输入
+→ MediaPipe Hand Landmarker 检测
+→ 双手 21 个关键点
+→ 手势语义计算（中点 / 距离 / 角度 / 捏合 / 速度 / 握拳）
+→ TouchDesigner 参数映射
+→ 实时 3D 故障视觉输出</div>
+          <p>本 Blueprint 的设计理由是：<strong>把这条链路结构化、可记录、可复现、可教学</strong>。视频带来灵感，但 Blueprint 带来技能。</p>
+
+          <h3>为什么采用"Web 模拟器 + TouchDesigner 真机模板"双轨设计？</h3>
+          <ul>
+            <li><strong>Web 模拟器</strong> — 让没有 TouchDesigner 的人也能拖动手点、看视觉变化、读懂映射规则。GitHub Pages 静态部署即可访问。</li>
+            <li><strong>TouchDesigner 真机模板</strong> — 提供 Python DAT Prompt 模板和节点图规划，让本地有 TouchDesigner 的用户能复现真实效果。</li>
+            <li><strong>不提交 .toe 二进制</strong> — TouchDesigner 工程文件是二进制且体积大，不适合版本控制。用户按 references 复制节点结构即可。</li>
+          </ul>
+
+          <h3>为什么不用真实摄像头做 Web Demo？</h3>
+          <ul>
+            <li><strong>隐私考虑</strong> — GitHub Pages 静态部署，请求摄像头权限会引发用户警觉，且 MediaPipe WASM 在浏览器内运行对性能有要求</li>
+            <li><strong>演示可控性</strong> — 拖动手点 + slider 可以精确演示每项映射，让讲解更可控</li>
+            <li><strong>移动端兼容</strong> — 真实摄像头方案在移动端不可靠，拖动手点方案移动端可用</li>
+            <li><strong>真机方案已存在</strong> — 真实摄像头方案在 TouchDesigner 端由 MediaPipe 插件完成，Web 端定位是"解释映射逻辑"</li>
+          </ul>
+
+          <h2 id="impact-analysis">修改影响分析</h2>
+          <p><strong>本方案对项目的影响：</strong></p>
+
+          <h3>正面影响</h3>
+          <ul>
+            <li><strong>扩展方案库多样性</strong> — 从纯 AI Workflow 拓展到 Creative Coding / Realtime Visual，覆盖创意技术用户群</li>
+            <li><strong>展示技术链路可视化能力</strong> — 把"AI Agent + 实时视觉 + 手势识别"三条技术线串联起来</li>
+            <li><strong>复用已有 Prompt 模板模式</strong> — 沿用 IDB-2 的"prompt 驱动 Demo 构建"模式，但 prompt 内容完全不同</li>
+            <li><strong>沉淀 AI 辅助创意编码工作流</strong> — Claude / Codex 生成 TouchDesigner Python DAT 是新模式</li>
+          </ul>
+
+          <h3>潜在影响 / 风险</h3>
+          <ul>
+            <li><strong>Web 模拟器 vs 真机的预期管理</strong> — 必须显著标注 Web Demo 是"交互模拟器 / companion demo"，不能让人误以为是 TouchDesigner 真机</li>
+            <li><strong>.toe 不进 Git</strong> — 需要明确告知用户"在本地新建 .toe 后按 references 复制节点"，不能承诺仓库里有 .toe</li>
+            <li><strong>MediaPipe 插件依赖</strong> — 真实效果依赖 torinmb/mediapipe-touchdesigner 第三方插件，用户需要独立安装</li>
+            <li><strong>创意视觉效果复杂度差异</strong> — Web 端 CSS filter 和 TouchDesigner GLSL 效果差异大，方案中明确说"Web 端不模拟 TouchDesigner GLSL 高级效果"</li>
+          </ul>
+
+          <h3>与其他 Blueprint 的关系</h3>
+          <ul>
+            <li><strong>与 IDB-1（项目记忆型会议助手）</strong> — 可以联动，把创意技术 workshop 会议记录联动到 Blueprint 知识库</li>
+            <li><strong>与 IDB-2（客户会议自主循环构建）</strong> — 共用"prompt 驱动 Demo 构建"模式，但 prompt 内容完全独立</li>
+            <li><strong>与 IDB-3（多 Agent 项目管理面板）</strong> — 无直接依赖，但都属于"AI 辅助创意工作流"系列</li>
+          </ul>
+
+          <h2 id="original-idea">原始想法 / 灵感来源</h2>
+          <blockquote>
+            <p>"最近有个爆款视频：一双手在摄像头前快速变换动作，屏幕上就跟着出现夸张的 3D 故障视觉——画面挤压、扭曲、闪烁、色彩切换，像把 Figma 和 Photoshop 打垮了一样。看起来很惊艳，但更值得拆解的是背后的真实技术链路：摄像头 → 手部关键点 → 手势语义 → 视觉参数映射。 如果把这套链路整理成一个可复现的 Blueprint，再让 Claude / Agent 辅助生成 TouchDesigner Python DAT 脚本和 Web 交互模拟器，创意技术人员就能在 2-3 天内做出来一个属于自己风格的实时视觉 Demo。"</p>
+          </blockquote>
+
+          <h2 id="background">背景与问题</h2>
+          <h3>当前场景</h3>
+          <p>创意技术、互动装置、舞台视觉、VJ 表演领域一直存在一个共同痛点：<strong>实时视觉需要"复杂工具 + 复杂输入"</strong>。常见工作流：</p>
+          <ul>
+            <li>用 TouchDesigner / Notch / Resolume 搭建视觉管线</li>
+            <li>用 MIDI 控制器、Kinect、Leap Motion、自定义硬件做输入</li>
+            <li>把两者联调需要懂节点图、信号流、Python / GLSL</li>
+          </ul>
+          <p>这导致一个尴尬的局面：真正"懂视觉"的设计师不一定会写节点图，会写节点图的技术人不一定有表演感的肢体表现力。</p>
+
+          <h3>现有痛点</h3>
+          <ul>
+            <li><strong>痛点 1：工具门槛高</strong> — TouchDesigner 非商用版虽然免费，但节点图 + Python DAT + CHOP 信号流的组合学习曲线陡峭</li>
+            <li><strong>痛点 2：手部追踪方案分散</strong> — MediaPipe Hands、Hand Landmarker、Leap Motion、Kinect 各有优缺点，选型没有标准答案</li>
+            <li><strong>痛点 3：手势到视觉的映射关系藏在脑子里</strong> — 设计师凭直觉做映射，但没有结构化记录</li>
+            <li><strong>痛点 4：AI 辅助脚本缺位</strong> — TouchDesigner Python DAT 可以写，但 prompt 和上下文都不容易凑齐</li>
+            <li><strong>痛点 5：缺少可解释的 Demo</strong> — 观众看到的是"哇好酷"，但创作者需要向同行、老师、客户解释每一帧视觉变化对应哪个手势</li>
+          </ul>
+
+          <h2 id="users">目标用户</h2>
+          <table>
+            <thead>
+              <tr><th>用户角色</th><th>使用场景</th><th>核心价值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>创意技术学习者</td><td>学 TouchDesigner、MediaPipe、手势识别</td><td>有完整链路可学，不是只看到结果视频</td></tr>
+              <tr><td>视觉设计师 / VJ</td><td>做表演视觉、品牌快闪、互动装置</td><td>不用学硬件编程也能用身体控制视觉</td></tr>
+              <tr><td>AI Agent 使用者</td><td>让 Claude / Codex 辅助生成 TouchDesigner 脚本</td><td>有标准 prompt 模板和映射规则可复用</td></tr>
+              <tr><td>独立创作者</td><td>做可讲解的 Demo 给客户、老师、同行</td><td>GitHub Pages 上的交互模拟器可直接演示</td></tr>
+              <tr><td>互动装置艺术家</td><td>装置输入源设计</td><td>标准化的"手势 → 参数"映射库可拼装</td></tr>
+              <tr><td>教学场景</td><td>创意技术课程、workshop</td><td>有完整 demo pack 可让学生复现</td></tr>
+            </tbody>
+          </table>
+
+          <h2 id="overview">方案概述</h2>
+          <p>这个方案的核心是把"摄像头 → MediaPipe → 手势语义 → TouchDesigner → 实时视觉"这条链路<strong>结构化、可记录、可复现</strong>。它由三层组成：</p>
+          <ol>
+            <li><strong>真实运行层（TouchDesigner 端）</strong> — 在本地 TouchDesigner + MediaPipe 插件环境下运行</li>
+            <li><strong>Web 交互模拟器（GitHub Pages 端）</strong> — 用 HTML/CSS/JS 复现手势映射逻辑，让没有 TouchDesigner 的人也能理解</li>
+            <li><strong>AI 辅助脚本层（Claude / Codex / Agent 端）</strong> — 用 prompt 模板让 AI 生成 TouchDesigner Python DAT、MediaPipe 集成代码、Web Demo 代码</li>
+          </ol>
+
+          <p><strong>MVP（Gesture Cube Lite）核心手势映射：</strong></p>
+          <div class="workflow-box">
+双手中点 → cube 位置
+双手距离 → cube 缩放
+双手连线角度 → cube 旋转
+左手捏合 → 噪点 / distortion 强度
+右手捏合 → 切换颜色主题
+快速移动 → 触发 glitch
+双手握拳 → freeze frame</div>
+
+          <p><strong>Web Demo 定位明确：</strong>这是静态 Web 模拟器，验证手势映射逻辑和 Demo 可解释性。真实 TouchDesigner 版本需要在本地安装 TouchDesigner + MediaPipe 插件。</p>
+
+          <h2 id="mvp">Demo MVP</h2>
+          <h3>目标</h3>
+          <p>用 2-3 天验证："手势 → 视觉"映射规则能不能被结构化记录、复现、讲解？不要求做到完整的 TouchDesigner 真机工程，但要求：</p>
+          <ul>
+            <li>Web 交互模拟器可拖动、可观察视觉变化</li>
+            <li>映射规则和参数面板完整可见</li>
+            <li>TouchDesigner Python DAT 脚本有完整模板，可在本地真实环境复现</li>
+          </ul>
+
+          <h3>输入 / 输出</h3>
+          <ul>
+            <li><strong>Web Demo 输入</strong> — 浏览器内拖动两个手点 + slider 控制捏合度 + toggle 控制 freeze</li>
+            <li><strong>TouchDesigner 输入</strong> — 摄像头实时画面 + MediaPipe Hand Landmarker 输出</li>
+            <li><strong>Agent 输入</strong> — 固定的 Prompt 模板 + 当前手势映射规则文档 + 项目脚手架</li>
+            <li><strong>输出</strong> — Web 端 cube 实时视觉 + TouchDesigner 真机视觉 + 沉淀产物（映射规则文档、Python DAT 脚本、Web Demo 源码）</li>
+          </ul>
+
+          <h3>验证标准（核心）</h3>
+          <ul class="checklist">
+            <li>Web Demo 打开后立即可交互，无需摄像头授权</li>
+            <li>拖动 Left Hand → cube 跟随移动</li>
+            <li>拖动 Right Hand → cube 跟随移动</li>
+            <li>双手距离变化 → cube 缩放</li>
+            <li>双手角度变化 → cube 旋转</li>
+            <li>Left Pinch slider → 噪点强度变化</li>
+            <li>Right Pinch slider → 颜色主题切换</li>
+            <li>Movement Speed 高 → glitch 闪烁</li>
+            <li>Both Fists Freeze toggle 开启 → 视觉暂停</li>
+            <li>Reset 按钮 → 回到初始状态</li>
+            <li>参数面板实时显示 9 项核心参数</li>
+          </ul>
+
+          <h2 id="architecture">技术架构</h2>
+          <h3>最小技术栈</h3>
+          <table>
+            <thead>
+              <tr><th>组件</th><th>技术</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>摄像头输入</td><td>Webcam (getUserMedia) / TouchDesigner TOP</td><td>实时视频流</td></tr>
+              <tr><td>手部追踪</td><td>MediaPipe Hand Landmarker (Web) / MediaPipe TouchDesigner 插件 (本地)</td><td>左右手各 21 个关键点</td></tr>
+              <tr><td>手势语义层</td><td>原生 JS（Web）/ Python DAT（TouchDesigner）</td><td>计算中心、距离、角度、捏合度、速度</td></tr>
+              <tr><td>视觉输出</td><td>CSS 3D cube + filter effects（Web）/ TouchDesigner 节点图（GLSL）</td><td>实时视觉</td></tr>
+              <tr><td>AI 辅助</td><td>Claude / Codex / Hermes Agent</td><td>生成 TouchDesigner Python DAT、Web Demo 代码</td></tr>
+              <tr><td>文档 / Demo</td><td>Markdown / HTML / CSS / 原生 JS</td><td>不依赖构建框架</td></tr>
+              <tr><td>发布</td><td>GitHub Pages（Web Demo）/ 本地 .toe 文件（TouchDesigner 真机）</td><td>不提交 .toe 二进制</td></tr>
+            </tbody>
+          </table>
+
+          <h3>架构图</h3>
+          <div class="workflow-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                       输入层                                          │
+│  Web: 浏览器拖动手点（mock 手势）                                       │
+│  TouchDesigner: 摄像头 + MediaPipe 插件 → 21 个关键点 / 手            │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       手势语义层（Gesture Semantics）                │
+│  center_x / center_y / distance / angle                              │
+│  left_pinch / right_pinch / speed / fist_left / fist_right          │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       视觉映射层（Visual Mapping）                    │
+│  center → cube 位置   distance → cube 缩放                          │
+│  angle → cube 旋转    left_pinch → 噪点强度                         │
+│  right_pinch → 主题   speed → glitch                                 │
+│  fist → freeze                                                        │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       视觉输出层                                      │
+│  Web: CSS 3D cube + CSS filter                                       │
+│  TouchDesigner: 节点图 → GLSL → 屏幕                                  │
+└─────────────────────────────────────────────────────────────────────┘</div>
+
+          <h2 id="workflow">数据流 / 工作流</h2>
+          <h3>核心流程</h3>
+          <div class="workflow-box">
+手势输入（拖动 or 摄像头）
+→ 手部关键点检测（MediaPipe）
+→ 手势语义计算（中点 / 距离 / 角度 / 捏合 / 速度 / 握拳）
+→ 视觉参数映射（cube 位置 / 缩放 / 旋转 / 噪点 / 主题 / glitch / freeze）
+→ 视觉输出更新（CSS 3D 或 TouchDesigner 节点图）
+→ 参数面板实时显示
+→ （可选）AI Agent 辅助生成 / 修改映射规则</div>
+
+          <h3>每个步骤说明</h3>
+          <ol>
+            <li><strong>手势输入</strong> — Web 端用鼠标拖动两个手点（模拟双手位置）；TouchDesigner 端用摄像头 + MediaPipe 检测真实手部</li>
+            <li><strong>手部关键点检测</strong> — MediaPipe Hand Landmarker 输出每只手的 21 个关键点坐标 + 置信度</li>
+            <li><strong>手势语义计算</strong> — 从 21 个关键点计算：双手中点（取 wrist 平均）、双手距离、双手连线角度、捏合度（拇指-食指距离归一化）、移动速度（连续帧差）、握拳状态</li>
+            <li><strong>视觉参数映射</strong> — 每个手势语义量映射到具体的视觉参数。映射规则用纯函数实现</li>
+            <li><strong>视觉输出更新</strong> — Web 端用 CSS transform / filter / class 切换；TouchDesigner 端用 CHOP 信号传到节点图参数</li>
+            <li><strong>参数面板实时显示</strong> — Web 端有 9 项参数面板</li>
+            <li><strong>AI 辅助</strong> — 用 prompt 模板让 Claude / Codex 生成 / 调整 TouchDesigner Python DAT 脚本或 Web Demo 代码</li>
+          </ol>
+
+          <h2 id="mapping">交互映射</h2>
+          <p><strong>7 项核心手势到视觉的映射规则（这是 Blueprint 的核心资产）：</strong></p>
+          <table>
+            <thead>
+              <tr><th>手势输入</th><th>视觉输出</th><th>映射函数</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>双手中点 center_x ∈ [-1, 1]</td><td>cube translate_x ∈ [-2, 2]</td><td>mapRange(center_x, -1, 1, -2, 2)</td></tr>
+              <tr><td>双手中点 center_y ∈ [-1, 1]</td><td>cube translate_y ∈ [-2, 2]</td><td>mapRange(center_y, -1, 1, -2, 2)</td></tr>
+              <tr><td>双手距离 distance ∈ [0.2, 1.5]</td><td>cube scale ∈ [0.5, 2.0]</td><td>mapRange(distance, 0.2, 1.5, 0.5, 2.0)</td></tr>
+              <tr><td>双手角度 angle ∈ [-180°, 180°]</td><td>cube rotation_z 跟随</td><td>angle 直接赋值</td></tr>
+              <tr><td>左手捏合 left_pinch ∈ [0, 1]</td><td>噪点强度 noise_amount ∈ [0, 1]</td><td>mapRange(left_pinch, 0, 1, 0, 1)</td></tr>
+              <tr><td>右手捏合 right_pinch ∈ [0, 1]</td><td>主题切换 neon / mono / cyber</td><td>右捏合度阈值切主题</td></tr>
+              <tr><td>移动速度 speed ∈ [0, 1]</td><td>glitch 闪烁</td><td>speed > 0.7 开启</td></tr>
+              <tr><td>双手握拳 fist_left && fist_right</td><td>freeze frame</td><td>freeze=true 暂停动画</td></tr>
+            </tbody>
+          </table>
+
+          <h2 id="demo-pack">Demo Pack</h2>
+          <p>完整 Demo Pack 结构：</p>
+          <div class="workflow-box">
+demos/gesture-visual-lab/
+├── README.md                                    # 复现说明
+├── inputs/
+│   ├── source-idea.md                          # 原始想法
+│   ├── source-analysis.md                      # 爆款视频技术链路拆解
+│   └── technical-background.md                 # MediaPipe + TouchDesigner 技术背景
+├── prompts/
+│   ├── touchdesigner-python-dat-prompt.md     # TD Python DAT 生成 prompt
+│   └── static-demo-build-prompt.md            # Web Demo 生成 prompt
+├── outputs/
+│   ├── blueprint-brief.md                      # Blueprint 摘要
+│   ├── gesture-mapping-model.md                # 手势映射模型
+│   ├── touchdesigner-network-plan.md           # TouchDesigner 节点图规划
+│   └── demo-notes.md                           # Demo 演示笔记
+├── app/
+│   ├── index.html                              # Web Demo 入口
+│   ├── style.css                               # 样式
+│   └── app.js                                  # 手势映射 + cube 更新逻辑
+└── validation/
+    └── acceptance-checklist.md                 # 完整验收清单</div>
+
+          <h2 id="prompt">关键 Prompt</h2>
+          <p><strong>Prompt A：生成 TouchDesigner Python DAT 脚本</strong></p>
+          <pre><code>你是 TouchDesigner + MediaPipe 集成专家。请基于以下手势映射规则，生成一个
+完整的 TouchDesigner Python DAT 脚本（mediapipe_hand_callbacks.py），用于
+GestureVisual Lab Blueprint。
+
+## 手势映射规则（必须严格按此映射）
+
+1. 双手中点 (center_x, center_y) → cube 位置 (translate_x, translate_y)
+2. 双手距离 (distance) → cube 缩放 (scale)
+3. 双手连线角度 (angle) → cube 旋转 (rotation_z)
+4. 左手捏合 (left_pinch) → 噪点强度 (noise_amount)
+5. 右手捏合 (right_pinch) → 主题切换（neon / mono / cyber）
+6. 移动速度 (speed) → glitch 闪烁
+7. 双手握拳 (fist_left && fist_right) → freeze
+
+## 要求
+
+1. 先输出脚本结构说明，再写代码
+2. 代码用函数化结构（getCenter, getDistance, getAngle, getPinch, getSpeed, getFist, mapRange）
+3. 每个函数加简短注释
+4. 在脚本开头说明哪些行需要用户替换（用户本地 .toe 节点名）
+5. 不要使用任何真实摄像头设备，只用 mock 数据测试
+6. 不要硬编码任何 API key / secret</code></pre>
+
+          <p><strong>Prompt B：生成 Web Demo 代码</strong></p>
+          <pre><code>你是前端工程师。请基于以下手势映射规则，生成一个静态 Web Demo
+（HTML + CSS + 原生 JS），用于 GestureVisual Lab Blueprint 的 GitHub Pages
+展示。这是一个"交互模拟器 / companion demo"，不调用摄像头。
+
+## 手势映射规则
+
+[同 Prompt A 的 7 条映射规则]
+
+## Web Demo 要求
+
+1. 不依赖外部 CDN
+2. 不使用构建步骤
+3. 移动端也能基本使用
+4. 只用 HTML / CSS / 原生 JS
+5. 代码内有简短注释
+
+## 关键函数
+
+- getCenter(left, right)
+- getDistance(left, right)
+- getAngle(left, right)
+- mapRange(value, inMin, inMax, outMin, outMax)
+- updateCube()
+- triggerGlitch()
+- switchTheme()
+- freezeFrame()</code></pre>
+
+          <h2 id="risks">风险与限制</h2>
+          <table>
+            <thead>
+              <tr><th>风险</th><th>影响</th><th>应对</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>TouchDesigner 真实运行环境差异</td><td>中</td><td>Web Demo 标注为"模拟器"，明确真机需要本地 TouchDesigner + MediaPipe 插件</td></tr>
+              <tr><td>MediaPipe Hand Landmarker 在低光照下效果差</td><td>中</td><td>说明真机使用环境要求（光线、背景、单人双手）</td></tr>
+              <tr><td>Web Demo 不用真实摄像头</td><td>低</td><td>用拖动手点 + slider 作为"mock 手势"，明确标注是 companion demo</td></tr>
+              <tr><td>双手交叉或重叠时 MediaPipe 跟踪错位</td><td>中</td><td>真机版需要选手势定义规则避免歧义；Web 模拟器无此问题</td></tr>
+              <tr><td>TouchDesigner 节点图学习曲线陡峭</td><td>高</td><td>提供完整 Python DAT 模板 + 节点命名规范</td></tr>
+              <tr><td>AI Agent 生成的 Python DAT 可能语法错</td><td>中</td><td>在 prompt 模板中要求"先输出脚本说明再写代码"，并提供参考实现</td></tr>
+              <tr><td>公众误以为 Web Demo 是 TouchDesigner 真机</td><td>中</td><td>在 Web Demo 顶部显著位置标注"companion demo / 交互模拟器"</td></tr>
+            </tbody>
+          </table>
+
+          <h3>已知限制</h3>
+          <ul>
+            <li><strong>Web Demo 不调用摄像头</strong> — 因为 GitHub Pages 静态部署 + 隐私考虑</li>
+            <li><strong>本 Blueprint 不交付 .toe 二进制文件</strong> — 用户需在本地 TouchDesigner 环境中按 references 复制节点结构</li>
+            <li><strong>Web 端无法模拟 TouchDesigner GLSL 高级效果</strong> — 只用 CSS filter 模拟基础效果</li>
+            <li><strong>AI Agent 辅助脚本可能需要多轮迭代</strong> — TouchDesigner Python DAT 与 MediaPipe 集成的细节多</li>
+          </ul>
+
+          <h2 id="acceptance">验收</h2>
+          <h3>功能验收</h3>
+          <ul class="checklist">
+            <li>Web Demo 打开后立即可交互</li>
+            <li>两个手点可拖动</li>
+            <li>三个 slider 可调节</li>
+            <li>freeze toggle 可切换</li>
+            <li>reset 按钮可重置</li>
+            <li>9-10 项参数实时显示</li>
+            <li>7 项手势映射全部生效</li>
+            <li>移动端基本可用</li>
+          </ul>
+
+          <h3>质量验收</h3>
+          <ul class="checklist">
+            <li>不依赖外部 CDN</li>
+            <li>不使用构建步骤</li>
+            <li>不提交 .toe / .tox 等二进制文件</li>
+            <li>不含 API key / secret / token</li>
+            <li>代码内有简短注释</li>
+            <li>Web Demo 显著标注"交互模拟器 / companion demo"</li>
+            <li>不写"已经跑通 TouchDesigner 真机工程"的虚假结论</li>
+          </ul>
+
+          <h2 id="reproduce">复现</h2>
+          <ol>
+            <li>阅读 <code>docs/gesture-visual-lab.md</code> 和本页</li>
+            <li>阅读 <code>demos/gesture-visual-lab/README.md</code></li>
+            <li>查看 <code>inputs/</code> 中的原始想法和技术背景</li>
+            <li>查看 <code>prompts/</code> 中的两个核心 Prompt</li>
+            <li>查看 <code>outputs/</code> 中的 Brief、映射模型、节点图规划、Demo 笔记</li>
+            <li>打开 <code>app/index.html</code> 体验 Web Demo</li>
+            <li>对照 <code>validation/acceptance-checklist.md</code> 验证</li>
+            <li>本地安装 TouchDesigner + MediaPipe 插件，按 <code>outputs/touchdesigner-network-plan.md</code> 复制节点结构</li>
+          </ol>
+
+          <h2 id="extensions">后续扩展方向</h2>
+          <ol>
+            <li><strong>真实摄像头集成</strong> — Web Demo 增加 getUserMedia + MediaPipe Hand Landmarker JS 版</li>
+            <li><strong>更多手势定义</strong> — OK / 指点 / 握拳 / 张开</li>
+            <li><strong>多人多手支持</strong> — 多人协同控制视觉</li>
+            <li><strong>手势 → MIDI 映射</strong> — 让 Ableton / Resolume 等软件也能接收</li>
+            <li><strong>手势 → 颜色 / 形状库</strong> — 切换预设主题</li>
+            <li><strong>录制与回放</strong> — 录制手势序列，回放时让视觉按时间轴重现</li>
+            <li><strong>TouchDesigner 真实插件打包</strong> — 打包成 TouchDesigner 插件方便其他用户安装</li>
+            <li><strong>AI Agent 自动生成视觉主题</strong> — 让 Claude 根据描述自动生成颜色 / 形状 / 噪点配置</li>
+            <li><strong>与项目记忆型会议助手联动</strong> — 把创意技术 workshop 联动到 Blueprint 知识库</li>
+            <li><strong>多平台适配</strong> — Unity / Unreal / Three.js 复现</li>
+          </ol>
+
+          <h2 id="reference">参考资源</h2>
+          <ul>
+            <li><a href="https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker" target="_blank">MediaPipe Hand Landmarker 官方文档</a></li>
+            <li><a href="https://github.com/torinmb/mediapipe-touchdesigner" target="_blank">torinmb / mediapipe-touchdesigner（GitHub 插件）</a></li>
+            <li><a href="https://derivative.ca/product/touchdesigner-non-commercial/77" target="_blank">TouchDesigner Non-Commercial 免费下载</a></li>
+            <li><a href="https://docs.derivative.ca/index.php?title=Python" target="_blank">TouchDesigner Python DAT 文档</a></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        可复现 Demo 蓝图库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
