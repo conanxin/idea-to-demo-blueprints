@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIY Lamp Builder · ReadingCore-01</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="demo-app">
+    <!-- 顶部 -->
+    <header class="demo-header">
+      <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
+      <div class="header-titles">
+        <h1>DIY Lamp Builder</h1>
+        <p class="subtitle">ReadingCore-01 · 可定制外壳 · 制造计划</p>
+      </div>
+      <span class="badge">companion demo / 配置器原型</span>
+    </header>
+
+    <main class="demo-main">
+
+      <!-- ============ A. Idea Input ============ -->
+      <section class="card idea-card" id="idea-section">
+        <div class="card-head">
+          <span class="step-tag">A</span>
+          <h2>Idea Input</h2>
+        </div>
+        <p class="card-hint">输一句产品想法，AI 会自动把它拆成"固定内核 + 可定制外壳"两层结构。</p>
+        <textarea id="idea-input" rows="3" placeholder="例如：北京风格阅读台灯，外壳可定制，适合书桌使用">北京风格阅读台灯，外壳可定制，适合书桌使用</textarea>
+        <button id="btn-generate" class="primary-btn">Generate Product Demo</button>
+      </section>
+
+      <!-- ============ B. AI Analyze ============ -->
+      <section class="card analyze-card" id="analyze-section">
+        <div class="card-head">
+          <span class="step-tag">B</span>
+          <h2>AI Analyze · Product Architecture</h2>
+        </div>
+        <p class="card-hint">AI 把模糊想法拆成可执行的产品架构。</p>
+        <div class="arch-grid">
+          <div class="arch-item">
+            <span class="arch-label">Lamp Type</span>
+            <span class="arch-value" id="arch-lamp-type">Reading Desk Lamp</span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Core Module</span>
+            <span class="arch-value" id="arch-core-module">
+              <span class="locked">🔒 ReadingCore-01</span>
+            </span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Light Type</span>
+            <span class="arch-value" id="arch-light-type">24V Linear LED</span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Brightness Target</span>
+            <span class="arch-value" id="arch-brightness">500–800 lm</span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Reading Distance</span>
+            <span class="arch-value" id="arch-distance">35–45 cm</span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Shell</span>
+            <span class="arch-value" id="arch-shell">Customizable</span>
+          </div>
+          <div class="arch-item arch-item-wide">
+            <span class="arch-label">Interface</span>
+            <span class="arch-value" id="arch-interface">M3 dual mount / aluminum channel cassette</span>
+          </div>
+        </div>
+        <div class="arch-note">
+          <strong>结构原则：</strong>
+          LED 灯带<em>不直接贴塑料外壳</em>。标准结构是
+          <code>LED 灯带 → 铝型材/铝槽散热 → 乳白扩散罩 → 可定制外壳</code>。
+          外壳只承担造型，不承担散热和电气。
+        </div>
+      </section>
+
+      <!-- ============ C. Configurator ============ -->
+      <section class="card config-card" id="configurator-section">
+        <div class="card-head">
+          <span class="step-tag">C</span>
+          <h2>Configurator</h2>
+        </div>
+        <p class="card-hint">左侧选参数，右侧 SVG 预览实时变化。Core 字段固定不可改。</p>
+
+        <div class="config-layout">
+          <div class="config-controls">
+            <div class="control-group">
+              <label for="cfg-lamp-type">Lamp Type</label>
+              <select id="cfg-lamp-type">
+                <option value="Reading Lamp">Reading Lamp</option>
+                <option value="Ambient Lamp">Ambient Lamp</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="cfg-shell-style">Shell Style</label>
+              <select id="cfg-shell-style">
+                <option value="Minimal Bar">Minimal Bar</option>
+                <option value="Hutong Window">Hutong Window</option>
+                <option value="Beijing Pavilion">Beijing Pavilion</option>
+                <option value="Book Arc">Book Arc</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label>Color</label>
+              <div class="color-row" id="color-row">
+                <button type="button" class="color-chip" data-color="Warm White" data-hex="#f5efe6" aria-label="Warm White"></button>
+                <button type="button" class="color-chip" data-color="Hutong Gray" data-hex="#7a7a78" aria-label="Hutong Gray"></button>
+                <button type="button" class="color-chip" data-color="Palace Red" data-hex="#a83232" aria-label="Palace Red"></button>
+                <button type="button" class="color-chip" data-color="Night Black" data-hex="#1c1c1e" aria-label="Night Black"></button>
+              </div>
+              <span class="color-name" id="color-name">Warm White</span>
+            </div>
+
+            <div class="control-group">
+              <label for="cfg-engraving">Engraving</label>
+              <input type="text" id="cfg-engraving" value="北京之光" maxlength="24">
+            </div>
+
+            <div class="control-group">
+              <label>Core（固定不可改）</label>
+              <input type="text" value="ReadingCore-01" disabled class="locked-input">
+              <small class="locked-hint">🔒 这是 ReadingCore-01，所有款式都用同一内核</small>
+            </div>
+          </div>
+
+          <div class="config-preview">
+            <svg id="lamp-preview" viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg" aria-label="Lamp preview">
+              <!-- background -->
+              <rect x="0" y="0" width="320" height="360" fill="#fafaf7"></rect>
+              <!-- desk line -->
+              <line x1="20" y1="320" x2="300" y2="320" stroke="#d8d2c4" stroke-width="2"></line>
+
+              <!-- arm -->
+              <line id="lamp-arm" x1="160" y1="320" x2="160" y2="120" stroke="#9c9c98" stroke-width="6" stroke-linecap="round"></line>
+
+              <!-- shell (changes with style + color) -->
+              <g id="lamp-shell">
+                <!-- default: Minimal Bar shell will be drawn by JS -->
+              </g>
+
+              <!-- core cassette (always visible) -->
+              <g id="lamp-core">
+                <rect id="core-cassette" x="80" y="80" width="160" height="36" rx="6" fill="#3a3a3c"></rect>
+                <text id="core-label" x="160" y="103" text-anchor="middle" fill="#fff7e8" font-size="14" font-weight="600">ReadingCore-01</text>
+                <!-- light beam (always warm white, suggesting it's the unchangeable light) -->
+                <rect x="60" y="116" width="200" height="6" fill="#ffd9a0" opacity="0.85"></rect>
+                <rect x="50" y="122" width="220" height="3" fill="#ffe9c5" opacity="0.55"></rect>
+              </g>
+
+              <!-- engraving text -->
+              <text id="engraving-text" x="160" y="280" text-anchor="middle" fill="#5a5648" font-size="16" font-weight="500">北京之光</text>
+
+              <!-- base -->
+              <ellipse id="lamp-base" cx="160" cy="325" rx="46" ry="10" fill="#5a5648"></ellipse>
+              <ellipse cx="160" cy="322" rx="38" ry="6" fill="#7a7666"></ellipse>
+            </svg>
+            <p class="preview-caption" id="preview-caption">Minimal Bar · Warm White · 北京之光</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ D. Manufacturing Plan ============ -->
+      <section class="card mfg-card" id="manufacturing-section">
+        <div class="card-head">
+          <span class="step-tag">D</span>
+          <h2>Manufacturing Plan</h2>
+        </div>
+        <p class="card-hint">根据上面所有配置实时输出制造 JSON 和装配步骤。</p>
+
+        <div class="mfg-layout">
+          <div class="mfg-json">
+            <div class="mfg-json-head">
+              <span>manufacturing_plan.json</span>
+              <button type="button" id="btn-copy-json" class="ghost-btn">Copy</button>
+            </div>
+            <pre id="manufacturing-json"></pre>
+          </div>
+
+          <div class="mfg-steps">
+            <h3>Assembly Steps</h3>
+            <ol id="assembly-steps">
+              <li>Cut 24V high-CRI LED strip to lamp-head length</li>
+              <li>Attach LED strip to aluminum channel</li>
+              <li>Install opal diffuser</li>
+              <li>Mount ReadingCore-01 into customizable shell</li>
+              <li>Attach arm and base</li>
+              <li>Run brightness, heat and glare checks</li>
+            </ol>
+            <p class="mfg-disclaimer">
+              ⚠ Demo 输出为估算参考。真实采购、真实 CAD / STL、真实报价都不在本 Demo 范围内。
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="demo-footer">
+      <p>
+        <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · MIT
+      </p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

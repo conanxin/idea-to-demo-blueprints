@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIY 可定制阅读台灯构建器 · Idea-to-Demo Blueprints</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-hero">
+      <div class="container">
+        <a href="../index.html" class="back-link">← 返回方案库</a>
+        <h1>DIY 可定制阅读台灯构建器</h1>
+        <div class="meta">
+          <span class="accent">Physical Product / AI Workflow / Configurator</span>
+          <span>难度：中等</span>
+          <span>Demo 周期：1-2 天</span>
+          <span>适合：独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者</span>
+          <span class="tag tag-green" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-size:0.75rem;">demo-ready</span>
+        </div>
+        <p class="intro">把"一个实体产品想法"在 5 分钟内转成"可演示的受控定制产品 Demo"——固定内核 ReadingCore-01 + 可换外壳 Shell，让独立开发者和文创团队能低成本验证产品可行性。</p>
+        <p style="margin-top:16px;">
+          <a href="../demos/diy-lamp-builder/" class="btn" style="display:inline-block;padding:10px 18px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:500;">查看 Demo →</a>
+          <a href="../diy-lamp-builder.md" class="btn" style="display:inline-block;padding:10px 18px;background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;text-decoration:none;font-weight:500;margin-left:8px;">阅读完整 Blueprint 文档 (MD) →</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container">
+        <nav class="toc">
+          <div class="toc-title">目录</div>
+          <ul>
+            <li><a href="#design-rationale">设计理由</a></li>
+            <li><a href="#original-idea">原始想法</a></li>
+            <li><a href="#background">背景与问题</a></li>
+            <li><a href="#users">目标用户</a></li>
+            <li><a href="#overview">方案概述</a></li>
+            <li><a href="#mvp">Demo MVP</a></li>
+            <li><a href="#architecture">技术架构</a></li>
+            <li><a href="#workflow">数据流</a></li>
+            <li><a href="#structure">物理结构</a></li>
+            <li><a href="#demo-pack">Demo Pack</a></li>
+            <li><a href="#config-json">配置 JSON</a></li>
+            <li><a href="#prompt">关键 Prompt</a></li>
+            <li><a href="#risks">风险与限制</a></li>
+            <li><a href="#acceptance">验收</a></li>
+            <li><a href="#reproduce">复现</a></li>
+            <li><a href="#extensions">扩展</a></li>
+          </ul>
+        </nav>
+
+        <article class="article">
+          <h2 id="design-rationale">设计理由</h2>
+          <p><strong>为什么这个方案是必要的？</strong></p>
+          <p>独立开发者和小品牌文创团队想做实体产品时，最常见的死法：每个 SKU 从零设计、外包打样一次性消耗、LED 灯带贴塑料外壳散热失败、没有任何"可定制"的中间形态。设计-制造-销售链路里，<strong>没有任何一个"想法 → 可演示原型"的快速通道</strong>。</p>
+          <p>本 Blueprint 的设计理由是：<strong>用受控定制（controlled customization）模式，把"不变的内核"做成强 IP，把"变的部分"做成可定制项</strong>。参考 Gantri / Framework Laptop / Local Motors 的思路，但聚焦在更小、更轻的"阅读灯"赛道。</p>
+
+          <h3>为什么采用"固定内核 + 可变外壳"双层架构？</h3>
+          <ul>
+            <li><strong>ReadingCore-01 永远是同一个内核</strong> —— 灯芯模块、光电参数、装配接口都不变。所有 SKU 共享工程。</li>
+            <li><strong>Shell 永远可变</strong> —— 外壳只承担造型与文化表达。文创团队可以快速出多款风格 / 颜色 / 刻字。</li>
+            <li><strong>结构隔离</strong> —— LED 灯带不直接贴塑料外壳；先贴铝型材散热件，再加乳白扩散罩，最后装进可定制外壳。从根本上避免灯带直贴塑料的发黄陷阱。</li>
+            <li><strong>Demo 可在网页里完整表达</strong> —— 即使没有真实 3D 打印，单页 HTML 已经能讲清楚"内核是什么、外壳怎么变、装配顺序是什么"。</li>
+          </ul>
+
+          <h2 id="original-idea">原始想法</h2>
+          <p>这一段是用户在聊天里说出来的原始想法，未经润色：</p>
+          <blockquote style="background:var(--bg-tertiary);padding:14px 16px;border-left:3px solid var(--accent);border-radius:6px;color:var(--text-secondary);font-size:0.92rem;line-height:1.7;">
+            我想要做一个"北京风格"的阅读台灯：
+            <ul style="margin:8px 0 8px 0;">
+              <li>适合放在书桌旁边，晚上看书用</li>
+              <li>外壳可以是可定制的，比如不同的风格、颜色、纹样、刻字</li>
+              <li>但灯芯我想做成一个固定的、稳定的模块：24V 线性 LED，足够亮但不能刺眼</li>
+              <li>我希望这个灯不要像网红灯具那样把灯带直接贴在塑料外壳上 —— 那样散热很差，时间长了塑料会发黄</li>
+              <li>我想要的真正结构是：LED 灯带先贴到铝型材/铝槽上，前面再加一片乳白扩散罩，再整体装进那个可定制外壳</li>
+              <li>外壳只承担造型，不参与散热，也不接触电气</li>
+              <li>灯芯模块我叫它 <strong>ReadingCore-01</strong>，所有产品都用同一个内核，只是换外壳</li>
+            </ul>
+            参考一下 Gantri 那种"受控定制"的思路，但比它更小、更轻、更像阅读灯而不是氛围灯。
+          </blockquote>
+
+          <h2 id="background">背景与问题</h2>
+          <p>实体产品 Demo 缺失的关键中间环节：</p>
+          <ul>
+            <li><strong>每个 SKU 都从零设计</strong> —— 成本爆炸、迭代极慢</li>
+            <li><strong>外包打样一次性消耗</strong> —— 几百块一个样品，错了就报废</li>
+            <li><strong>结构错了重来</strong> —— LED 灯带贴塑料外壳、电源藏不进底座、散热不够外壳发黄</li>
+            <li><strong>没有任何"可定制"的中间形态</strong> —— 要么全定制，要么完全标准款</li>
+            <li><strong>现有"配置器"只做配色</strong> —— Nike By You、自行车配置器都没有架构推理</li>
+          </ul>
+
+          <h3>现有受控定制参考</h3>
+          <div class="workflow-box">
+Gantri           — 3D 打印灯厂，核心工程一次做好，只换表面
+Framework Laptop — 主板固定，端口/键盘/外壳可换
+Bourbon Barrel   — E26 灯座 + 通用 LED + 回收木桶外壳
+Local Motors     — 动力总成固定 + 车身可换
+          </div>
+          <p>共同点：<strong>把"不变的部分"做成强 IP，把"变的部分"做成可定制项</strong>。</p>
+
+          <h2 id="users">目标用户</h2>
+          <div class="article">
+            <table>
+              <thead><tr><th>用户角色</th><th>使用场景</th><th>价值</th></tr></thead>
+              <tbody>
+                <tr><td>独立开发者</td><td>想试水实体产品但不敢大批量打样</td><td>先用 Demo 验证想法</td></tr>
+                <tr><td>文创产品设计师</td><td>想做"有北京味儿"的灯具</td><td>用受控定制快速出款</td></tr>
+                <tr><td>产品经理</td><td>想跟客户解释"为什么这个灯值这个价"</td><td>用架构图直观说明</td></tr>
+                <tr><td>AI Agent 使用者</td><td>想让 AI 把"想法"变成"产品 Demo"</td><td>直接复用 Prompt 模板</td></tr>
+                <tr><td>硬件原型爱好者</td><td>想做 1:1 实物</td><td>按 JSON 找元器件自己打样</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="overview">方案概述</h2>
+          <p>DIY Lamp Builder 是一个<strong>纯静态单页 Demo</strong>，由 4 个区组成：</p>
+          <ul>
+            <li><strong>A. Idea Input</strong> —— 一句话产品想法输入</li>
+            <li><strong>B. AI Analyze</strong> —— 自动产品架构（ReadingCore-01 固定 / Shell 可变）</li>
+            <li><strong>C. Configurator</strong> —— 风格 / 颜色 / 刻字 + SVG 实时预览</li>
+            <li><strong>D. Manufacturing Plan</strong> —— 实时 JSON 输出 + 装配步骤</li>
+          </ul>
+          <p>整个 Demo 不依赖任何外部资源（无 CDN、无 build step、无 Three.js），用 HTML/CSS/JS 直接表达"实体产品想法 → 受控定制 Demo"的完整链路。</p>
+
+          <h2 id="mvp">Demo MVP</h2>
+          <p><strong>目标</strong>：用 1-2 天时间，做出能让"产品小白" 5 分钟看懂"ReadingCore-01 + 可定制外壳"架构的可交互 Demo。</p>
+
+          <h3>输入 / 输出</h3>
+          <div class="article">
+            <table>
+              <thead><tr><th>输入</th><th>输出</th></tr></thead>
+              <tbody>
+                <tr><td>一句话产品想法（textarea）</td><td>AI Analyze 6 字段表</td></tr>
+                <tr><td>4 个 Shell Style 选项</td><td>SVG 预览（外壳随选择变化，Core 区不变）</td></tr>
+                <tr><td>4 个 Color 选项</td><td>Manufacturing Plan JSON</td></tr>
+                <tr><td>1 个 Engraving 文本输入</td><td>Copy 按钮可复制 JSON</td></tr>
+                <tr><td>Core 字段固定</td><td>装配步骤列表（≥ 6 步）</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>第一版策略</h3>
+          <ul>
+            <li>不做真实 LLM 调用 —— AI Analyze 区是硬编码常量（因为 Demo 重点不是 LLM 推理，而是结构表达）</li>
+            <li>不做真实 CAD —— SVG mock 预览足够</li>
+            <li>不做真实采购/支付 —— BOM 估算给范围即可</li>
+            <li>不做真实光路计算 —— 500-800 lm 是设计目标，不是实测</li>
+          </ul>
+
+          <h2 id="architecture">技术架构</h2>
+          <div class="article">
+            <table>
+              <thead><tr><th>组件</th><th>技术</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td>页面结构</td><td>HTML</td><td>4 个 <code>&lt;section&gt;</code> 区块</td></tr>
+                <tr><td>样式</td><td>CSS</td><td>CSS 变量 + 媒体查询</td></tr>
+                <tr><td>交互</td><td>Vanilla JS</td><td>无框架，无构建</td></tr>
+                <tr><td>预览</td><td>SVG</td><td>4 种外壳形状 + 4 种颜色 + 文本</td></tr>
+                <tr><td>JSON 输出</td><td>JSON.stringify</td><td>实时序列化</td></tr>
+                <tr><td>部署</td><td>GitHub Pages</td><td>静态托管</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="workflow">数据流</h2>
+          <div class="workflow-box">
+用户输入想法
+  → AI 推导产品架构
+    → ReadingCore-01 锁定 / Shell 解锁
+      → 用户选外壳风格 + 颜色 + 刻字
+        → SVG 实时预览更新
+          → Manufacturing Plan JSON 实时更新
+            → Copy 按钮可复制 JSON
+              → 工程师按 JSON 找元器件打样
+          </div>
+
+          <h3>核心架构图</h3>
+          <div class="workflow-box">
+[Idea Input]
+   │
+   ▼
+[AI Analyze] ──▶ ReadingCore-01（固定灯芯模块）
+   │                 - 24V 线性 LED
+   │                 - 500–800 lm
+   │                 - 35–45 cm 阅读距离
+   │                 - M3 dual mount / 铝槽卡扣
+   ▼
+[Configurator] ─▶ Shell（可定制外壳）
+   │                - Style: Minimal Bar / Hutong Window / Beijing Pavilion / Book Arc
+   │                - Color: Warm White / Hutong Gray / Palace Red / Night Black
+   │                - Engraving: 自由文本
+   ▼
+[Manufacturing Plan] ─▶ 制造 JSON
+                        - LED 贴装 → 铝槽 → 扩散罩 → 外壳装配 → 校验
+          </div>
+
+          <h2 id="structure">物理结构图（ReadingCore-01 内核）</h2>
+          <div class="workflow-box">
+       [可定制外壳]      ← 只承担造型，不参与散热和电气
+            │
+            ▼
+       [乳白扩散罩]      ← 柔光，避免眩光
+            │
+            ▼
+       [铝型材/铝槽]      ← 关键散热通道
+            │
+            ▼
+       [24V 线性 LED]    ← 切到灯头长度
+            │
+            ▼
+       [M3 双孔法兰]     ← 装配接口
+
+结构原则：LED 灯带 不直接贴塑料外壳。
+          </div>
+
+          <h2 id="demo-pack">Demo Pack</h2>
+          <p>Demo Pack 文件结构（canonical 在 <code>demos/diy-lamp-builder/</code>，镜像在 <code>docs/demos/diy-lamp-builder/</code> 和 <code>public/demos/diy-lamp-builder/</code>）：</p>
+          <div class="workflow-box">
+demos/diy-lamp-builder/
+├── README.md              # 复现说明
+├── inputs/
+│   ├── source-idea.md     # 原始想法原文
+│   ├── background.md      # 背景与受控定制参考
+│   └── transcript.md      # 与 Agent 的需求对话模拟
+├── prompts/
+│   └── build-prompt.md    # 驱动 Agent 生成 Demo 的 Prompt 模板
+├── outputs/
+│   ├── brief.md           # AI 生成的方案 Brief
+│   ├── task-plan.md       # AI 生成的任务计划
+│   └── generated-demo-notes.md  # Demo 构建说明
+├── app/
+│   ├── index.html         # 4 区单页应用
+│   ├── style.css          # 样式
+│   └── app.js             # 交互与 JSON 输出
+└── validation/
+    └── acceptance-checklist.md  # 验收清单（全部勾选完成）
+          </div>
+
+          <p><strong>Demo Pack 路径</strong>：<code>demos/diy-lamp-builder/</code></p>
+          <p><strong>本地体验入口</strong>：<a href="../demos/diy-lamp-builder/">docs/demos/diy-lamp-builder/index.html</a> （会自动跳转到 <code>app/index.html</code>）</p>
+
+          <h2 id="config-json">配置 JSON 示例</h2>
+          <p>Demo 实时输出的 Manufacturing Plan JSON 结构（用户在 Configurator 改变选择时整段 JSON 会更新）：</p>
+          <div class="workflow-box">
+{
+  "core": "ReadingCore-01",
+  "core_type": "24V linear LED cassette",
+  "led_mount": "aluminum channel with opal diffuser",
+  "shell_style": "Minimal Bar",
+  "color": "Warm White",
+  "engraving": "北京之光",
+  "estimated_luminous_flux": "500-800 lm",
+  "estimated_print_time": "4h",
+  "estimated_material": "PETG / PLA+",
+  "estimated_bom_cost": "$40-80 prototype",
+  "lamp_type": "Reading Lamp",
+  "assembly_steps": [
+    "Cut 24V high-CRI LED strip to lamp-head length",
+    "Attach LED strip to aluminum channel",
+    "Install opal diffuser",
+    "Mount ReadingCore-01 into customizable shell",
+    "Attach arm and base",
+    "Run brightness, heat and glare checks"
+  ]
+}
+          </div>
+
+          <h3>页面结构表</h3>
+          <div class="article">
+            <table>
+              <thead><tr><th>页面</th><th>功能</th><th>关键交互</th></tr></thead>
+              <tbody>
+                <tr><td>A. Idea Input</td><td>一句话想法输入</td><td>Generate 按钮触发后续 3 区渲染</td></tr>
+                <tr><td>B. AI Analyze</td><td>产品架构 6 字段</td><td>Core 字段带锁定标记</td></tr>
+                <tr><td>C. Configurator</td><td>风格 / 颜色 / 刻字</td><td>左侧表单 + 右侧 SVG 实时预览</td></tr>
+                <tr><td>D. Manufacturing Plan</td><td>JSON + 装配步骤</td><td>Copy 按钮复制 JSON</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="prompt">关键 Prompt</h2>
+          <p>完整 Prompt 见 <code>demos/diy-lamp-builder/prompts/build-prompt.md</code>，下面是精简核心：</p>
+          <div class="workflow-box">
+你是「DIY 可定制阅读台灯构建器」的方案 Agent。
+
+# 用户原始想法（粘到这里）
+{{USER_IDEA}}
+
+# 你的任务
+
+请基于用户的想法，按以下四步生成产物：
+
+1. Product Architecture（产品架构推理）
+   识别输入想法，把它拆成两层结构：
+   - 固定灯芯模块：默认命名 ReadingCore-01
+   - 可定制外壳（Shell）：包含 Style / Color / Engraving 三类自由度
+
+2. Brief（方案 Brief）
+   300-500 字，包含定位、人群、价值主张、关键风险。
+
+3. Task Plan（任务计划）
+   按 [Idea Input → AI Analyze → Configurator → Manufacturing Plan] 四步列出。
+
+4. Manufacturing Plan JSON
+   按 README 中规定的字段输出。
+
+# 约束
+
+- 灯芯模块不可编辑
+- 外壳只承担造型，不承担散热和电气
+- 输出必须是结构化 JSON
+- 不要给真实采购链接，不要给真实 CAD/STL
+          </div>
+
+          <h2 id="risks">风险与限制</h2>
+          <div class="article">
+            <table>
+              <thead><tr><th>风险</th><th>影响</th><th>应对</th></tr></thead>
+              <tbody>
+                <tr><td>AI Analyze 区是 mock 不是真 LLM</td><td>中</td><td>在 generated-demo-notes.md 中明确标注；真实场景复用 Prompt 模板</td></tr>
+                <tr><td>SVG 预览精度有限</td><td>中</td><td>仅作示意；如需高精度可后续接 Three.js 或真实 CAD</td></tr>
+                <tr><td>BOM 估算成本不准确</td><td>中</td><td>给范围 <code>$40-80 prototype</code>；明确免责声明</td></tr>
+                <tr><td>散热设计未在 Demo 中验证</td><td>低</td><td>结构图中明确"铝槽是散热通道"，建议实际打样做热测试</td></tr>
+                <tr><td>风格 / 颜色只有 4 款</td><td>低</td><td>Demo 演示架构正确性，款式扩展留给后续版本</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>已知限制</h3>
+          <ul>
+            <li>不支持自定义 Style（仅 4 款预定义）</li>
+            <li>不支持上传图片 / 文件</li>
+            <li>不支持保存 / 分享配置（仅 Copy JSON）</li>
+            <li>装配步骤是英文（不针对中文用户改写）</li>
+            <li>BOM 价格是估算范围，不根据地区浮动</li>
+          </ul>
+
+          <h2 id="acceptance">验收结果</h2>
+          <p>所有验收项均已勾选（详见 <code>demos/diy-lamp-builder/validation/acceptance-checklist.md</code>）：</p>
+          <ul class="checklist">
+            <li>Demo Pack 6 个标准目录全部就位</li>
+            <li>docs/ 和 public/ 镜像完整</li>
+            <li>blueprints.json 三份完全一致（sha256 校验通过）</li>
+            <li>meta.total = 5 / meta.last_updated = "2026-07-03"</li>
+            <li>项目版本徽章 v0.1.1-alpha 不变</li>
+            <li>catalog schema 版本 meta.version = 4.2 不变</li>
+            <li>ReadingCore-01 字段在 UI 和代码层都不可编辑</li>
+            <li>16 种 Style × Color 组合预览正常</li>
+            <li>JSON 输出格式正确，Copy 按钮工作</li>
+            <li>装配步骤 ≥ 6 步</li>
+            <li>不依赖外部 CDN / build / Three.js</li>
+            <li>移动端可读（响应式布局）</li>
+            <li><code>bash scripts/check-catalog.sh</code> 输出 <code>RESULT: PASS</code></li>
+          </ul>
+
+          <h2 id="reproduce">复现</h2>
+          <ol>
+            <li>阅读 <code>docs/diy-lamp-builder.md</code> 和本页</li>
+            <li>阅读 <code>demos/diy-lamp-builder/README.md</code></li>
+            <li>查看 <code>inputs/</code> 中的原始想法、背景、对话模拟</li>
+            <li>查看 <code>prompts/build-prompt.md</code> 中的关键 Prompt</li>
+            <li>查看 <code>outputs/</code> 中的 Brief、任务计划、构建说明</li>
+            <li>打开 <code>app/index.html</code> 体验 4 区 Demo</li>
+            <li>在 Configurator 改变 Style / Color / Engraving，观察 SVG + JSON 实时更新</li>
+            <li>对照 <code>validation/acceptance-checklist.md</code> 逐项验收</li>
+          </ol>
+
+          <h2 id="extensions">后续扩展方向</h2>
+          <ol>
+            <li><strong>真实 LLM 接入</strong> —— 把 Idea Input 接到 Claude / GPT，按 build-prompt.md 输出架构和 JSON</li>
+            <li><strong>更多 Style</strong> —— 把 4 款外壳扩展到 8 / 12 款，加入材质选项（PETG / PLA+ / 树脂 / 木材）</li>
+            <li><strong>真实 CAD / STL 导出</strong> —— 用 OpenSCAD 或 Three.js 把 SVG 转成可打印 STL</li>
+            <li><strong>更多 Color</strong> —— 加入 Pantone 色卡导入、自定义 hex</li>
+            <li><strong>装配动画</strong> —— SVG 中做分步装配动画，每步高亮一个部件</li>
+            <li><strong>配置保存 / 分享</strong> —— URL hash 编码当前配置，方便分享链接</li>
+            <li><strong>多 ReadingCore 变体</strong> —— ReadingCore-02（高显色 95+）、ReadingCore-03（带 USB-C 充电口）</li>
+            <li><strong>与本 IDB 库联动</strong> —— 用「项目记忆型会议助手」管理 ReadingCore-01 迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态</li>
+          </ol>
+
+          <h2 id="reference">参考资源</h2>
+          <ul>
+            <li><a href="https://gantri.com" target="_blank">Gantri</a> —— 3D 打印灯厂，受控定制典范</li>
+            <li><a href="https://frame.work" target="_blank">Framework Laptop</a> —— 主板固定 + 外壳可换的受控定制模式</li>
+            <li><a href="https://openscad.org" target="_blank">OpenSCAD</a> —— 程序化生成 3D 模型，可作为后续 STL 导出扩展</li>
+            <li><a href="https://www.pantone.com" target="_blank">Pantone</a> —— 颜色一致性参考</li>
+            <li><a href="https://github.com/conanxin/idea-to-demo-blueprints/blob/main/docs/blueprint-template.md" target="_blank">Blueprint Template</a> —— 本方案遵循的模板</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
+        可复现 Demo 蓝图库 · MIT License · 2026
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

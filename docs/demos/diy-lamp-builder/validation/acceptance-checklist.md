@@ -1,0 +1,101 @@
+# 验收清单：DIY Lamp Builder Demo
+
+> 所有项目必须勾选为 [x]，Demo 才算 demo-ready。
+
+---
+
+## 文件结构验收
+
+- [x] `demos/diy-lamp-builder/README.md` 存在
+- [x] `demos/diy-lamp-builder/inputs/source-idea.md` 存在
+- [x] `demos/diy-lamp-builder/inputs/background.md` 存在
+- [x] `demos/diy-lamp-builder/inputs/transcript.md` 存在
+- [x] `demos/diy-lamp-builder/prompts/build-prompt.md` 存在
+- [x] `demos/diy-lamp-builder/outputs/brief.md` 存在
+- [x] `demos/diy-lamp-builder/outputs/task-plan.md` 存在
+- [x] `demos/diy-lamp-builder/outputs/generated-demo-notes.md` 存在
+- [x] `demos/diy-lamp-builder/app/index.html` 存在
+- [x] `demos/diy-lamp-builder/app/style.css` 存在
+- [x] `demos/diy-lamp-builder/app/app.js` 存在
+- [x] `demos/diy-lamp-builder/validation/acceptance-checklist.md` 存在（本文档）
+
+## 镜像验收
+
+- [x] `docs/diy-lamp-builder.md` 存在（Blueprint doc）
+- [x] `docs/demos/diy-lamp-builder/index.html` 存在（跳转页）
+- [x] `docs/demos/diy-lamp-builder/app/index.html` 存在
+- [x] `docs/demos/diy-lamp-builder/app/style.css` 存在
+- [x] `docs/demos/diy-lamp-builder/app/app.js` 存在
+- [x] `docs/blueprints/diy-lamp-builder.html` 存在
+- [x] `public/demos/diy-lamp-builder/index.html` 存在
+- [x] `public/demos/diy-lamp-builder/app/index.html` 存在
+- [x] `public/demos/diy-lamp-builder/app/style.css` 存在
+- [x] `public/demos/diy-lamp-builder/app/app.js` 存在
+- [x] `public/blueprints/diy-lamp-builder.html` 存在
+- [x] `docs/media/demo-diy-lamp-builder.png` 存在
+- [x] `public/media/demo-diy-lamp-builder.png` 存在
+
+## Blueprint 元数据验收
+
+- [x] `data/blueprints.json` 包含 5 个 blueprints
+- [x] `data/blueprints.json` `meta.total` = 5
+- [x] `docs/data/blueprints.json` 与 `data/blueprints.json` sha256 完全一致
+- [x] `public/data/blueprints.json` 与 `data/blueprints.json` sha256 完全一致
+- [x] `meta.last_updated` = "2026-07-03"
+- [x] `meta.version` = "4.2"（catalog schema 版本，未升级）
+- [x] 项目版本徽章 `v0.1.1-alpha` 在 README.md / docs/index.html / public/index.html 中保留
+- [x] 新 blueprint slug = `diy-lamp-builder`
+- [x] 新 blueprint status = `demo-ready`
+- [x] 新 blueprint 含 page_url / demo_url / demo_pack_path / md_url
+
+## 功能验收
+
+- [x] 打开 `app/index.html`，默认填入 "北京风格阅读台灯，外壳可定制，适合书桌使用"
+- [x] 页面加载后自动渲染 4 区内容
+- [x] 4 区依次为：Idea Input / AI Analyze / Configurator / Manufacturing Plan
+- [x] AI Analyze 显示 6 字段（Lamp Type / Core Module / Light Type / Brightness Target / Reading Distance / Shell / Interface）
+- [x] Configurator Lamp Type 有 2 选项：Reading Lamp / Ambient Lamp
+- [x] Configurator Shell Style 有 4 选项：Minimal Bar / Hutong Window / Beijing Pavilion / Book Arc
+- [x] Configurator Color 有 4 选项：Warm White / Hutong Gray / Palace Red / Night Black
+- [x] Configurator Engraving 是文本输入框
+- [x] Configurator Core 字段固定显示 "ReadingCore-01"，不可编辑
+- [x] 改变任何配置，SVG 预览实时更新
+- [x] 改变任何配置，Manufacturing Plan JSON 实时更新
+- [x] Manufacturing Plan 包含 `assembly_steps` 数组，至少 6 步
+
+## 结构正确性验收
+
+- [x] Demo 中明确写出"LED 灯带贴铝槽 + 乳白扩散罩 + 外壳装配"三层结构
+- [x] Demo 中明确写出"外壳不接触 LED，不承担散热"
+- [x] Demo 中明确写出 ReadingCore-01 是固定模块，不可变
+
+## 依赖验收
+
+- [x] 不引入任何 CDN
+- [x] 不引入 build step（webpack/vite/npm）
+- [x] 不引入 Three.js / 任何 3D 库
+- [x] 不引入 jQuery / Vue / React / Svelte / Solid 等前端框架
+- [x] 纯原生 HTML/CSS/JS
+- [x] 不引用外部图片资源（截图除外）
+- [x] 不引用 Google Fonts（用 system font stack）
+
+## 安全验收
+
+- [x] 不包含真实 API key / token / secret
+- [x] 不包含真实采购链接
+- [x] 不发起真实支付
+- [x] 不发起真实 LLM API 调用
+- [x] 不发起真实 CAD / STL 生成
+
+## 复现验收
+
+- [x] `prompts/build-prompt.md` 提供完整可复制 Prompt
+- [x] README.md 提供分步复现说明
+- [x] 所有 mock 部分在 `generated-demo-notes.md` 中明确标注
+- [x] GitHub Pages 预计可访问路径：`/demos/diy-lamp-builder/`
+
+## 元脚本验收
+
+- [x] `scripts/check-catalog.sh` 不再硬编码 `total=3`
+- [x] `scripts/check-catalog.sh` 遍历 `blueprints[].slug` 动态检查文件
+- [x] `bash scripts/check-catalog.sh` 输出 `RESULT: PASS`

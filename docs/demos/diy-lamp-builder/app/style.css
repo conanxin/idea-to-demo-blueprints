@@ -1,0 +1,495 @@
+/* DIY Lamp Builder Demo — companion demo / 配置器原型 */
+
+/* ---------- 基础变量 ---------- */
+:root {
+  --bg-primary: #fafaf7;
+  --bg-card: #ffffff;
+  --bg-tertiary: #f4f1ea;
+  --border: #e5e1d6;
+  --border-light: #efebde;
+  --text-primary: #1f1d18;
+  --text-secondary: #5a5648;
+  --text-muted: #8a8676;
+  --accent: #a83232;          /* palace red */
+  --accent-dark: #7d2424;
+  --accent-light: #f5d8d8;
+  --warm-white: #fff7e8;
+  --code-bg: #1f1d18;
+  --code-text: #f4e9d1;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+                "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mono-stack: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-stack);
+  line-height: 1.55;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: var(--mono-stack);
+  background: var(--bg-tertiary);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+/* ---------- 整体布局 ---------- */
+.demo-app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.back-link {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.header-titles h1 {
+  font-size: 1.6rem;
+  margin: 0 0 4px 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.header-titles .subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  border-radius: 12px;
+  font-weight: 500;
+  border: 1px solid #f0c8c8;
+}
+
+.demo-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.demo-footer {
+  text-align: center;
+  padding: 32px 0 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-light);
+  margin-top: 16px;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.card-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.step-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.card-hint {
+  margin: 0 0 16px 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- A. Idea Input ---------- */
+#idea-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+#idea-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.primary-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.primary-btn:hover {
+  background: var(--accent-dark);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* ---------- B. AI Analyze ---------- */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.arch-item {
+  background: var(--bg-tertiary);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+}
+
+.arch-item-wide {
+  grid-column: 1 / -1;
+}
+
+.arch-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.arch-value {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.locked {
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.arch-note {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #fff8ee;
+  border: 1px solid #f0dfb8;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  color: #5a4521;
+  line-height: 1.6;
+}
+
+.arch-note strong {
+  color: #5a4521;
+}
+
+.arch-note em {
+  background: #fce7c4;
+  font-style: normal;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ---------- C. Configurator ---------- */
+.config-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.config-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.control-group select,
+.control-group input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: #fff;
+  color: var(--text-primary);
+}
+
+.control-group select:focus,
+.control-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.locked-input {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
+}
+
+.locked-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.color-row {
+  display: flex;
+  gap: 8px;
+}
+
+.color-chip {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.color-chip:hover {
+  transform: scale(1.08);
+}
+
+.color-chip.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.color-name {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.config-preview {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#lamp-preview {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  background: #fafaf7;
+  border: 1px solid var(--border-light);
+}
+
+.preview-caption {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-family: var(--mono-stack);
+}
+
+/* ---------- D. Manufacturing Plan ---------- */
+.mfg-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.mfg-json {
+  background: var(--code-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.mfg-json-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2a2722;
+  color: #b8ad94;
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+}
+
+.ghost-btn {
+  background: transparent;
+  border: 1px solid #5a5648;
+  color: #b8ad94;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ghost-btn:hover {
+  border-color: #b8ad94;
+  color: #f4e9d1;
+}
+
+#manufacturing-json {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--code-text);
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.mfg-steps h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+#assembly-steps {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+#assembly-steps li {
+  margin-bottom: 4px;
+}
+
+.mfg-disclaimer {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #fff8ee;
+  border: 1px solid #f0dfb8;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: #5a4521;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 760px) {
+  .demo-app {
+    padding: 16px;
+  }
+
+  .config-layout,
+  .mfg-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .header-titles h1 {
+    font-size: 1.3rem;
+  }
+
+  .card {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .arch-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .badge {
+    align-self: flex-start;
+  }
+}

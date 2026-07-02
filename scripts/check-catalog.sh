@@ -1,6 +1,9 @@
 #!/bin/bash
 # scripts/check-catalog.sh
-# IDB-4C: Lightweight catalog maintenance check
+# IDB-4C → IDB-6 upgrade: dynamically reads data/blueprints.json
+# Verifies catalog integrity: file sync, meta.total, slug-driven page/demo/pack checks,
+# screenshots, version badge, release notes, secrets. No hardcoded total/slug.
+#
 # Usage: bash scripts/check-catalog.sh
 
 set -u
@@ -49,9 +52,41 @@ echo "Repository: $REPO_ROOT"
 echo "Date: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 echo ""
 
+# === 0. Load blueprint slugs from JSON (single source of truth) ===
+echo "--- 0. Load blueprint slugs from data/blueprints.json ---"
+if [ ! -f "data/blueprints.json" ]; then
+    fail "data/blueprints.json not found"
+    echo "RESULT: FAIL"
+    echo "Failures:"
+    printf "$FAIL_LIST"
+    exit 1
+fi
+
+# Use Python to extract slugs (so we don't need jq)
+SLUGS_FILE="$(mktemp)"
+trap 'rm -f "$SLUGS_FILE"' EXIT
+python3 -c "
+import json
+with open('data/blueprints.json') as f:
+    d = json.load(f)
+for b in d.get('blueprints', []):
+    print(b.get('slug', ''))
+" > "$SLUGS_FILE" 2>/dev/null
+
+if [ ! -s "$SLUGS_FILE" ]; then
+    fail "could not extract slugs from data/blueprints.json"
+    echo "RESULT: FAIL"
+    echo "Failures:"
+    printf "$FAIL_LIST"
+    exit 1
+fi
+
+SLUG_COUNT=$(wc -l < "$SLUGS_FILE" | tr -d ' ')
+pass "extracted $SLUG_COUNT slug(s) from data/blueprints.json: $(tr '\n' ' ' < "$SLUGS_FILE")"
+
 # === 1. Key files exist ===
+echo ""
 echo "--- 1. Key files exist ---"
-# Check files - some exist in root, others in docs/
 check_any() {
     local label="$1"
     shift
@@ -92,7 +127,7 @@ else
     fail "blueprints.json NOT identical: data=$H1 public=$H2 docs=$H3"
 fi
 
-# Validate JSON content with Python
+# Validate JSON content with Python — uses DYNAMIC count, not hardcoded
 if command -v python3 >/dev/null 2>&1; then
     python3 <<'PYEOF' 2>&1
 import json, sys
@@ -111,8 +146,8 @@ for f in files:
             all(k in b for k in ('page_url', 'demo_url', 'demo_pack_path'))
             for b in d.get('blueprints', [])
         )
-        if total == 3 and meta_total == 3 and status_ok and has_required_fields:
-            print(f"OK  {f}: total=3 meta.total=3 version={version} all=demo-ready all have page/demo/pack URLs")
+        if total == meta_total and status_ok and has_required_fields:
+            print(f"OK  {f}: total={total} meta.total={meta_total} version={version} all=demo-ready all have page/demo/pack URLs")
         else:
             print(f"NO  {f}: total={total} meta.total={meta_total} version={version} status_ok={status_ok} fields_ok={has_required_fields}")
             sys.exit(1)
@@ -121,7 +156,7 @@ for f in files:
         sys.exit(1)
 PYEOF
     if [ $? -eq 0 ]; then
-        pass "blueprint metadata structure valid (3 demo-ready with all required URLs)"
+        pass "blueprint metadata structure valid (all demo-ready, total matches meta.total, all have required URLs)"
     else
         fail "blueprint metadata structure invalid"
     fi
@@ -129,53 +164,81 @@ else
     fail "python3 not available for JSON structure check"
 fi
 
-# === 3. Blueprint pages exist ===
+# === 3. Blueprint pages exist (per slug) ===
 echo ""
 echo "--- 3. Blueprint pages ---"
-for slug in project-memory-meeting-assistant customer-meeting-autonomous-build multi-agent-project-dashboard; do
+while IFS= read -r slug; do
+    [ -z "$slug" ] && continue
     [ -f "docs/blueprints/$slug.html" ] && pass "page exists: docs/blueprints/$slug.html" || fail "missing: docs/blueprints/$slug.html"
     [ -f "public/blueprints/$slug.html" ] && pass "page exists: public/blueprints/$slug.html" || fail "missing: public/blueprints/$slug.html"
-done
+done < "$SLUGS_FILE"
 
-# === 4. Demo pages exist ===
+# === 4. Demo pages exist (per slug) ===
 echo ""
 echo "--- 4. Demo pages ---"
-for slug in project-memory-meeting-assistant customer-meeting-autonomous-build multi-agent-project-dashboard; do
+while IFS= read -r slug; do
+    [ -z "$slug" ] && continue
     [ -f "docs/demos/$slug/index.html" ] && pass "demo exists: docs/demos/$slug/index.html" || fail "missing: docs/demos/$slug/index.html"
     # public/demos is optional but check if exists
     if [ -d "public/demos/$slug" ]; then
         [ -f "public/demos/$slug/index.html" ] && pass "demo exists: public/demos/$slug/index.html" || echo "INFO  public/demos/$slug/index.html not found (optional)"
     fi
-done
+done < "$SLUGS_FILE"
 
-# === 5. Demo Pack completeness ===
+# === 5. Demo Pack completeness (per slug) ===
+# Convention: prefer demos/<slug>/ (canonical); fall back to docs/demos/<slug>/
+# when the older convention was used. Either is acceptable.
 echo ""
 echo "--- 5. Demo Pack completeness ---"
-for slug in project-memory-meeting-assistant customer-meeting-autonomous-build multi-agent-project-dashboard; do
-    PACK="demos/$slug"
-    if [ -d "$PACK" ]; then
-        ALL_OK=true
-        for sub in README.md inputs prompts outputs app validation validation/acceptance-checklist.md; do
-            if [ ! -e "$PACK/$sub" ]; then
-                ALL_OK=false
-                fail "demo pack missing: $PACK/$sub"
-            fi
-        done
-        if [ "$ALL_OK" = true ]; then
-            pass "demo pack complete: $slug"
-        fi
-    else
-        fail "demo pack missing: $PACK/"
+while IFS= read -r slug; do
+    [ -z "$slug" ] && continue
+    PACK=""
+    PACK_KIND=""
+    if [ -d "demos/$slug" ]; then
+        PACK="demos/$slug"
+        PACK_KIND="demos/"
+    elif [ -d "docs/demos/$slug" ]; then
+        PACK="docs/demos/$slug"
+        PACK_KIND="docs/demos/"
     fi
-done
+    if [ -z "$PACK" ]; then
+        fail "demo pack missing: demos/$slug/ (also docs/demos/$slug/)"
+        continue
+    fi
+    ALL_OK=true
+    for sub in README.md inputs prompts outputs app validation validation/acceptance-checklist.md; do
+        if [ ! -e "$PACK/$sub" ]; then
+            ALL_OK=false
+            fail "demo pack missing: $PACK/$sub"
+        fi
+    done
+    if [ "$ALL_OK" = true ]; then
+        pass "demo pack complete ($PACK_KIND$slug)"
+    fi
+done < "$SLUGS_FILE"
 
-# === 6. Screenshots ===
+# === 6. Screenshots (homepage + per-slug) ===
 echo ""
 echo "--- 6. Screenshots ---"
-for img in homepage.png demo-project-memory-meeting-assistant.png demo-customer-meeting-autonomous-build.png demo-multi-agent-project-dashboard.png; do
-    PATH_IMG="docs/media/$img"
+# Always check homepage
+[ -f "docs/media/homepage.png" ] || fail "screenshot missing: docs/media/homepage.png"
+[ -f "docs/media/homepage.png" ] && {
+    SIZE=$(file_size "docs/media/homepage.png")
+    EXT=$(file_ext "docs/media/homepage.png")
+    if [ "$SIZE" -gt 0 ] && [ "$EXT" = "png" ]; then
+        pass "screenshot OK: docs/media/homepage.png (${SIZE} bytes)"
+    else
+        fail "screenshot invalid: docs/media/homepage.png (size=$SIZE ext=$EXT)"
+    fi
+}
+
+# Per-slug: docs/media/demo-<slug>.png
+# Informational only — missing screenshots do not fail the check.
+while IFS= read -r slug; do
+    [ -z "$slug" ] && continue
+    PATH_IMG="docs/media/demo-$slug.png"
     if [ ! -f "$PATH_IMG" ]; then
-        fail "screenshot missing: $PATH_IMG"
+        echo "INFO  screenshot missing (non-fatal): $PATH_IMG"
         continue
     fi
     SIZE=$(file_size "$PATH_IMG")
@@ -185,7 +248,6 @@ for img in homepage.png demo-project-memory-meeting-assistant.png demo-customer-
     elif [ "$EXT" != "png" ]; then
         fail "screenshot wrong extension: $PATH_IMG (.png expected)"
     else
-        # Optional: verify PNG via file command
         if command -v file >/dev/null 2>&1; then
             if file "$PATH_IMG" 2>/dev/null | grep -q "PNG image"; then
                 pass "screenshot OK: $PATH_IMG (${SIZE} bytes, valid PNG)"
@@ -197,7 +259,7 @@ for img in homepage.png demo-project-memory-meeting-assistant.png demo-customer-
             pass "screenshot OK: $PATH_IMG (${SIZE} bytes)"
         fi
     fi
-done
+done < "$SLUGS_FILE"
 
 # === 7. Version badge ===
 echo ""

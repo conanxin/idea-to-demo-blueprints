@@ -95,11 +95,35 @@
       "md_url": "docs/gesture-visual-lab.md",
       "created_phase": "IDB-5",
       "updated_phase": "IDB-5"
+    },
+    {
+      "id": "idb-6",
+      "title": "DIY 可定制阅读台灯构建器",
+      "title_en": "DIY Lamp Builder",
+      "slug": "diy-lamp-builder",
+      "summary": "把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON 与制造计划。",
+      "category": "Physical Product / AI Workflow / Configurator",
+      "difficulty": "中等",
+      "difficulty_en": "Medium",
+      "demo_time": "1-2 天",
+      "demo_time_en": "1-2 days",
+      "audience": ["独立开发者", "产品经理", "文创产品设计师", "AI Agent 使用者", "硬件原型爱好者"],
+      "audience_en": ["Indie Developer", "Product Manager", "Cultural Product Designer", "AI Agent User", "Hardware Prototype Maker"],
+      "tags": ["AI", "实体产品", "灯具", "配置器", "3D Demo", "Manufacturing Plan"],
+      "status": "demo-ready",
+      "created_at": "2026-07-03",
+      "updated_at": "2026-07-03",
+      "page_url": "./blueprints/diy-lamp-builder.html",
+      "demo_url": "./demos/diy-lamp-builder/",
+      "demo_pack_path": "demos/diy-lamp-builder/",
+      "md_url": "docs/diy-lamp-builder.md",
+      "created_phase": "IDB-6",
+      "updated_phase": "IDB-6"
     }
   ],
   "meta": {
     "version": "4.2",
-    "total": 4,
-    "last_updated": "2026-06-13"
+    "total": 5,
+    "last_updated": "2026-07-03"
   }
 }
