@@ -53,15 +53,18 @@
 - [x] 打开 `app/index.html`，默认填入 "北京风格阅读台灯，外壳可定制，适合书桌使用"
 - [x] 页面加载后自动渲染 4 区内容
 - [x] 4 区依次为：Idea Input / AI Analyze / Configurator / Manufacturing Plan
-- [x] AI Analyze 显示 6 字段（Lamp Type / Core Module / Light Type / Brightness Target / Reading Distance / Shell / Interface）
+- [x] AI Analyze 显示 7 字段（Use Case / Core Choice / Brightness Target / Color Temperature / Shell Style / Glare Strategy / Estimated Position）
 - [x] Configurator Lamp Type 有 2 选项：Reading Lamp / Ambient Lamp
 - [x] Configurator Shell Style 有 4 选项：Minimal Bar / Hutong Window / Beijing Pavilion / Book Arc
 - [x] Configurator Color 有 4 选项：Warm White / Hutong Gray / Palace Red / Night Black
-- [x] Configurator Engraving 是文本输入框
+- [x] Configurator Engraving 是文本输入框，实时显示在底座或灯头上
 - [x] Configurator Core 字段固定显示 "ReadingCore-01"，不可编辑
-- [x] 改变任何配置，SVG 预览实时更新
+- [x] 改变任何配置，SVG 预览实时更新（4 种外壳明显不同）
 - [x] 改变任何配置，Manufacturing Plan JSON 实时更新
-- [x] Manufacturing Plan 包含 `assembly_steps` 数组，至少 6 步
+- [x] Manufacturing Plan 包含 `assembly_steps` 数组，8 步，带状态标签
+- [x] BOM 成本随 shell style 和颜色变化
+- [x] 4 个示例 idea button 可更新配置
+- [x] Manufacturing JSON 含 `phase: IDB-6B`
 
 ## 结构正确性验收
 

@@ -1,7 +1,7 @@
-/* DIY Lamp Builder Demo
+/* DIY Lamp Builder Demo — IDB-6B Productization Pass
  * Pure vanilla JS. No dependencies. No build step.
  * Drives: SVG shell style + engraving, real-time Manufacturing Plan JSON,
- * AI Analyze section (mock — represents what an LLM would output).
+ * BOM cost model, idea-to-config parser, assembly workflow.
  */
 
 (function () {
@@ -12,70 +12,161 @@
   var DEFAULT_IDEA = '北京风格阅读台灯，外壳可定制，适合书桌使用';
 
   var COLOR_MAP = {
-    'Warm White':    { hex: '#f5efe6', label: 'Warm White' },
-    'Hutong Gray':   { hex: '#7a7a78', label: 'Hutong Gray' },
-    'Palace Red':    { hex: '#a83232', label: 'Palace Red' },
-    'Night Black':   { hex: '#1c1c1e', label: 'Night Black' }
+    'Warm White':  { hex: '#f5efe6', label: 'Warm White', finishing: 1.0 },
+    'Hutong Gray': { hex: '#7a7a78', label: 'Hutong Gray', finishing: 1.0 },
+    'Palace Red':  { hex: '#a83232', label: 'Palace Red', finishing: 1.15 },
+    'Night Black': { hex: '#1c1c1e', label: 'Night Black', finishing: 1.1 }
   };
 
   var SHELL_STYLES = {
     'Minimal Bar': {
       label: 'Minimal Bar',
-      // simple horizontal bar above the core
-      draw: function (svg, color) {
-        var ns = 'http://www.w3.org/2000/svg';
-        var g = document.createElementNS(ns, 'g');
-        g.setAttribute('class', 'shell-minimal-bar');
-        g.innerHTML =
-          '<rect x="40" y="50" width="240" height="22" rx="3" fill="' + color + '" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<rect x="40" y="72" width="240" height="6" fill="#2a2722" opacity="0.35"/>';
+      complexity: 1.0,
+      printTime: '3.5h',
+      finishing: 'low',
+      riskLevel: 'low',
+      recommendedIteration: '1st',
+      draw: function (color, secondary) {
+        var g = svgGroup('shell-minimal-bar');
+        // long rounded bar with a thin highlight strip
+        g.appendChild(rect(40, 52, 240, 24, 4, color, '#2a2722', 1.5));
+        g.appendChild(rect(40, 76, 240, 4, 0, '#2a2722', null, 0));
+        g.lastChild.setAttribute('opacity', '0.25');
+        // two subtle mounting slots
+        g.appendChild(rect(60, 56, 12, 16, 2, secondary, '#2a2722', 1));
+        g.appendChild(rect(248, 56, 12, 16, 2, secondary, '#2a2722', 1));
         return g;
       }
     },
     'Hutong Window': {
       label: 'Hutong Window',
-      // lattice window frame above the core
-      draw: function (svg, color) {
-        var ns = 'http://www.w3.org/2000/svg';
-        var g = document.createElementNS(ns, 'g');
-        g.setAttribute('class', 'shell-hutong-window');
-        g.innerHTML =
-          '<rect x="40" y="36" width="240" height="38" rx="2" fill="' + color + '" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<line x1="100" y1="36" x2="100" y2="74" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<line x1="160" y1="36" x2="160" y2="74" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<line x1="220" y1="36" x2="220" y2="74" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<line x1="40" y1="55" x2="280" y2="55" stroke="#2a2722" stroke-width="1.5"/>';
+      complexity: 1.25,
+      printTime: '5h',
+      finishing: 'medium',
+      riskLevel: 'medium',
+      recommendedIteration: '2nd',
+      draw: function (color, secondary) {
+        var g = svgGroup('shell-hutong-window');
+        // window frame
+        g.appendChild(rect(40, 38, 240, 40, 2, color, '#2a2722', 1.5));
+        // vertical mullions
+        var xs = [100, 160, 220];
+        for (var i = 0; i < xs.length; i++) {
+          g.appendChild(line(xs[i], 38, xs[i], 78, '#2a2722', 1.5));
+        }
+        // horizontal bar
+        g.appendChild(line(40, 58, 280, 58, '#2a2722', 1.5));
+        // inner lattice accent
+        g.appendChild(rect(44, 42, 232, 32, 0, 'none', '#c7b299', 1));
+        g.lastChild.setAttribute('opacity', '0.25');
         return g;
       }
     },
     'Beijing Pavilion': {
       label: 'Beijing Pavilion',
-      // curved roofline above the core
-      draw: function (svg, color) {
-        var ns = 'http://www.w3.org/2000/svg';
-        var g = document.createElementNS(ns, 'g');
-        g.setAttribute('class', 'shell-beijing-pavilion');
-        g.innerHTML =
-          '<path d="M 40 76 Q 100 28 160 32 Q 220 28 280 76 Z" fill="' + color + '" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<rect x="44" y="76" width="232" height="6" fill="#2a2722" opacity="0.4"/>' +
-          '<circle cx="160" cy="30" r="3" fill="#a83232"/>';
+      complexity: 1.45,
+      printTime: '6.5h',
+      finishing: 'high',
+      riskLevel: 'medium',
+      recommendedIteration: '2nd',
+      draw: function (color, secondary) {
+        var g = svgGroup('shell-beijing-pavilion');
+        // curved roof outline
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', 'M 36 76 Q 80 24 160 28 Q 240 24 284 76 Z');
+        path.setAttribute('fill', color);
+        path.setAttribute('stroke', '#2a2722');
+        path.setAttribute('stroke-width', '1.5');
+        g.appendChild(path);
+        // eave tier
+        var eave = rect(48, 74, 224, 8, 1, secondary, '#2a2722', 1);
+        g.appendChild(eave);
+        // central finial
+        g.appendChild(circle(160, 26, 4, '#a83232'));
+        // decorative ridge lines
+        g.appendChild(line(80, 40, 120, 55, '#2a2722', 1));
+        g.appendChild(line(240, 40, 200, 55, '#2a2722', 1));
         return g;
       }
     },
     'Book Arc': {
       label: 'Book Arc',
-      // open book curve above the core
-      draw: function (svg, color) {
-        var ns = 'http://www.w3.org/2000/svg';
-        var g = document.createElementNS(ns, 'g');
-        g.setAttribute('class', 'shell-book-arc');
-        g.innerHTML =
-          '<path d="M 40 70 Q 80 36 160 50 Q 240 36 280 70 L 280 78 L 40 78 Z" fill="' + color + '" stroke="#2a2722" stroke-width="1.5"/>' +
-          '<line x1="160" y1="50" x2="160" y2="78" stroke="#2a2722" stroke-width="1.2"/>';
+      complexity: 1.35,
+      printTime: '5.5h',
+      finishing: 'medium',
+      riskLevel: 'low',
+      recommendedIteration: '2nd',
+      draw: function (color, secondary) {
+        var g = svgGroup('shell-book-arc');
+        // two open book pages as a curved shade
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', 'M 40 72 Q 80 30 160 44 Q 240 30 280 72 L 280 80 L 40 80 Z');
+        path.setAttribute('fill', color);
+        path.setAttribute('stroke', '#2a2722');
+        path.setAttribute('stroke-width', '1.5');
+        g.appendChild(path);
+        // page fold line
+        g.appendChild(line(160, 44, 160, 80, '#2a2722', 1.2));
+        // page edge accents
+        g.appendChild(line(44, 72, 80, 48, '#c7b299', 1));
+        g.appendChild(line(276, 72, 240, 48, '#c7b299', 1));
         return g;
       }
     }
   };
+
+  var BASE_COMPONENTS = [
+    { key: 'led', name: '24V high-CRI LED strip', low: 8, high: 18 },
+    { key: 'channel', name: 'Aluminum channel + opal diffuser', low: 6, high: 14 },
+    { key: 'psu', name: '24V power adapter', low: 8, high: 15 },
+    { key: 'dimmer', name: 'Dimmer / controller', low: 4, high: 12 },
+    { key: 'hardware', name: 'Wires / screws / M3 inserts', low: 2, high: 5 },
+    { key: 'base', name: 'Base + arm mock', low: 10, high: 25 }
+  ];
+
+  var FINISHING_COSTS = {
+    'Warm White':  { low: 4, high: 8 },
+    'Hutong Gray': { low: 4, high: 8 },
+    'Palace Red':  { low: 8, high: 14 },
+    'Night Black': { low: 6, high: 12 }
+  };
+
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // ---------- SVG helpers ----------
+
+  function svgGroup(cls) {
+    var g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', cls);
+    return g;
+  }
+
+  function rect(x, y, w, h, r, fill, stroke, sw) {
+    var el = document.createElementNS(NS, 'rect');
+    el.setAttribute('x', x); el.setAttribute('y', y);
+    el.setAttribute('width', w); el.setAttribute('height', h);
+    if (r) el.setAttribute('rx', r);
+    el.setAttribute('fill', fill);
+    if (stroke) el.setAttribute('stroke', stroke);
+    if (sw) el.setAttribute('stroke-width', sw);
+    return el;
+  }
+
+  function line(x1, y1, x2, y2, stroke, sw) {
+    var el = document.createElementNS(NS, 'line');
+    el.setAttribute('x1', x1); el.setAttribute('y1', y1);
+    el.setAttribute('x2', x2); el.setAttribute('y2', y2);
+    el.setAttribute('stroke', stroke);
+    el.setAttribute('stroke-width', sw);
+    return el;
+  }
+
+  function circle(cx, cy, r, fill) {
+    var el = document.createElementNS(NS, 'circle');
+    el.setAttribute('cx', cx); el.setAttribute('cy', cy);
+    el.setAttribute('r', r); el.setAttribute('fill', fill);
+    return el;
+  }
 
   // ---------- DOM refs ----------
 
@@ -84,13 +175,14 @@
   var dom = {
     ideaInput:        $('idea-input'),
     btnGenerate:      $('btn-generate'),
-    archLampType:     $('arch-lamp-type'),
-    archCoreModule:   $('arch-core-module'),
-    archLightType:    $('arch-light-type'),
+    ideaButtons:      document.querySelectorAll('.idea-chip'),
+    archUseCase:      $('arch-use-case'),
+    archCoreChoice:   $('arch-core-choice'),
     archBrightness:   $('arch-brightness'),
-    archDistance:     $('arch-distance'),
+    archColorTemp:    $('arch-color-temp'),
     archShell:        $('arch-shell'),
-    archInterface:    $('arch-interface'),
+    archGlare:        $('arch-glare'),
+    archPosition:     $('arch-position'),
     cfgLampType:      $('cfg-lamp-type'),
     cfgShellStyle:    $('cfg-shell-style'),
     cfgEngraving:     $('cfg-engraving'),
@@ -100,64 +192,224 @@
     engravingText:    $('engraving-text'),
     previewCaption:   $('preview-caption'),
     manufacturingJSON:$('manufacturing-json'),
-    btnCopyJSON:      $('btn-copy-json')
+    btnCopyJSON:      $('btn-copy-json'),
+    bomSummary:       $('bom-summary'),
+    bomTbody:         $('bom-tbody'),
+    assemblySteps:    $('assembly-steps')
   };
 
   // ---------- State ----------
 
   var state = {
     color:    'Warm White',
-    colorHex: '#f5efe6'
+    colorHex: '#f5efe6',
+    parsed:   null
   };
 
+  // ---------- Idea parser (lightweight rule-based, no LLM) ----------
+
+  function parseIdeaToConfig(text) {
+    var t = (text || '').toLowerCase();
+    var config = {
+      useCase: 'Reading desk lamp',
+      lampType: 'Reading Lamp',
+      colorTemperature: 'Warm 3000K',
+      shellStyle: 'Hutong Window',
+      color: 'Warm White',
+      glareStrategy: 'Recessed opal diffuser',
+      brightnessTarget: '500-800 lm',
+      estimatedPosition: 'Desk, 35-45 cm',
+      core: 'ReadingCore-01'
+    };
+
+    if (/北京|胡同|四合院|窗/.test(t)) {
+      config.shellStyle = 'Hutong Window';
+      config.color = /灰/.test(t) ? 'Hutong Gray' : 'Warm White';
+    }
+    if (/天坛|宫殿|中式|亭|阁/.test(t)) {
+      config.shellStyle = 'Beijing Pavilion';
+      config.color = 'Palace Red';
+    }
+    if (/极简|黑色|工作|桌面|办公/.test(t)) {
+      config.shellStyle = 'Minimal Bar';
+      config.color = 'Night Black';
+      config.brightnessTarget = '600-800 lm';
+      config.useCase = 'Desktop work lamp';
+      config.estimatedPosition = 'Desk, 40-50 cm';
+    }
+    if (/书卷|床头|弧形|孩子|儿童|睡前|读书|阅读/.test(t)) {
+      if (/书卷|床头|弧形/.test(t)) {
+        config.shellStyle = 'Book Arc';
+      }
+      if (/孩子|儿童|睡前|读书|阅读/.test(t)) {
+        config.colorTemperature = 'Warm 2700K';
+        config.glareStrategy = 'Low glare, recessed diffuser';
+        config.brightnessTarget = 'Soft reading 400-600 lm';
+        config.useCase = 'Bedside reading lamp';
+        config.estimatedPosition = 'Bedside, 35-45 cm';
+      }
+    }
+    if (/孩子|儿童|睡前/.test(t)) {
+      config.shellStyle = 'Book Arc';
+    }
+
+    if (/阅读|读书|书桌|图书|台灯/.test(t)) {
+      config.lampType = 'Reading Lamp';
+    } else if (/氛围|装饰|环境|ambient/.test(t)) {
+      config.lampType = 'Ambient Lamp';
+      config.brightnessTarget = '200-400 lm';
+      config.useCase = 'Ambient lamp';
+    }
+
+    return config;
+  }
+
   // ---------- Rendering ----------
+
+  function selectedColorOrFallback(colorName) {
+    var info = COLOR_MAP[colorName] || COLOR_MAP['Warm White'];
+    return info;
+  }
+
+  function secondaryColor(hex) {
+    // compute a slightly darker/lighter accent for inner details
+    var map = {
+      '#f5efe6': '#e6dcc8',
+      '#7a7a78': '#9a9a98',
+      '#a83232': '#7d2424',
+      '#1c1c1e': '#3a3a3c'
+    };
+    return map[hex] || '#d8d2c4';
+  }
 
   function renderShell() {
     var styleName = dom.cfgShellStyle.value;
     var style = SHELL_STYLES[styleName];
     if (!style) return;
 
-    // clear existing shell
     while (dom.lampShell.firstChild) {
       dom.lampShell.removeChild(dom.lampShell.firstChild);
     }
-    var g = style.draw(null, state.colorHex);
+    var sec = secondaryColor(state.colorHex);
+    var g = style.draw(state.colorHex, sec);
     dom.lampShell.appendChild(g);
 
-    // engraving
     var text = (dom.cfgEngraving.value || '').trim();
     dom.engravingText.textContent = text || '—';
 
-    // caption
+    // pick engraving color based on shell brightness
+    var darkShell = (state.color === 'Night Black' || state.color === 'Palace Red');
+    dom.engravingText.setAttribute('fill', darkShell ? '#f5efe6' : '#5a5648');
+
+    // place engraving either on base or head depending on style
+    var baseY = 326;
+    if (styleName === 'Minimal Bar') {
+      dom.engravingText.setAttribute('y', '120');
+      dom.engravingText.setAttribute('font-size', '14');
+    } else if (styleName === 'Hutong Window') {
+      dom.engravingText.setAttribute('y', '120');
+      dom.engravingText.setAttribute('font-size', '13');
+    } else {
+      dom.engravingText.setAttribute('y', baseY);
+      dom.engravingText.setAttribute('font-size', '16');
+    }
+
     dom.previewCaption.textContent =
       style.label + ' · ' + state.color + (text ? ' · ' + text : '');
   }
 
+  function calculateBom(styleName, colorName) {
+    var style = SHELL_STYLES[styleName];
+    var shellLow = 6 + Math.round(6 * (style.complexity - 1.0));
+    var shellHigh = 12 + Math.round(12 * (style.complexity - 1.0));
+    var finishing = FINISHING_COSTS[colorName] || FINISHING_COSTS['Warm White'];
+
+    var rows = [];
+    var baseLow = 0, baseHigh = 0;
+    for (var i = 0; i < BASE_COMPONENTS.length; i++) {
+      var c = BASE_COMPONENTS[i];
+      rows.push({ name: c.name, low: c.low, high: c.high });
+      baseLow += c.low;
+      baseHigh += c.high;
+    }
+    rows.push({ name: '3D printed shell (' + style.label + ')', low: shellLow, high: shellHigh });
+    rows.push({ name: 'Finishing / paint (' + colorName + ')', low: finishing.low, high: finishing.high });
+
+    var totalLow = baseLow + shellLow + finishing.low;
+    var totalHigh = baseHigh + shellHigh + finishing.high;
+    return { rows: rows, totalLow: totalLow, totalHigh: totalHigh };
+  }
+
+  function formatBomRange(low, high) {
+    return '$' + low + '-' + high + ' prototype';
+  }
+
+  function renderBomTable() {
+    var styleName = dom.cfgShellStyle.value;
+    var bom = calculateBom(styleName, state.color);
+    dom.bomSummary.textContent = formatBomRange(bom.totalLow, bom.totalHigh);
+
+    var tbody = dom.bomTbody;
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+    for (var i = 0; i < bom.rows.length; i++) {
+      var r = bom.rows[i];
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + esc(r.name) + '</td>' +
+        '<td>$' + r.low + '</td>' +
+        '<td>$' + r.high + '</td>';
+      tbody.appendChild(tr);
+    }
+  }
+
   function buildManufacturingJSON() {
     var styleName = dom.cfgShellStyle.value;
+    var style = SHELL_STYLES[styleName];
     var lampType = dom.cfgLampType.value;
     var color = state.color;
     var engraving = (dom.cfgEngraving.value || '').trim();
+    var parsed = state.parsed || parseIdeaToConfig(dom.ideaInput.value || DEFAULT_IDEA);
+    var bom = calculateBom(styleName, color);
 
     return {
-      core: 'ReadingCore-01',
-      core_type: '24V linear LED cassette',
-      led_mount: 'aluminum channel with opal diffuser',
+      phase: 'IDB-6B',
+      core_locked: true,
+      idea_summary: (dom.ideaInput.value || '').trim().substring(0, 120),
+      use_case: parsed.useCase,
       shell_style: styleName,
       color: color,
       engraving: engraving || '(none)',
-      estimated_luminous_flux: '500-800 lm',
-      estimated_print_time: '4h',
-      estimated_material: 'PETG / PLA+',
-      estimated_bom_cost: '$40-80 prototype',
-      lamp_type: lampType,
+      reading_target: {
+        luminous_flux: parsed.brightnessTarget,
+        desk_lux: '300-500 lux',
+        distance: '35-45 cm',
+        glare_control: 'recessed opal diffuser + downward beam'
+      },
+      core_stack: [
+        '24V high-CRI linear LED strip',
+        'aluminum channel heat sink',
+        'opal diffuser',
+        'M3 dual mount',
+        'custom shell'
+      ],
+      estimated_bom_cost: formatBomRange(bom.totalLow, bom.totalHigh),
+      estimated_print_time: style.printTime,
+      risk_notes: [
+        'Shell complexity multiplier: ' + style.complexity + 'x',
+        'Finishing level: ' + style.finishing,
+        'Risk level: ' + style.riskLevel,
+        'Recommended iteration: ' + style.recommendedIteration
+      ],
       assembly_steps: [
-        'Cut 24V high-CRI LED strip to lamp-head length',
-        'Attach LED strip to aluminum channel',
-        'Install opal diffuser',
-        'Mount ReadingCore-01 into customizable shell',
-        'Attach arm and base',
-        'Run brightness, heat and glare checks'
+        { step: 'Cut 24V high-CRI LED strip to lamp-head length', status: 'manual' },
+        { step: 'Attach LED strip to aluminum channel', status: 'manual' },
+        { step: 'Install opal diffuser', status: 'manual' },
+        { step: 'Mount ReadingCore-01 into custom shell', status: 'prototype-ready' },
+        { step: 'Attach arm and base', status: 'manual' },
+        { step: 'Run 30-min heat check', status: 'prototype-ready' },
+        { step: 'Run glare check at 35-45 cm reading distance', status: 'prototype-ready' },
+        { step: 'Save configuration JSON as prototype spec', status: 'future-automation' }
       ]
     };
   }
@@ -168,29 +420,37 @@
   }
 
   function updateAnalyzeSection() {
-    // Mock — represents what AI would output for this idea.
-    // In a real workflow this section would be populated by an LLM response.
-    var lampType = dom.cfgLampType.value;
-    dom.archLampType.textContent = lampType === 'Ambient Lamp'
-      ? 'Ambient Desk Lamp'
-      : 'Reading Desk Lamp';
+    var parsed = state.parsed || parseIdeaToConfig(dom.ideaInput.value || DEFAULT_IDEA);
+    state.parsed = parsed;
 
-    // core module is fixed
-    dom.archCoreModule.innerHTML = '<span class="locked">🔒 ReadingCore-01</span>';
+    dom.archUseCase.textContent = parsed.useCase;
+    dom.archCoreChoice.innerHTML = '<span class="locked">🔒 ' + parsed.core + '</span>';
+    dom.archBrightness.textContent = parsed.brightnessTarget;
+    dom.archColorTemp.textContent = parsed.colorTemperature;
+    dom.archShell.textContent = parsed.shellStyle;
+    dom.archGlare.textContent = parsed.glareStrategy;
+    dom.archPosition.textContent = parsed.estimatedPosition;
 
-    // shell depends on whether it's customizable
-    dom.archShell.textContent = 'Customizable';
+    // reflect parsed choices into controls without triggering infinite loops
+    if (dom.cfgShellStyle.value !== parsed.shellStyle) {
+      dom.cfgShellStyle.value = parsed.shellStyle;
+    }
+    if (dom.cfgLampType.value !== parsed.lampType) {
+      dom.cfgLampType.value = parsed.lampType;
+    }
+    selectColor(parsed.color, false);
   }
 
   function renderAll() {
-    renderShell();
-    renderManufacturingJSON();
     updateAnalyzeSection();
+    renderShell();
+    renderBomTable();
+    renderManufacturingJSON();
   }
 
   // ---------- Color chip handling ----------
 
-  function selectColor(colorName) {
+  function selectColor(colorName, render) {
     var info = COLOR_MAP[colorName];
     if (!info) return;
     state.color = colorName;
@@ -207,47 +467,58 @@
     }
 
     dom.colorName.textContent = colorName;
-    renderShell();
-    renderManufacturingJSON();
+    if (render !== false) {
+      renderShell();
+      renderBomTable();
+      renderManufacturingJSON();
+    }
   }
 
   function initColorChips() {
     var chips = dom.colorRow.querySelectorAll('.color-chip');
     for (var i = 0; i < chips.length; i++) {
       var c = chips[i];
-      var hex = c.getAttribute('data-hex');
-      var name = c.getAttribute('data-color');
-      c.style.backgroundColor = hex;
+      c.style.backgroundColor = c.getAttribute('data-hex');
       c.addEventListener('click', function (e) {
-        var target = e.currentTarget;
-        selectColor(target.getAttribute('data-color'));
+        selectColor(e.currentTarget.getAttribute('data-color'), true);
       });
     }
-    // set initial active
-    selectColor(state.color);
+  }
+
+  // ---------- Helpers ----------
+
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   // ---------- Event wiring ----------
 
   function wire() {
     dom.btnGenerate.addEventListener('click', function () {
-      // "Generate Product Demo" just re-renders.
-      // In a real workflow this would call an LLM.
+      state.parsed = parseIdeaToConfig(dom.ideaInput.value);
       renderAll();
-      // smooth scroll to analyze section
       var target = document.getElementById('analyze-section');
       if (target && target.scrollIntoView) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
 
+    for (var i = 0; i < dom.ideaButtons.length; i++) {
+      dom.ideaButtons[i].addEventListener('click', function (e) {
+        var idea = e.currentTarget.getAttribute('data-idea');
+        dom.ideaInput.value = idea;
+        state.parsed = parseIdeaToConfig(idea);
+        renderAll();
+      });
+    }
+
     dom.cfgLampType.addEventListener('change', function () {
-      updateAnalyzeSection();
       renderManufacturingJSON();
     });
 
     dom.cfgShellStyle.addEventListener('change', function () {
       renderShell();
+      renderBomTable();
       renderManufacturingJSON();
     });
 
@@ -261,12 +532,9 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () {
           dom.btnCopyJSON.textContent = 'Copied!';
-          setTimeout(function () {
-            dom.btnCopyJSON.textContent = 'Copy';
-          }, 1500);
+          setTimeout(function () { dom.btnCopyJSON.textContent = 'Copy'; }, 1500);
         });
       } else {
-        // fallback
         var ta = document.createElement('textarea');
         ta.value = text;
         document.body.appendChild(ta);
@@ -274,9 +542,7 @@
         try { document.execCommand('copy'); } catch (e) {}
         document.body.removeChild(ta);
         dom.btnCopyJSON.textContent = 'Copied!';
-        setTimeout(function () {
-          dom.btnCopyJSON.textContent = 'Copy';
-        }, 1500);
+        setTimeout(function () { dom.btnCopyJSON.textContent = 'Copy'; }, 1500);
       }
     });
   }
@@ -284,13 +550,13 @@
   // ---------- Init ----------
 
   function init() {
-    // Make sure the default idea is set
     if (!dom.ideaInput.value) {
       dom.ideaInput.value = DEFAULT_IDEA;
     }
     initColorChips();
     wire();
-    // initial render so the page is "live" on first paint
+    selectColor('Warm White', false);
+    state.parsed = parseIdeaToConfig(dom.ideaInput.value);
     renderAll();
   }
 

@@ -3,7 +3,7 @@
 > **方案：** DIY 可定制阅读台灯构建器
 > **Demo 场景：** 把"做一个北京风格、可定制外壳、适合桌旁阅读"的台灯想法，转成可交互配置器 + 产品架构 + 制造计划
 > **状态：** demo-ready
-> **阶段：** IDB-6
+> **阶段：** IDB-6B
 
 ---
 
@@ -23,10 +23,12 @@
 
 一个纯静态、单文件家族的 Demo，用来演示 **"想法 → 可定制实体产品 Demo"** 的完整链路：
 
-- **Idea Input** — 输入一句产品想法
+- **Idea Input** — 输入一句产品想法，4 个示例按钮可一键触发
+- **Idea Parser** — 轻量规则解析器，把关键词转成产品决策
 - **AI Analyze** — 自动推导产品架构（ReadingCore-01 + 可定制外壳）
-- **Configurator** — 选择外壳风格、颜色、刻字，实时预览
-- **Manufacturing Plan** — 实时输出制造 JSON + 装配步骤
+- **Configurator** — 选择外壳风格、颜色、刻字，实时预览（4 种外壳明显不同）
+- **BOM Cost Model** — 动态成本估算，按 shell / 颜色变化
+- **Manufacturing Plan** — 实时输出制造 JSON + 8 步装配流程
 
 整个 Demo 没有任何外部依赖（无 CDN、无 build step、无 Three.js），只用 HTML / CSS / JS，可直接在 GitHub Pages 上打开。
 
@@ -75,7 +77,9 @@ demos/diy-lamp-builder/
 ├── outputs/
 │   ├── brief.md                # AI 生成的方案 Brief
 │   ├── task-plan.md            # AI 生成的任务计划
-│   └── generated-demo-notes.md # Demo 构建说明
+│   ├── generated-demo-notes.md # Demo 构建说明
+│   ├── productization-pass.md  # IDB-6B 产品化目标与变化
+│   └── bom-model.json          # BOM 成本模型数据结构
 ├── app/
 │   ├── index.html              # 4 区单页应用
 │   ├── style.css               # 样式
@@ -98,4 +102,4 @@ demos/diy-lamp-builder/
 
 ---
 
-*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6.*
+*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6B.*

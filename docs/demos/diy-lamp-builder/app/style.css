@@ -427,36 +427,137 @@ code {
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  max-height: 460px;
+  max-height: 520px;
   overflow-y: auto;
 }
 
+.mfg-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.bom-panel h3,
 .mfg-steps h3 {
   margin: 0 0 10px 0;
   font-size: 0.9rem;
   font-weight: 700;
 }
 
-#assembly-steps {
+.bom-summary {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-family: var(--mono-stack);
+}
+
+.bom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.bom-table th,
+.bom-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.bom-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bom-table td:nth-child(2),
+.bom-table td:nth-child(3) {
+  font-family: var(--mono-stack);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mfg-steps ol {
   margin: 0;
   padding-left: 20px;
   font-size: 0.85rem;
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
-#assembly-steps li {
-  margin-bottom: 4px;
+.mfg-steps li {
+  margin-bottom: 6px;
+}
+
+.step-status {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.step-status.prototype-ready {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.step-status.manual {
+  background: #fff8ee;
+  color: #8a6d3b;
+}
+
+.step-status.future-automation {
+  background: #eef2f7;
+  color: #4a6fa5;
 }
 
 .mfg-disclaimer {
-  margin-top: 14px;
   padding: 10px 12px;
   background: #fff8ee;
   border: 1px solid #f0dfb8;
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
   color: #5a4521;
+}
+
+/* ---------- A. Idea Input chips ---------- */
+.idea-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.idea-chip {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.idea-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #fff8f8;
+}
+
+.badge-idb {
+  background: #1f1d18;
+  color: #fff;
+  border: none;
 }
 
 /* ---------- 响应式 ---------- */

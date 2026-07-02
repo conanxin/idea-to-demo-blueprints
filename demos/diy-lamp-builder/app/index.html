@@ -3,82 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Lamp Builder · ReadingCore-01</title>
+  <title>DIY Lamp Builder · IDB-6B Productization Pass</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="demo-app">
-    <!-- 顶部 -->
     <header class="demo-header">
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
       <div class="header-titles">
         <h1>DIY Lamp Builder</h1>
-        <p class="subtitle">ReadingCore-01 · 可定制外壳 · 制造计划</p>
+        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6B Productization Pass</p>
       </div>
-      <span class="badge">companion demo / 配置器原型</span>
+      <span class="badge badge-idb">IDB-6B</span>
     </header>
 
     <main class="demo-main">
 
-      <!-- ============ A. Idea Input ============ -->
+      <!-- A. Idea Input -->
       <section class="card idea-card" id="idea-section">
         <div class="card-head">
           <span class="step-tag">A</span>
           <h2>Idea Input</h2>
         </div>
-        <p class="card-hint">输一句产品想法，AI 会自动把它拆成"固定内核 + 可定制外壳"两层结构。</p>
+        <p class="card-hint">输一句产品想法，内置轻量规则解析器会自动拆成"固定内核 + 可定制外壳"两层结构。</p>
         <textarea id="idea-input" rows="3" placeholder="例如：北京风格阅读台灯，外壳可定制，适合书桌使用">北京风格阅读台灯，外壳可定制，适合书桌使用</textarea>
+        <div class="idea-buttons">
+          <button type="button" class="idea-chip" data-idea="北京风格阅读台灯，放在书桌使用">北京风格阅读台灯</button>
+          <button type="button" class="idea-chip" data-idea="给孩子读书用的暖光台灯">给孩子读书用的暖光台灯</button>
+          <button type="button" class="idea-chip" data-idea="极简黑色桌面工作灯">极简黑色桌面工作灯</button>
+          <button type="button" class="idea-chip" data-idea="书卷造型床头阅读灯">书卷造型床头阅读灯</button>
+        </div>
         <button id="btn-generate" class="primary-btn">Generate Product Demo</button>
       </section>
 
-      <!-- ============ B. AI Analyze ============ -->
+      <!-- B. AI Analyze / Product Architecture -->
       <section class="card analyze-card" id="analyze-section">
         <div class="card-head">
           <span class="step-tag">B</span>
           <h2>AI Analyze · Product Architecture</h2>
         </div>
-        <p class="card-hint">AI 把模糊想法拆成可执行的产品架构。</p>
-        <div class="arch-grid">
+        <p class="card-hint">解析后的产品决策卡片（Demo 中由轻量规则解析器驱动，非真实 LLM）。</p>
+        <div class="arch-grid" id="arch-grid">
           <div class="arch-item">
-            <span class="arch-label">Lamp Type</span>
-            <span class="arch-value" id="arch-lamp-type">Reading Desk Lamp</span>
+            <span class="arch-label">Use Case</span>
+            <span class="arch-value" id="arch-use-case">Reading desk lamp</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Core Module</span>
-            <span class="arch-value" id="arch-core-module">
+            <span class="arch-label">Core Choice</span>
+            <span class="arch-value" id="arch-core-choice">
               <span class="locked">🔒 ReadingCore-01</span>
             </span>
-          </div>
-          <div class="arch-item">
-            <span class="arch-label">Light Type</span>
-            <span class="arch-value" id="arch-light-type">24V Linear LED</span>
           </div>
           <div class="arch-item">
             <span class="arch-label">Brightness Target</span>
             <span class="arch-value" id="arch-brightness">500–800 lm</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Reading Distance</span>
-            <span class="arch-value" id="arch-distance">35–45 cm</span>
+            <span class="arch-label">Color Temperature</span>
+            <span class="arch-value" id="arch-color-temp">Warm 3000K</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Shell</span>
-            <span class="arch-value" id="arch-shell">Customizable</span>
+            <span class="arch-label">Shell Style</span>
+            <span class="arch-value" id="arch-shell">Hutong Window</span>
           </div>
-          <div class="arch-item arch-item-wide">
-            <span class="arch-label">Interface</span>
-            <span class="arch-value" id="arch-interface">M3 dual mount / aluminum channel cassette</span>
+          <div class="arch-item">
+            <span class="arch-label">Glare Strategy</span>
+            <span class="arch-value" id="arch-glare">Recessed opal diffuser</span>
+          </div>
+          <div class="arch-item">
+            <span class="arch-label">Estimated Position</span>
+            <span class="arch-value" id="arch-position">Desk, 35–45 cm</span>
           </div>
         </div>
         <div class="arch-note">
           <strong>结构原则：</strong>
           LED 灯带<em>不直接贴塑料外壳</em>。标准结构是
-          <code>LED 灯带 → 铝型材/铝槽散热 → 乳白扩散罩 → 可定制外壳</code>。
+          <code>24V 线性 LED → 铝型材/铝槽散热 → 乳白扩散罩 → 可定制外壳</code>。
           外壳只承担造型，不承担散热和电气。
         </div>
       </section>
 
-      <!-- ============ C. Configurator ============ -->
+      <!-- C. Configurator -->
       <section class="card config-card" id="configurator-section">
         <div class="card-head">
           <span class="step-tag">C</span>
@@ -125,30 +130,25 @@
             <div class="control-group">
               <label>Core（固定不可改）</label>
               <input type="text" value="ReadingCore-01" disabled class="locked-input">
-              <small class="locked-hint">🔒 这是 ReadingCore-01，所有款式都用同一内核</small>
+              <small class="locked-hint">🔒 所有款式共享 ReadingCore-01</small>
             </div>
           </div>
 
           <div class="config-preview">
             <svg id="lamp-preview" viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg" aria-label="Lamp preview">
-              <!-- background -->
               <rect x="0" y="0" width="320" height="360" fill="#fafaf7"></rect>
-              <!-- desk line -->
               <line x1="20" y1="320" x2="300" y2="320" stroke="#d8d2c4" stroke-width="2"></line>
 
               <!-- arm -->
               <line id="lamp-arm" x1="160" y1="320" x2="160" y2="120" stroke="#9c9c98" stroke-width="6" stroke-linecap="round"></line>
 
               <!-- shell (changes with style + color) -->
-              <g id="lamp-shell">
-                <!-- default: Minimal Bar shell will be drawn by JS -->
-              </g>
+              <g id="lamp-shell"></g>
 
-              <!-- core cassette (always visible) -->
+              <!-- core cassette -->
               <g id="lamp-core">
                 <rect id="core-cassette" x="80" y="80" width="160" height="36" rx="6" fill="#3a3a3c"></rect>
                 <text id="core-label" x="160" y="103" text-anchor="middle" fill="#fff7e8" font-size="14" font-weight="600">ReadingCore-01</text>
-                <!-- light beam (always warm white, suggesting it's the unchangeable light) -->
                 <rect x="60" y="116" width="200" height="6" fill="#ffd9a0" opacity="0.85"></rect>
                 <rect x="50" y="122" width="220" height="3" fill="#ffe9c5" opacity="0.55"></rect>
               </g>
@@ -160,38 +160,55 @@
               <ellipse id="lamp-base" cx="160" cy="325" rx="46" ry="10" fill="#5a5648"></ellipse>
               <ellipse cx="160" cy="322" rx="38" ry="6" fill="#7a7666"></ellipse>
             </svg>
-            <p class="preview-caption" id="preview-caption">Minimal Bar · Warm White · 北京之光</p>
+            <p class="preview-caption" id="preview-caption">Hutong Window · Warm White · 北京之光</p>
           </div>
         </div>
       </section>
 
-      <!-- ============ D. Manufacturing Plan ============ -->
+      <!-- D. Manufacturing Plan -->
       <section class="card mfg-card" id="manufacturing-section">
         <div class="card-head">
           <span class="step-tag">D</span>
           <h2>Manufacturing Plan</h2>
         </div>
-        <p class="card-hint">根据上面所有配置实时输出制造 JSON 和装配步骤。</p>
+        <p class="card-hint">实时更新的 Manufacturing JSON、BOM 成本估算与装配流程。</p>
 
         <div class="mfg-layout">
           <div class="mfg-json">
             <div class="mfg-json-head">
-              <span>manufacturing_plan.json</span>
+              <span id="json-filename">manufacturing_plan.json</span>
               <button type="button" id="btn-copy-json" class="ghost-btn">Copy</button>
             </div>
             <pre id="manufacturing-json"></pre>
           </div>
 
-          <div class="mfg-steps">
-            <h3>Assembly Steps</h3>
-            <ol id="assembly-steps">
-              <li>Cut 24V high-CRI LED strip to lamp-head length</li>
-              <li>Attach LED strip to aluminum channel</li>
-              <li>Install opal diffuser</li>
-              <li>Mount ReadingCore-01 into customizable shell</li>
-              <li>Attach arm and base</li>
-              <li>Run brightness, heat and glare checks</li>
-            </ol>
+          <div class="mfg-side">
+            <div class="bom-panel">
+              <h3>Idea Parser &amp; BOM Cost Model</h3>
+              <p class="hint" style="font-size:0.85rem;color:var(--text-muted);margin:0 0 10px;">Idea Parser converts keywords into product decisions. BOM updates live with shell and color.</p>
+              <div class="bom-summary" id="bom-summary">$58-126 prototype</div>
+              <table class="bom-table" id="bom-table">
+                <thead>
+                  <tr><th>Component</th><th>Low</th><th>High</th></tr>
+                </thead>
+                <tbody id="bom-tbody"></tbody>
+              </table>
+            </div>
+
+            <div class="mfg-steps">
+              <h3>Assembly Workflow</h3>
+              <ol id="assembly-steps">
+                <li><span class="step-status manual">manual</span> Cut 24V high-CRI LED strip to lamp-head length</li>
+                <li><span class="step-status manual">manual</span> Attach LED strip to aluminum channel</li>
+                <li><span class="step-status manual">manual</span> Install opal diffuser</li>
+                <li><span class="step-status prototype-ready">prototype-ready</span> Mount ReadingCore-01 into custom shell</li>
+                <li><span class="step-status manual">manual</span> Attach arm and base</li>
+                <li><span class="step-status prototype-ready">prototype-ready</span> Run 30-min heat check</li>
+                <li><span class="step-status prototype-ready">prototype-ready</span> Run glare check at 35-45 cm reading distance</li>
+                <li><span class="step-status future-automation">future-automation</span> Save configuration JSON as prototype spec</li>
+              </ol>
+            </div>
+
             <p class="mfg-disclaimer">
               ⚠ Demo 输出为估算参考。真实采购、真实 CAD / STL、真实报价都不在本 Demo 范围内。
             </p>
@@ -204,7 +221,7 @@
     <footer class="demo-footer">
       <p>
         <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
-        · Idea-to-Demo Blueprints · v0.1.1-alpha · MIT
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6B · MIT
       </p>
     </footer>
   </div>

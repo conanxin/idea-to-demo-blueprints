@@ -8,6 +8,8 @@
 - **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan
 - **状态：** demo-ready
 - **创建阶段：** IDB-6
+- **更新阶段：** IDB-6B
+- **productization_pass：** completed
 
 ---
 
@@ -351,13 +353,80 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 ---
 
+## IDB-6B Productization Pass
+
+本阶段把 IDB-6 的 Demo 升级为更像"产品原型工具"的版本。
+
+### 新增能力
+
+| 能力 | 说明 | 状态 |
+|------|------|------|
+| **Idea Parser** | 轻量规则解析器，把关键词转成产品决策 | 已完成 |
+| **Shell Visual Differentiation** | 4 种外壳在轮廓、纹样、刻字位置上明显不同 | 已完成 |
+| **BOM Cost Model** | 动态成本估算，按 shell 复杂度 + 颜色涂装变化 | 已完成 |
+| **Assembly Workflow** | 8 步装配流程，带 prototype-ready / manual / future-automation 状态标签 | 已完成 |
+| **Productization Risks** | Manufacturing JSON 中输出风险等级、推荐迭代轮次 | 已完成 |
+
+### 4 种外壳设计说明
+
+| Shell Style | 视觉特征 | 复杂度 | 打印时间 | 风险 |
+|-------------|----------|--------|----------|------|
+| Minimal Bar | 极简长条、圆角、干净线条 | 1.0 | 3.5h | low |
+| Hutong Window | 窗棂网格/格栅，北京胡同元素 | 1.25 | 5h | medium |
+| Beijing Pavilion | 屋檐/檐口轮廓，中式亭阁屋顶线 | 1.45 | 6.5h | medium |
+| Book Arc | 书页弧线/拱形灯罩，适合床头 | 1.35 | 5.5h | low |
+
+### BOM 计算说明
+
+总成本 = 基础元器件 + 3D 打印外壳 + 颜色涂装
+
+- 基础元器件：LED strip、铝槽+扩散罩、电源、控制器、紧固件、底座/支架，合计 `$38-87`。
+- 外壳成本：按复杂度乘数在 `$6-24` 之间浮动。
+- 涂装成本：按颜色工艺在 `$4-16` 之间浮动。
+- 最终输出格式：`$58-126 prototype`。
+
+详细数据结构见 `demos/diy-lamp-builder/outputs/bom-model.json`。
+
+### Idea Parser 规则示例
+
+| 关键词 | 推荐决策 |
+|--------|----------|
+| 孩子/儿童/睡前 | warm 2700K、Book Arc、low glare |
+| 北京/胡同/四合院/窗 | Hutong Window、Warm White / Hutong Gray |
+| 天坛/宫殿/中式/亭/阁 | Beijing Pavilion、Palace Red |
+| 极简/黑色/工作/桌面 | Minimal Bar、Night Black、600-800 lm |
+| 书卷/床头/弧形 | Book Arc |
+| 阅读/读书/书桌/图书 | Reading Lamp、ReadingCore-01 |
+
+### Before / After：IDB-6 → IDB-6B
+
+| 维度 | IDB-6 | IDB-6B |
+|------|-------|--------|
+| Manufacturing JSON | 简单字段 | 含 phase、core_locked、reading_target、core_stack、risk_notes |
+| BOM 成本 | 固定范围 | 按 shell / 颜色动态计算 |
+| Idea 解析 | 无 | 规则解析器 + 4 个示例按钮 |
+| 装配流程 | 6 步文字 | 8 步带状态标签 |
+| 外壳预览 | 基础差异 | 轮廓、纹样、刻字位置明显不同 |
+
+### 产品化风险
+
+| 风险 | 影响 | 应对 |
+|------|------|------|
+| AI Analyze 区仍是 mock 不是真 LLM | 中 | 规则解析器已标注；真实 LLM 可复用 Prompt 模板 |
+| SVG 预览精度有限 | 中 | 仅作示意；后续用 OpenSCAD / SVG-to-CAD 导出真实 STL |
+| BOM 估算成本不准确 | 中 | 给范围；实际采购和量产成本会大幅下降 |
+| 散热设计未验证 | 低 | 结构已强制"铝槽散热 + 外壳不接触 LED" |
+| 风格/颜色仅 4 款 | 低 | 架构正确即可扩展 |
+
+---
+
 ## 风险与限制
 
 | 风险 | 影响 | 应对 |
 |------|------|------|
 | AI Analyze 区是 mock 不是真 LLM | 中 | 在 generated-demo-notes.md 中明确标注；架构推理逻辑交给真实 LLM 处理时复用 Prompt 模板 |
 | SVG 预览精度有限 | 中 | 仅作示意用，不替代真实 CAD / STL；如需高精度可后续接 Three.js |
-| BOM 估算成本不准确 | 中 | 给范围 `$40-80 prototype` 而非单一价格；明确免责声明 |
+| BOM 估算成本不准确 | 中 | 给范围并动态计算；明确免责声明 |
 | 散热设计未在 Demo 中验证 | 低 | 在结构图中明确"铝槽是散热通道"，建议实际打样做热测试 |
 | 风格 / 颜色只有 4 款 | 低 | Demo 演示架构正确性，款式扩展留给后续版本 |
 
@@ -368,6 +437,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - 限制 3：不支持保存 / 分享配置（仅 Copy JSON）
 - 限制 4：装配步骤是英文（不针对中文用户改写）
 - 限制 5：BOM 价格是估算范围，不根据地区浮动
+- 限制 6：Idea Parser 是规则匹配，不是真实 LLM
 
 ---
 
@@ -375,12 +445,15 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 1. **真实 LLM 接入** —— 把 Idea Input 接到 Claude / GPT，按 build-prompt.md 输出架构和 JSON
 2. **更多 Style** —— 把 4 款外壳扩展到 8 款 / 12 款，加入材质选项（PETG / PLA+ / 树脂 / 木材）
-3. **真实 CAD / STL 导出** —— 用 OpenSCAD 或 Three.js 把 SVG 转成可打印 STL
-4. **更多 Color** —— 加入 Pantone 色卡导入、自定义 hex
-5. **装配动画** —— SVG 中做分步装配动画，每步高亮一个部件
-6. **配置保存 / 分享** —— URL hash 编码当前配置，方便分享链接
-7. **多 ReadingCore 变体** —— ReadingCore-02（高显色 95+）、ReadingCore-03（带 USB-C 充电口）
-8. **与本 IDB 库的其他 Demo 联动** —— 用「项目记忆型会议助手」管理 ReadingCore-01 的迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态
+3. **真实 CAD / STL 导出** —— 用 OpenSCAD 或 SVG-to-CAD 把预览转成可打印 STL
+4. **SVG-to-CAD** —— 把 2D 外壳路径直接导入 FreeCAD / OpenSCAD 进行参数化拉伸
+5. **更多 Color** —— 加入 Pantone 色卡导入、自定义 hex
+6. **装配动画** —— SVG 中做分步装配动画，每步高亮一个部件
+7. **配置保存 / 分享** —— URL hash 编码当前配置，方便分享链接
+8. **多 ReadingCore 变体** —— ReadingCore-02（高显色 95+）、ReadingCore-03（带 USB-C 充电口）
+9. **真实元器件 sourcing** —— 给出可采购的 SKU 和替代方案
+10. **真实亮度/照度测试** —— 用 lux meter 验证 35-45 cm 处的 desk lux
+11. **与本 IDB 库的其他 Demo 联动** —— 用「项目记忆型会议助手」管理 ReadingCore-01 的迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态
 
 ---
 

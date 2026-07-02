@@ -1,0 +1,35 @@
+{
+  "base_components": [
+    { "name": "24V high-CRI LED strip", "low_usd": 8, "high_usd": 18, "note": "CRI ≥ 95, 24V linear strip, cut to lamp-head length" },
+    { "name": "Aluminum channel + opal diffuser", "low_usd": 6, "high_usd": 14, "note": "Heat sink + recessed diffuser, M3-compatible mounting wings" },
+    { "name": "24V power adapter", "low_usd": 8, "high_usd": 15, "note": "Desktop brick or wall-plug style depending on region" },
+    { "name": "Dimmer / controller", "low_usd": 4, "high_usd": 12, "note": "PWM dimmer or 1-channel LED controller" },
+    { "name": "Wires / screws / M3 inserts", "low_usd": 2, "high_usd": 5, "note": "Heat-set threaded inserts, M3 screws, 22 AWG wire" },
+    { "name": "Base + arm mock", "low_usd": 10, "high_usd": 25, "note": "Gooseneck or hinged arm mock with weighted base" }
+  ],
+  "shell_styles": [
+    { "name": "Minimal Bar", "complexity_multiplier": 1.0, "print_time": "3.5h", "low_usd": 6, "high_usd": 12, "finishing_level": "low", "risk_level": "low", "recommended_iteration": "1st" },
+    { "name": "Hutong Window", "complexity_multiplier": 1.25, "print_time": "5h", "low_usd": 10, "high_usd": 18, "finishing_level": "medium", "risk_level": "medium", "recommended_iteration": "2nd" },
+    { "name": "Beijing Pavilion", "complexity_multiplier": 1.45, "print_time": "6.5h", "low_usd": 14, "high_usd": 24, "finishing_level": "high", "risk_level": "medium", "recommended_iteration": "2nd" },
+    { "name": "Book Arc", "complexity_multiplier": 1.35, "print_time": "5.5h", "low_usd": 12, "high_usd": 22, "finishing_level": "medium", "risk_level": "low", "recommended_iteration": "2nd" }
+  ],
+  "color_finishing": [
+    { "name": "Warm White", "low_usd": 4, "high_usd": 8, "note": "Single-coat matte or bare PLA/PETG" },
+    { "name": "Hutong Gray", "low_usd": 4, "high_usd": 8, "note": "Single-coat matte gray" },
+    { "name": "Palace Red", "low_usd": 8, "high_usd": 14, "note": "Pigmented red + clear protective coat, two-step" },
+    { "name": "Night Black", "low_usd": 6, "high_usd": 12, "note": "Dark dye + fingerprint-resistant satin coat" }
+  ],
+  "calculation_notes": [
+    "Total BOM = sum(base_components) + shell_cost + finishing_cost.",
+    "Shell cost range = low_shell + (high_shell - low_shell) * (complexity_multiplier - 1.0) / (max_complexity - 1.0).",
+    "Finishing cost depends on color coat complexity, not shell shape.",
+    "All numbers are US-dollar estimates for a single prototype; volume production changes dramatically."
+  ],
+  "assumptions": [
+    "3D printed shell in PETG or PLA+ on a mid-size FDM printer.",
+    "No custom electronics or PCB design; off-the-shelf LED controller.",
+    "No shipping, customs, or labor cost included.",
+    "No tool wear, failed prints, or re-prints budgeted.",
+    "Prototype quantity = 1; no bulk pricing."
+  ]
+}
