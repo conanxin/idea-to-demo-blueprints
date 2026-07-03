@@ -14,15 +14,15 @@
   var DEFAULT_IDEA = '北京风格阅读台灯，外壳可定制，适合书桌使用';
 
   var COLOR_MAP = {
-    '暖白':  { hex: '#f5efe6', label: '暖白', finishing: 1.0 },
-    '胡同灰': { hex: '#7a7a78', label: '胡同灰', finishing: 1.0 },
-    '宫墙红':  { hex: '#a83232', label: '宫墙红', finishing: 1.15 },
-    '夜黑': { hex: '#1c1c1e', label: '夜黑', finishing: 1.1 }
+    'Warm White':  { hex: '#f5efe6', label: 'Warm White', finishing: 1.0 },
+    'Hutong Gray': { hex: '#7a7a78', label: 'Hutong Gray', finishing: 1.0 },
+    'Palace Red':  { hex: '#a83232', label: 'Palace Red', finishing: 1.15 },
+    'Night Black': { hex: '#1c1c1e', label: 'Night Black', finishing: 1.1 }
   };
 
   var SHELL_STYLES = {
-    '极简长条': {
-      label: '极简长条',
+    'Minimal Bar': {
+      label: 'Minimal Bar',
       complexity: 1.0,
       printTime: '3.5h',
       finishing: 'low',
@@ -40,8 +40,8 @@
         return g;
       }
     },
-    '胡同窗棂': {
-      label: '胡同窗棂',
+    'Hutong Window': {
+      label: 'Hutong Window',
       complexity: 1.25,
       printTime: '5h',
       finishing: 'medium',
@@ -64,8 +64,8 @@
         return g;
       }
     },
-    '北京亭檐': {
-      label: '北京亭檐',
+    'Beijing Pavilion': {
+      label: 'Beijing Pavilion',
       complexity: 1.45,
       printTime: '6.5h',
       finishing: 'high',
@@ -91,8 +91,8 @@
         return g;
       }
     },
-    '书卷弧形': {
-      label: '书卷弧形',
+    'Book Arc': {
+      label: 'Book Arc',
       complexity: 1.35,
       printTime: '5.5h',
       finishing: 'medium',
@@ -127,10 +127,10 @@
   ];
 
   var FINISHING_COSTS = {
-    '暖白':  { low: 4, high: 8 },
-    '胡同灰': { low: 4, high: 8 },
-    '宫墙红':  { low: 8, high: 14 },
-    '夜黑': { low: 6, high: 12 }
+    'Warm White':  { low: 4, high: 8 },
+    'Hutong Gray': { low: 4, high: 8 },
+    'Palace Red':  { low: 8, high: 14 },
+    'Night Black': { low: 6, high: 12 }
   };
 
   var NS = 'http://www.w3.org/2000/svg';
@@ -216,7 +216,7 @@
     heatPoints:               $('heat-points'),
     glareChecks:              $('glare-checks'),
     prototypeChecklist:     $('prototype-checklist'),
-    gate数值:                $('gate-value'),
+    gateValue:                $('gate-value'),
     btnDownloadTestProtocol:  $('btn-download-test-protocol'),
     btnDownloadMeasurementLog: $('btn-download-measurement-log'),
     btnDownloadReadinessReport: $('btn-download-readiness-report'),
@@ -226,7 +226,7 @@
   // ---------- State ----------
 
   var state = {
-    color:    '暖白',
+    color:    'Warm White',
     colorHex: '#f5efe6',
     parsed:   null
   };
@@ -234,54 +234,54 @@
   // ---------- Idea parser (lightweight rule-based, no LLM) ----------
 
   function parseIdeaToConfig(text) {
-    var t = (text || '').to低估erCase();
+    var t = (text || '').toLowerCase();
     var config = {
-      useCase: '桌面阅读台灯',
-      lampType: '阅读台灯',
-      colorTemperature: '暖白 3000K',
-      shellStyle: '胡同窗棂',
-      color: '暖白',
-      glareStrategy: '内缩式乳白扩散罩',
+      useCase: 'Reading desk lamp',
+      lampType: 'Reading Lamp',
+      colorTemperature: 'Warm 3000K',
+      shellStyle: 'Hutong Window',
+      color: 'Warm White',
+      glareStrategy: 'Recessed opal diffuser',
       brightnessTarget: '500-800 lm',
       estimatedPosition: 'Desk, 35-45 cm',
       core: 'ReadingCore-01'
     };
 
     if (/北京|胡同|四合院|窗/.test(t)) {
-      config.shellStyle = '胡同窗棂';
-      config.color = /灰/.test(t) ? '胡同灰' : '暖白';
+      config.shellStyle = 'Hutong Window';
+      config.color = /灰/.test(t) ? 'Hutong Gray' : 'Warm White';
     }
     if (/天坛|宫殿|中式|亭|阁/.test(t)) {
-      config.shellStyle = '北京亭檐';
-      config.color = '宫墙红';
+      config.shellStyle = 'Beijing Pavilion';
+      config.color = 'Palace Red';
     }
     if (/极简|黑色|工作|桌面|办公/.test(t)) {
-      config.shellStyle = '极简长条';
-      config.color = '夜黑';
+      config.shellStyle = 'Minimal Bar';
+      config.color = 'Night Black';
       config.brightnessTarget = '600-800 lm';
       config.useCase = 'Desktop work lamp';
       config.estimatedPosition = 'Desk, 40-50 cm';
     }
     if (/书卷|床头|弧形|孩子|儿童|睡前|读书|阅读/.test(t)) {
       if (/书卷|床头|弧形/.test(t)) {
-        config.shellStyle = '书卷弧形';
+        config.shellStyle = 'Book Arc';
       }
       if (/孩子|儿童|睡前|读书|阅读/.test(t)) {
         config.colorTemperature = 'Warm 2700K';
-        config.glareStrategy = '低估 glare, recessed diffuser';
+        config.glareStrategy = 'Low glare, recessed diffuser';
         config.brightnessTarget = 'Soft reading 400-600 lm';
         config.useCase = 'Bedside reading lamp';
         config.estimatedPosition = 'Bedside, 35-45 cm';
       }
     }
     if (/孩子|儿童|睡前/.test(t)) {
-      config.shellStyle = '书卷弧形';
+      config.shellStyle = 'Book Arc';
     }
 
     if (/阅读|读书|书桌|图书|台灯/.test(t)) {
-      config.lampType = '阅读台灯';
+      config.lampType = 'Reading Lamp';
     } else if (/氛围|装饰|环境|ambient/.test(t)) {
-      config.lampType = '氛围灯';
+      config.lampType = 'Ambient Lamp';
       config.brightnessTarget = '200-400 lm';
       config.useCase = 'Ambient lamp';
     }
@@ -292,7 +292,7 @@
   // ---------- Rendering ----------
 
   function selectedColorOrFallback(colorName) {
-    var info = COLOR_MAP[colorName] || COLOR_MAP['暖白'];
+    var info = COLOR_MAP[colorName] || COLOR_MAP['Warm White'];
     return info;
   }
 
@@ -323,15 +323,15 @@
     dom.engravingText.textContent = text || '—';
 
     // pick engraving color based on shell brightness
-    var darkShell = (state.color === '夜黑' || state.color === '宫墙红');
+    var darkShell = (state.color === 'Night Black' || state.color === 'Palace Red');
     dom.engravingText.setAttribute('fill', darkShell ? '#f5efe6' : '#5a5648');
 
     // place engraving either on base or head depending on style
     var baseY = 326;
-    if (styleName === '极简长条') {
+    if (styleName === 'Minimal Bar') {
       dom.engravingText.setAttribute('y', '120');
       dom.engravingText.setAttribute('font-size', '14');
-    } else if (styleName === '胡同窗棂') {
+    } else if (styleName === 'Hutong Window') {
       dom.engravingText.setAttribute('y', '120');
       dom.engravingText.setAttribute('font-size', '13');
     } else {
@@ -345,24 +345,24 @@
 
   function calculateBom(styleName, colorName) {
     var style = SHELL_STYLES[styleName];
-    var shell低估 = 6 + Math.round(6 * (style.complexity - 1.0));
-    var shell高估 = 12 + Math.round(12 * (style.complexity - 1.0));
-    var finishing = FINISHING_COSTS[colorName] || FINISHING_COSTS['暖白'];
+    var shellLow = 6 + Math.round(6 * (style.complexity - 1.0));
+    var shellHigh = 12 + Math.round(12 * (style.complexity - 1.0));
+    var finishing = FINISHING_COSTS[colorName] || FINISHING_COSTS['Warm White'];
 
     var rows = [];
-    var base低估 = 0, base高估 = 0;
+    var baseLow = 0, baseHigh = 0;
     for (var i = 0; i < BASE_COMPONENTS.length; i++) {
       var c = BASE_COMPONENTS[i];
       rows.push({ name: c.name, low: c.low, high: c.high });
-      base低估 += c.low;
-      base高估 += c.high;
+      baseLow += c.low;
+      baseHigh += c.high;
     }
-    rows.push({ name: '3D printed shell (' + style.label + ')', low: shell低估, high: shell高估 });
+    rows.push({ name: '3D printed shell (' + style.label + ')', low: shellLow, high: shellHigh });
     rows.push({ name: 'Finishing / paint (' + colorName + ')', low: finishing.low, high: finishing.high });
 
-    var total低估 = base低估 + shell低估 + finishing.low;
-    var total高估 = base高估 + shell高估 + finishing.high;
-    return { rows: rows, total低估: total低估, total高估: total高估 };
+    var totalLow = baseLow + shellLow + finishing.low;
+    var totalHigh = baseHigh + shellHigh + finishing.high;
+    return { rows: rows, totalLow: totalLow, totalHigh: totalHigh };
   }
 
   function formatBomRange(low, high) {
@@ -372,7 +372,7 @@
   function renderBomTable() {
     var styleName = dom.cfgShellStyle.value;
     var bom = calculateBom(styleName, state.color);
-    dom.bomSummary.textContent = formatBomRange(bom.total低估, bom.total高估);
+    dom.bomSummary.textContent = formatBomRange(bom.totalLow, bom.totalHigh);
 
     var tbody = dom.bomTbody;
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
@@ -419,23 +419,23 @@
         'M3 dual mount',
         'custom shell'
       ],
-      estimated_bom_cost: formatBomRange(bom.total低估, bom.total高估),
+      estimated_bom_cost: formatBomRange(bom.totalLow, bom.totalHigh),
       estimated_print_time: style.printTime,
       risk_notes: [
         'Shell complexity multiplier: ' + style.complexity + 'x',
         'Finishing level: ' + style.finishing,
-        '风险等级: ' + style.riskLevel,
+        'Risk level: ' + style.riskLevel,
         'Recommended iteration: ' + style.recommendedIteration
       ],
       assembly_steps: [
-        { step: '按灯头长度裁剪 24V 高显色 LED 灯带', status: '手动' },
-        { step: '将 LED 灯带贴到铝槽/铝型材上', status: '手动' },
-        { step: '安装乳白扩散罩', status: '手动' },
-        { step: '把 ReadingCore-01 装入定制外壳', status: '样机可用' },
-        { step: '安装支臂和底座', status: '手动' },
-        { step: '进行 30 分钟发热检查', status: '样机可用' },
-        { step: '在 35–45 cm 阅读距离做眩光检查', status: '样机可用' },
-        { step: '保存配置 JSON 作为样机规格', status: '未来自动化' }
+        { step: 'Cut 24V high-CRI LED strip to lamp-head length', status: 'manual' },
+        { step: 'Attach LED strip to aluminum channel', status: 'manual' },
+        { step: 'Install opal diffuser', status: 'manual' },
+        { step: 'Mount ReadingCore-01 into custom shell', status: 'prototype-ready' },
+        { step: 'Attach arm and base', status: 'manual' },
+        { step: 'Run 30-min heat check', status: 'prototype-ready' },
+        { step: 'Run glare check at 35-45 cm reading distance', status: 'prototype-ready' },
+        { step: 'Save configuration JSON as prototype spec', status: 'future-automation' }
       ],
       cad_export: {
         format: 'OpenSCAD',
@@ -528,25 +528,25 @@
     scad.push('module readingcore_keepout() {');
     scad.push('  // Reserved volume for ReadingCore-01 cassette + LED channel + diffuser');
     scad.push('  color("DimGrey")');
-    scad.push('    cube([core_keepout_length, core_keepout_width, core_keepout_height], 中心点 = true);');
+    scad.push('    cube([core_keepout_length, core_keepout_width, core_keepout_height], center = true);');
     scad.push('}');
     scad.push('');
     scad.push('module diffuser_slot() {');
     scad.push('  // Cut-out where light exits downward');
     scad.push('  color("LightYellow")');
-    scad.push('    cube([diffuser_length, diffuser_width, 4], 中心点 = true);');
+    scad.push('    cube([diffuser_length, diffuser_width, 4], center = true);');
     scad.push('}');
     scad.push('');
     scad.push('module m3_mount_holes() {');
     scad.push('  for (x = [-mount_spacing/2, mount_spacing/2])');
     scad.push('    translate([x, 0, 0])');
-    scad.push('      cylinder(d = mount_hole_d, h = shell_width + 2, 中心点 = true, $fn = 32);');
+    scad.push('      cylinder(d = mount_hole_d, h = shell_width + 2, center = true, $fn = 32);');
     scad.push('}');
     scad.push('');
     scad.push('module cable_exit() {');
     scad.push('  // Side exit for 24V cable');
     scad.push('  rotate([90, 0, 0])');
-    scad.push('    cylinder(d = 8, h = shell_width + 2, 中心点 = true, $fn = 32);');
+    scad.push('    cylinder(d = 8, h = shell_width + 2, center = true, $fn = 32);');
     scad.push('}');
     scad.push('');
     scad.push('module shell_minimal_bar() {');
@@ -569,7 +569,7 @@
     scad.push('    // decorative mullions cut-outs');
     scad.push('    for (x = [-shell_length/3, 0, shell_length/3])');
     scad.push('      translate([x, 0, shell_height/2 - wall])');
-    scad.push('        cube([wall, shell_width - wall*2, wall*2], 中心点 = true);');
+    scad.push('        cube([wall, shell_width - wall*2, wall*2], center = true);');
     scad.push('  }');
     scad.push('}');
     scad.push('');
@@ -597,7 +597,7 @@
     scad.push('      // page-fold arc');
     scad.push('      translate([0, 0, shell_height/2])');
     scad.push('        rotate([0, 90, 0])');
-    scad.push('          cylinder(d = shell_width, h = shell_length, 中心点 = true, $fn = 64);');
+    scad.push('          cylinder(d = shell_width, h = shell_length, center = true, $fn = 64);');
     scad.push('    }');
     scad.push('    readingcore_keepout();');
     scad.push('    diffuser_slot();');
@@ -607,13 +607,13 @@
     scad.push('}');
     scad.push('');
     scad.push('module selected_shell() {');
-    scad.push('  if (shell_style == "极简长条")');
+    scad.push('  if (shell_style == "Minimal Bar")');
     scad.push('    shell_minimal_bar();');
-    scad.push('  else if (shell_style == "胡同窗棂")');
+    scad.push('  else if (shell_style == "Hutong Window")');
     scad.push('    shell_hutong_window();');
-    scad.push('  else if (shell_style == "北京亭檐")');
+    scad.push('  else if (shell_style == "Beijing Pavilion")');
     scad.push('    shell_beijing_pavilion();');
-    scad.push('  else if (shell_style == "书卷弧形")');
+    scad.push('  else if (shell_style == "Book Arc")');
     scad.push('    shell_book_arc();');
     scad.push('  else');
     scad.push('    shell_minimal_bar();');
@@ -623,7 +623,7 @@
     scad.push('  $fn = 32;');
     scad.push('  translate([0, 0, 0])');
     scad.push('    minkowski() {');
-    scad.push('      cube([l - r*2, w - r*2, h - r*2], 中心点 = true);');
+    scad.push('      cube([l - r*2, w - r*2, h - r*2], center = true);');
     scad.push('      sphere(r = r);');
     scad.push('    }');
     scad.push('}');
@@ -674,17 +674,17 @@
     var engravingLong = engraving.length > 12;
 
     var checks = [
-      { name: 'ReadingCore-01 禁入区', status: '通过', detail: 'Core keepout ' + p.core_keepout_length + '×' + p.core_keepout_width + '×' + p.core_keepout_height + ' mm reserved.' },
-      { name: '扩散罩槽间隙', status: '通过', detail: 'Slot width ' + p.diffuser_width + ' mm, length ' + p.diffuser_length + ' mm.' },
-      { name: 'M3 安装孔', status: '通过', detail: 'Hole d=' + p.mount_hole_d + ' mm, spacing ' + p.mount_spacing + ' mm.' },
-      { name: '线缆出口', status: '通过', detail: 'Side exit d=8 mm for 24V cable.' },
-      { name: '最小壁厚', status: thinWall ? '注意' : '通过', detail: thinWall ? 'Wall ' + p.wall + ' mm is below 2.0 mm recommendation.' : 'Wall ' + p.wall + ' mm meets 2.0 mm minimum.' },
-      { name: '刻字可制造性', status: engravingLong ? '注意' : '通过', detail: engravingLong ? 'Long engraving may need larger font / test text.' : 'Engraving length OK for fit-test sample.' }
+      { name: 'ReadingCore-01 keepout', status: 'PASS', detail: 'Core keepout ' + p.core_keepout_length + '×' + p.core_keepout_width + '×' + p.core_keepout_height + ' mm reserved.' },
+      { name: 'Diffuser slot clearance', status: 'PASS', detail: 'Slot width ' + p.diffuser_width + ' mm, length ' + p.diffuser_length + ' mm.' },
+      { name: 'M3 mount holes', status: 'PASS', detail: 'Hole d=' + p.mount_hole_d + ' mm, spacing ' + p.mount_spacing + ' mm.' },
+      { name: 'Cable exit', status: 'PASS', detail: 'Side exit d=8 mm for 24V cable.' },
+      { name: 'Minimum wall thickness', status: thinWall ? 'WARN' : 'PASS', detail: thinWall ? 'Wall ' + p.wall + ' mm is below 2.0 mm recommendation.' : 'Wall ' + p.wall + ' mm meets 2.0 mm minimum.' },
+      { name: 'Engraving manufacturability', status: engravingLong ? 'WARN' : 'PASS', detail: engravingLong ? 'Long engraving may need larger font / test text.' : 'Engraving length OK for fit-test sample.' }
     ];
 
     var warnCount = 0;
     for (var i = 0; i < checks.length; i++) {
-      if (checks[i].status === '注意') warnCount++;
+      if (checks[i].status === 'WARN') warnCount++;
     }
     var riskLevel = shellComplexity > 1.3 ? (warnCount > 0 ? 'high' : 'medium') : (warnCount > 0 ? 'medium' : 'low');
 
@@ -694,7 +694,7 @@
       checks: checks,
       risk_level: riskLevel,
       shell_complexity: style ? (style.complexity <= 1.1 ? 'low' : style.complexity <= 1.3 ? 'medium' : 'high') : 'medium',
-      next_physical_test: '先打印装配测试件，再打印完整外壳'
+      next_physical_test: 'Print fit-test coupon before full shell'
     };
   }
 
@@ -705,28 +705,28 @@
   function buildPrintOrientationPlan() {
     var p = buildCadParams();
     var plans = {
-      '极简长条': {
+      'Minimal Bar': {
         orientation: 'Diffuser opening facing upward or side-up',
         support_strategy: 'Usually no support / minimal support',
         bed_contact: 'Flat back on build plate',
         risk_level: 'low',
         why: 'Boxy geometry with flat back and minimal overhangs.'
       },
-      '胡同窗棂': {
+      'Hutong Window': {
         orientation: 'Back face on bed, grille facing upward',
         support_strategy: 'Moderate supports for grille details',
         bed_contact: 'Flat back on build plate',
         risk_level: 'medium',
         why: 'Grille mullions need bridging / support cleanup.'
       },
-      '北京亭檐': {
+      'Beijing Pavilion': {
         orientation: 'Roof ridge upward, flat back on bed',
         support_strategy: 'Likely supports for eaves',
         bed_contact: 'Flat back on build plate',
         risk_level: 'high',
         why: 'Tiered roof and eaves create large overhangs.'
       },
-      '书卷弧形': {
+      'Book Arc': {
         orientation: 'Arc upward, diffuser side controlled',
         support_strategy: 'Moderate supports under arc',
         bed_contact: 'Flat back on build plate',
@@ -734,7 +734,7 @@
         why: 'Curved shell surfaces create layer-line and support scars.'
       }
     };
-    return plans[p.shell_style] || plans['极简长条'];
+    return plans[p.shell_style] || plans['Minimal Bar'];
   }
 
   function buildSlicerProfile() {
@@ -775,7 +775,7 @@
   function generateFitTestCouponScad() {
     var p = buildCadParams();
     var scad = [];
-    scad.push('// IDB-6D 装配测试件');
+    scad.push('// IDB-6D Fit-Test Coupon');
     scad.push('// Generated by DIY Lamp Builder');
     scad.push('// Print this coupon before the full shell to validate M3 holes, diffuser slot, cable exit, and engraving.');
     scad.push('');
@@ -786,7 +786,7 @@
     scad.push('  for (i = [0:2]) {');
     scad.push('    d = 3.0 + i * 0.2;');
     scad.push('    translate([i * 10, 0, 0])');
-    scad.push('      cylinder(d = d, h = 10, 中心点 = true, $fn = 32);');
+    scad.push('      cylinder(d = d, h = 10, center = true, $fn = 32);');
     scad.push('  }');
     scad.push('}');
     scad.push('');
@@ -795,7 +795,7 @@
     scad.push('  widths = [17.8, 18.0, 18.2, 18.4];');
     scad.push('  for (i = [0:3]) {');
     scad.push('    translate([i * 22, 0, 0])');
-    scad.push('      cube([widths[i], 4, 8], 中心点 = true);');
+    scad.push('      cube([widths[i], 4, 8], center = true);');
     scad.push('  }');
     scad.push('}');
     scad.push('');
@@ -804,24 +804,24 @@
     scad.push('  for (i = [0:1]) {');
     scad.push('    r = 4 + i;');
     scad.push('    translate([i * 12, 0, 0])');
-    scad.push('      cylinder(r = r, h = 10, 中心点 = true, $fn = 32);');
+    scad.push('      cylinder(r = r, h = 10, center = true, $fn = 32);');
     scad.push('  }');
     scad.push('}');
     scad.push('');
     scad.push('module engraving_sample() {');
     scad.push('  // Small text sample to check legibility after FDM');
     scad.push('  linear_extrude(height = 0.3)');
-    scad.push('    text("IDB-6D", size = 3, font = font, halign = "中心点", valign = "中心点");');
+    scad.push('    text("IDB-6D", size = 3, font = font, halign = "center", valign = "center");');
     scad.push('}');
     scad.push('');
     scad.push('module fit_test_coupon() {');
     scad.push('  difference() {');
     scad.push('    union() {');
     scad.push('      // base plate');
-    scad.push('      cube([70, 40, 2], 中心点 = true);');
+    scad.push('      cube([70, 40, 2], center = true);');
     scad.push('      // cable exit bosses');
-    scad.push('      translate([-20, 12, 3]) cylinder(r = 6, h = 4, 中心点 = true, $fn = 32);');
-    scad.push('      translate([8, 12, 3]) cylinder(r = 6, h = 4, 中心点 = true, $fn = 32);');
+    scad.push('      translate([-20, 12, 3]) cylinder(r = 6, h = 4, center = true, $fn = 32);');
+    scad.push('      translate([8, 12, 3]) cylinder(r = 6, h = 4, center = true, $fn = 32);');
     scad.push('    }');
     scad.push('    // M3 holes');
     scad.push('    translate([-20, -10, 0]) m3_hole_ladder();');
@@ -841,7 +841,7 @@
   function buildValidationReport() {
     return {
       phase: 'IDB-6D',
-      configuration_id: 'sample-' + (buildCadParams().shell_style || 'minimal-bar').to低估erCase().replace(/ /g, '-'),
+      configuration_id: 'sample-' + (buildCadParams().shell_style || 'minimal-bar').toLowerCase().replace(/ /g, '-'),
       cad_validation: buildCadValidationContext(),
       print_orientation: buildPrintOrientationPlan(),
       slicer_profile: buildSlicerProfile(),
@@ -849,7 +849,7 @@
         generated_file: 'fit-test-coupon.scad',
         optional_stl_command: 'openscad -o fit-test-coupon.stl fit-test-coupon.scad'
       },
-      openscad_export: '通过',
+      openscad_export: 'PASS',
       fit_test_coupon_status: 'PENDING',
       measured_fit: 'PENDING',
       ready_for_full_shell_print: false
@@ -863,7 +863,7 @@
     for (var i = 0; i < validation.checks.length; i++) {
       var c = validation.checks[i];
       var li = document.createElement('li');
-      var statusClass = c.status === '通过' ? 'check-pass' : c.status === '注意' ? 'check-warn' : 'check-fail';
+      var statusClass = c.status === 'PASS' ? 'check-pass' : c.status === 'WARN' ? 'check-warn' : 'check-fail';
       li.className = statusClass;
       li.innerHTML = '<span class="check-name">' + esc(c.name) + '</span>' +
         '<span class="check-status">' + esc(c.status) + '</span>' +
@@ -921,7 +921,7 @@
   function downloadSlicerProfile() {
     var p = buildSlicerProfile();
     var lines = [];
-    lines.push('# IDB-6D DIY Lamp Shell 切片参数');
+    lines.push('# IDB-6D DIY Lamp Shell Slicer Profile');
     lines.push('# Generator: DIY Lamp Builder');
     lines.push('');
     lines.push('profile_name = ' + p.profile_name);
@@ -1045,18 +1045,18 @@
   function buildLuxTestPlan() {
     return {
       phase: 'IDB-6E',
-      test_name: '阅读区域照度网格',
+      test_name: 'reading-zone lux grid',
       target_distance_cm: '35-45',
       target_lux: '300-500',
       points: [
-        { id: '中心点', target: '>=300 lux' },
-        { id: '左页', target: '>=200 lux' },
-        { id: '右页', target: '>=200 lux' },
-        { id: '前边缘', target: 'trend only' },
-        { id: '后边缘', target: 'trend only' }
+        { id: 'center', target: '>=300 lux' },
+        { id: 'left_page', target: '>=200 lux' },
+        { id: 'right_page', target: '>=200 lux' },
+        { id: 'front_edge', target: 'trend only' },
+        { id: 'back_edge', target: 'trend only' }
       ],
-      device: '优先使用照度计；手机照度 App 仅适合样机趋势参考',
-      status: '等待测量'
+      device: 'lux meter preferred; phone app acceptable for trend-only prototype checks',
+      status: 'PENDING_MEASUREMENT'
     };
   }
 
@@ -1066,29 +1066,29 @@
       duration_first_pass_min: 30,
       duration_extended_min: 60,
       measurement_points: [
-        '铝槽',
-        'LED 附近打印外壳',
-        '扩散罩边缘',
-        '底座或控制器',
-        '线缆出口'
+        'aluminum_channel',
+        'printed_shell_near_led',
+        'diffuser_edge',
+        'base_or_controller',
+        'cable_exit'
       ],
-      pass_rule: '不应软化、变形、异味、变色，也不应达到让人不适的触摸温度',
-      status: '等待测量'
+      pass_rule: 'no softening, warping, smell, discoloration, or uncomfortable touch temperature',
+      status: 'PENDING_MEASUREMENT'
     };
   }
 
   function buildGlareReview() {
     return {
       phase: 'IDB-6E',
-      review_position: '正常坐姿阅读姿态',
+      review_position: 'normal seated reading posture',
       checks: [
-        { name: 'LED 直视可见性', target: '不可直接看见' },
-        { name: '扩散罩内缩', target: '内缩或遮挡' },
-        { name: '纸面热点', target: '无明显刺眼热点' },
-        { name: '反光', target: '光面纸上无强烈反光' },
-        { name: '阴影', target: '手部/书本阴影可接受' }
+        { name: 'Direct LED visibility', target: 'not visible' },
+        { name: 'Diffuser recess', target: 'recessed or shielded' },
+        { name: 'Paper hot spot', target: 'no sharp hot spot' },
+        { name: 'Reflection', target: 'no harsh glare on glossy page' },
+        { name: 'Shadow', target: 'hand/book shadow acceptable' }
       ],
-      status: '等待评估'
+      status: 'PENDING_REVIEW'
     };
   }
 
@@ -1142,7 +1142,7 @@
       heat_soak: buildHeatSoakPlan(),
       glare_review: buildGlareReview(),
       prototype_checklist: buildPrototypeChecklist(),
-      readiness_gate: '等待实物测试',
+      readiness_gate: 'PENDING_PHYSICAL_TESTS',
       not_certification: true
     };
   }
@@ -1167,8 +1167,8 @@
     lines.push('');
     lines.push('## Lux grid protocol');
     lines.push('1. Turn lamp on and wait 2 minutes.');
-    lines.push('2. Measure illuminance at: 中心点, left page, right page, front edge, back edge.');
-    lines.push('3. Pass: 中心点 >= 300 lux; no reading-zone point below 200 lux.');
+    lines.push('2. Measure illuminance at: center, left page, right page, front edge, back edge.');
+    lines.push('3. Pass: center >= 300 lux; no reading-zone point below 200 lux.');
     lines.push('');
     lines.push('## Heat soak protocol');
     lines.push('1. Run lamp at normal power in a ventilated room.');
@@ -1191,17 +1191,17 @@
   }
 
   function generateMeasurementLogCsv() {
-    var header = 'date,prototype_id,shell_style,color,engraving,material,led_module,power_setting,distance_cm,lux_中心点,lux_左页,lux_右页,lux_前边缘,lux_后边缘,heat_0_min_aluminum_c,heat_30_min_aluminum_c,heat_60_min_aluminum_c,heat_30_min_shell_c,heat_60_min_shell_c,direct_led_visible,paper_hotspot,glare_notes,heat_notes,pass_warn_fail,next_adjustment';
-    var sample = '2026-07-03,sample-' + (buildCadParams().shell_style || 'minimal-bar').to低估erCase().replace(/ /g, '-') + '-001,' + (buildCadParams().shell_style || '') + ',' + (state.color || '') + ',' + (buildCadParams().engraving_text || '') + ',PETG,24V linear LED,100%,40,,,,,,,,,,,no,no,record here,record here,PENDING,record here';
+    var header = 'date,prototype_id,shell_style,color,engraving,material,led_module,power_setting,distance_cm,lux_center,lux_left_page,lux_right_page,lux_front_edge,lux_back_edge,heat_0_min_aluminum_c,heat_30_min_aluminum_c,heat_60_min_aluminum_c,heat_30_min_shell_c,heat_60_min_shell_c,direct_led_visible,paper_hotspot,glare_notes,heat_notes,pass_warn_fail,next_adjustment';
+    var sample = '2026-07-03,sample-' + (buildCadParams().shell_style || 'minimal-bar').toLowerCase().replace(/ /g, '-') + '-001,' + (buildCadParams().shell_style || '') + ',' + (state.color || '') + ',' + (buildCadParams().engraving_text || '') + ',PETG,24V linear LED,100%,40,,,,,,,,,,,no,no,record here,record here,PENDING,record here';
     return header + '\\n' + sample + '\\n';
   }
 
   function generatePrototypeChecklistMarkdown() {
     var lines = [];
-    lines.push('# IDB-6E 样机就绪检查清单');
+    lines.push('# IDB-6E Prototype Readiness Checklist');
     lines.push('');
-    lines.push('## 低估 voltage boundary');
-    lines.push('- [ ] 低估-voltage adapter only');
+    lines.push('## Low voltage boundary');
+    lines.push('- [ ] Low-voltage adapter only');
     lines.push('- [ ] No exposed conductor');
     lines.push('- [ ] Strain relief at cable exit');
     lines.push('');
@@ -1225,9 +1225,9 @@
     lines.push('- [ ] No reading-zone point below 200 lux');
     lines.push('');
     lines.push('## Glare review');
-    lines.push('- [ ] Direct LED 不可直接看见');
+    lines.push('- [ ] Direct LED not visible');
     lines.push('- [ ] No harsh reflection on glossy page');
-    lines.push('- [ ] 阴影 acceptable');
+    lines.push('- [ ] Shadow acceptable');
     lines.push('');
     lines.push('## Documentation');
     lines.push('- [ ] Measurement log filled');
@@ -1292,8 +1292,8 @@
     }
 
     var report = buildPhysicalReadinessReport();
-    dom.gate数值.textContent = report.readiness_gate;
-    dom.gate数值.className = 'gate-value gate-pending';
+    dom.gateValue.textContent = report.readiness_gate;
+    dom.gateValue.className = 'gate-value gate-pending';
   }
 
   function downloadTestProtocol() {
@@ -1434,7 +1434,7 @@
     }
     initColorChips();
     wire();
-    selectColor('暖白', false);
+    selectColor('Warm White', false);
     state.parsed = parseIdeaToConfig(dom.ideaInput.value);
     renderAll();
   }
