@@ -52,7 +52,7 @@
   "estimated_luminous_flux": "500-800 lm",
   "estimated_print_time": "4h",
   "estimated_material": "PETG / PLA+",
-  "estimated_bom_cost": "$40-80 prototype",
+  "estimated_bom_cost": "$58-126 prototype",
   "assembly_steps": [
     "Cut 24V high-CRI LED strip to lamp-head length",
     "Attach LED strip to aluminum channel",
@@ -78,7 +78,7 @@
 1. **必须先做架构推理** —— 直接给配置器会让 Demo 沦为"配色选择器"
 2. **Brief 和 JSON 必须分开输出** —— Brief 是给人看的，JSON 是给制造端用的
 3. **assembly_steps 要可执行** —— 每一步应该能在桌上拿烙铁 + 螺丝刀完成
-4. **不要给真实价格链接** —— 估算成本给范围即可（"$40-80 prototype"）
+4. **不要给真实价格链接** —— 估算成本给动态范围即可（"$58-126 prototype"）
 
 ## 这个 Prompt 在做什么
 

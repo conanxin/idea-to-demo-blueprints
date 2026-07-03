@@ -106,9 +106,18 @@
 ## IDB-6B.1 Polish Fix Acceptance
 
 - [x] Removed stale current-stage copy that described AI Analyze as hardcoded constants.
-- [x] Updated stale $40-80 prototype current-cost copy to dynamic BOM range wording.
+- [x] Removed stale $40-80 prototype current-cost reference and updated to dynamic BOM range wording.
 - [x] Kept historical “IDB-6 → IDB-6B” comparison intact.
 - [x] Updated updated_phase to IDB-6B.1 in all three synchronized blueprint JSON files.
 - [x] Did not add a 6th Blueprint; meta.total remains 5.
 - [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
 - [x] Browser smoke is optional and recorded as SKIP in the phase report.
+
+## IDB-6B.2 Blueprint Mirror Fix Acceptance
+
+- [x] Removed stale “AI Analyze 区是硬编码常量” from visible Blueprint/docs/public mirror pages.
+- [x] Removed stale $40-80 prototype from visible Blueprint/docs/public mirror pages.
+- [x] Preserved historical “IDB-6 → IDB-6B” comparison.
+- [x] Updated updated_phase to IDB-6B.2 in all synchronized blueprint JSON files.
+- [x] Did not add a 6th Blueprint; meta.total remains 5.
+- [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
