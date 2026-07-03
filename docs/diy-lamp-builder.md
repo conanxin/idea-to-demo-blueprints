@@ -887,3 +887,32 @@ demos/diy-lamp-builder/
 ---
 
 *Created following the [Idea-to-Demo Blueprints](https://github.com/conanxin/idea-to-demo-blueprints) format. Phase: IDB-6C.*
+
+## IDB-6F Physical Prototype Build Package + Sourcing Checklist + Purchase-ready BOM
+
+IDB-6F 把 DIY Lamp Builder 从“测试流程已定义”推进到“可以准备采购并组装第一台样机”。
+
+### 新增内容
+
+- Purchase-ready BOM
+- Component spec sheet
+- Sourcing checklist
+- Quote comparison template
+- First prototype assembly runbook
+- Supplier risk register
+- Purchase decision gate
+- First build issue log
+
+### 采购边界
+
+本阶段不是供应商背书，也不是实时价格确认。它定义的是首台样机的规格与采购检查框架。真实供应商 shortlist 和实时价格对比留到 IDB-6G。
+
+### 第一台样机建议顺序
+
+1. 先填 quote comparison template。
+2. 只购买一套样机料。
+3. 打印 fit-test coupon。
+4. 验证 M3 孔、扩散罩槽、铝槽间隙和线缆出口。
+5. 打印完整 shell。
+6. 装配 ReadingCore-01。
+7. 执行 IDB-6E 的照度、热稳定和眩光测试。

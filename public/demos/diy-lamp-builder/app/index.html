@@ -407,7 +407,59 @@
         </p>
       </section>
 
-    </main>
+    
+<section class="panel build-package-card" id="build-package">
+  <div class="panel-header">
+    <span class="section-kicker">H. 打样采购包</span>
+    <h2>Build Package · 采购清单 · 首台样机</h2>
+    <p>把 IDB-6E 的验证流程推进到真实打样前的采购与装配准备。这里不做供应商背书，只提供第一台样机的规格清单、采购检查和装配 runbook。</p>
+  </div>
+
+  <div class="physical-grid">
+    <div class="test-card">
+      <h3>Purchase-ready BOM</h3>
+      <p>围绕 ReadingCore-01 的首台样机采购清单：24V 高显色灯带、铝槽、乳白扩散罩、24V 电源、调光器、M3 五金、PETG/PLA+ 外壳与底座。</p>
+      <ul>
+        <li>估算范围：约 $49–138 / first prototype</li>
+        <li>先买一套样机料，不做批量采购</li>
+        <li>电气部分只做低压 24V 原型边界</li>
+      </ul>
+    </div>
+    <div class="test-card">
+      <h3>Sourcing Checklist</h3>
+      <p>采购前确认电压、CRI、灯带宽度、铝槽/扩散罩匹配、电源电流、调光器兼容、线缆出口与应力释放。</p>
+      <ul>
+        <li>中文关键词：24V 高显色 COB 灯带、LED 铝槽 乳白扩散罩、24V LED 调光器</li>
+        <li>英文关键词：24V high CRI COB LED strip, LED aluminum channel opal diffuser</li>
+      </ul>
+    </div>
+
+    <div class="test-card">
+      <h3>First Build Runbook</h3>
+      <p>推荐顺序：先打印装配测试件，再打印完整外壳；先低亮度通电观察，再做照度、热稳定和眩光测试。</p>
+      <ol>
+        <li>fit-test coupon</li>
+        <li>full shell print</li>
+        <li>ReadingCore-01 cassette assembly</li>
+        <li>IDB-6E physical tests</li>
+      </ol>
+    </div>
+
+    <div class="test-card">
+      <h3>Downloads</h3>
+      <div class="download-row">
+        <a class="button secondary" href="../outputs/build-package/purchase-ready-bom.csv" download>下载 BOM CSV</a>
+        <a class="button secondary" href="../outputs/build-package/purchase-ready-bom.json" download>下载 BOM JSON</a>
+        <a class="button secondary" href="../outputs/build-package/sourcing-checklist.md" download>下载采购检查清单.md</a>
+        <a class="button secondary" href="../outputs/build-package/first-prototype-assembly-runbook.md" download>下载装配 Runbook.md</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="measurement-note">IDB-6F 仍是首台样机准备包，不是供应商背书、认证测试或量产采购建议。真实采购候选与价格对比留到 IDB-6G。</p>
+</section>
+
+</main>
 
     <footer class="demo-footer">
       <p>

@@ -235,3 +235,17 @@
 - [x] No broad substring replacement used.
 - [x] No 6th Blueprint added; meta.total remains 5.
 - [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
+
+## IDB-6F Build Package Acceptance
+
+- [x] Build Package section visible in Demo App.
+- [x] outputs/build-package/ directory added.
+- [x] Purchase-ready BOM CSV and JSON added.
+- [x] Component spec sheet added.
+- [x] Sourcing checklist added.
+- [x] Quote comparison template added.
+- [x] First prototype assembly runbook added.
+- [x] Supplier risk register added.
+- [x] Purchase decision gate added.
+- [x] Build package validation script PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.

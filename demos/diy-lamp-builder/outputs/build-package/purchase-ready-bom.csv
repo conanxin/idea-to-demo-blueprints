@@ -1,0 +1,11 @@
+category,item,minimum_spec,recommended_spec,quantity,unit,estimate_low_usd,estimate_high_usd,notes
+light,24V high-CRI LED strip,24V warm white CRI90+,24V COB or dense strip CRI95 3000K/4000K,1,strip segment,8,18,cut to lamp-head length
+thermal,aluminum LED channel,fits LED strip and diffuser,240-260mm aluminum channel with opal diffuser,1,set,6,14,acts as heat sink and light cassette
+optical,opal diffuser,compatible with aluminum channel,opal PC/PMMA diffuser,1,piece,2,6,avoid visible LED dots
+power,24V power adapter,24V DC sufficient current,24V 1A-2A adapter with known safety marks,1,piece,8,15,prototype only
+control,dimmer/controller,24V LED dimmer,inline PWM dimmer or touch dimmer,1,piece,4,12,check flicker visually
+mechanical,M3 screws and inserts,M3 hardware,M3 heat-set inserts + screws,1,set,2,5,for mount holes
+mechanical,cable strain relief,basic grommet or clip,strain relief at cable exit,1,set,1,4,prevent wire pull
+printed,shell material,PLA+ or PETG,PETG for durable prototype,1,print,6,24,depends on shell style
+printed,base and arm mock,stable desk support,weighted base + simple arm,1,set,10,30,prototype geometry only
+finish,paint/finishing,optional sanding/paint,matte finish if visual demo needed,1,batch,4,16,do after fit validation
