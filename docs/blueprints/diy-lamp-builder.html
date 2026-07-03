@@ -20,777 +20,167 @@
   <div class="page-content">
     <div class="page-hero">
       <div class="container">
-        <a href="../index.html" class="back-link">← 返回方案库</a>
         <h1>DIY 可定制阅读台灯构建器</h1>
+        <p class="lead">从一句话想法到可打印、可装配、可测试的实体阅读台灯原型。</p>
         <div class="meta">
-          <span class="accent">Physical Product / AI Workflow / Configurator</span>
-          <span>难度：中等</span>
-          <span>Demo 周期：1-2 天</span>
-          <span>适合：独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者</span>
-          <span class="tag tag-green" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-size:0.75rem;">demo-ready</span>
-          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6H</span>
-          <span class="tag" style="background:#a83232;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6E Physical Testing Pass</span>
+          <span class="tag">v0.1.1-alpha</span>
+          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6H.2</span>
         </div>
-        <p class="intro">把"一个实体产品想法"在 5 分钟内转成"可演示的受控定制产品 Demo"——固定内核 ReadingCore-01 + 可换外壳 Shell，让独立开发者和文创团队能低成本验证产品可行性。</p>
-        <p style="margin-top:16px;">
-          <a href="../demos/diy-lamp-builder/" class="btn" style="display:inline-block;padding:10px 18px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:500;">查看 Demo →</a>
-          <a href="../diy-lamp-builder.md" class="btn" style="display:inline-block;padding:10px 18px;background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;text-decoration:none;font-weight:500;margin-left:8px;">阅读完整 Blueprint 文档 (MD) →</a>
+        <p class="small" style="margin-top:1rem;opacity:0.7;">
+          <a href="../../demos/diy-lamp-builder/app/index.html" class="button">打开 Demo App</a>
+          <a href="https://github.com/conanxin/idea-to-demo-blueprints/tree/main/demos/diy-lamp-builder" class="button secondary" target="_blank">查看源码</a>
         </p>
       </div>
     </div>
 
-    <div class="page-body">
-      <div class="container">
-        <nav class="toc">
-          <div class="toc-title">目录</div>
-          <ul>
-            <li><a href="#design-rationale">设计理由</a></li>
-            <li><a href="#original-idea">原始想法</a></li>
-            <li><a href="#background">背景与问题</a></li>
-            <li><a href="#users">目标用户</a></li>
-            <li><a href="#overview">方案概述</a></li>
-            <li><a href="#mvp">Demo MVP</a></li>
-            <li><a href="#architecture">技术架构</a></li>
-            <li><a href="#workflow">数据流</a></li>
-            <li><a href="#structure">物理结构</a></li>
-            <li><a href="#demo-pack">Demo Pack</a></li>
-            <li><a href="#config-json">配置 JSON</a></li>
-            <li><a href="#idb-6e">IDB-6E Physical Testing Pass</a></li>
-            <li><a href="#idb-6d">IDB-6D Print Validation Pass</a></li>
-            <li><a href="#idb-6c">IDB-6C CAD Export Pass</a></li>
-            <li><a href="#prompt">关键 Prompt</a></li>
-            <li><a href="#risks">风险与限制</a></li>
-            <li><a href="#acceptance">验收</a></li>
-            <li><a href="#reproduce">复现</a></li>
-            <li><a href="#extensions">扩展</a></li>
-          </ul>
-        </nav>
-
-        <article class="article">
-          <h2 id="design-rationale">设计理由</h2>
-          <p><strong>为什么这个方案是必要的？</strong></p>
-          <p>独立开发者和小品牌文创团队想做实体产品时，最常见的死法：每个 SKU 从零设计、外包打样一次性消耗、LED 灯带贴塑料外壳散热失败、没有任何"可定制"的中间形态。设计-制造-销售链路里，<strong>没有任何一个"想法 → 可演示原型"的快速通道</strong>。</p>
-          <p>本 Blueprint 的设计理由是：<strong>用受控定制（controlled customization）模式，把"不变的内核"做成强 IP，把"变的部分"做成可定制项</strong>。参考 Gantri / Framework Laptop / Local Motors 的思路，但聚焦在更小、更轻的"阅读灯"赛道。</p>
-
-          <h3>为什么采用"固定内核 + 可变外壳"双层架构？</h3>
-          <ul>
-            <li><strong>ReadingCore-01 永远是同一个内核</strong> —— 灯芯模块、光电参数、装配接口都不变。所有 SKU 共享工程。</li>
-            <li><strong>Shell 永远可变</strong> —— 外壳只承担造型与文化表达。文创团队可以快速出多款风格 / 颜色 / 刻字。</li>
-            <li><strong>结构隔离</strong> —— LED 灯带不直接贴塑料外壳；先贴铝型材散热件，再加乳白扩散罩，最后装进可定制外壳。从根本上避免灯带直贴塑料的发黄陷阱。</li>
-            <li><strong>Demo 可在网页里完整表达</strong> —— 即使没有真实 3D 打印，单页 HTML 已经能讲清楚"内核是什么、外壳怎么变、装配顺序是什么"。</li>
-          </ul>
-
-          <h2 id="original-idea">原始想法</h2>
-          <p>这一段是用户在聊天里说出来的原始想法，未经润色：</p>
-          <blockquote style="background:var(--bg-tertiary);padding:14px 16px;border-left:3px solid var(--accent);border-radius:6px;color:var(--text-secondary);font-size:0.92rem;line-height:1.7;">
-            我想要做一个"北京风格"的阅读台灯：
-            <ul style="margin:8px 0 8px 0;">
-              <li>适合放在书桌旁边，晚上看书用</li>
-              <li>外壳可以是可定制的，比如不同的风格、颜色、纹样、刻字</li>
-              <li>但灯芯我想做成一个固定的、稳定的模块：24V 线性 LED，足够亮但不能刺眼</li>
-              <li>我希望这个灯不要像网红灯具那样把灯带直接贴在塑料外壳上 —— 那样散热很差，时间长了塑料会发黄</li>
-              <li>我想要的真正结构是：LED 灯带先贴到铝型材/铝槽上，前面再加一片乳白扩散罩，再整体装进那个可定制外壳</li>
-              <li>外壳只承担造型，不参与散热，也不接触电气</li>
-              <li>灯芯模块我叫它 <strong>ReadingCore-01</strong>，所有产品都用同一个内核，只是换外壳</li>
-            </ul>
-            参考一下 Gantri 那种"受控定制"的思路，但比它更小、更轻、更像阅读灯而不是氛围灯。
-          </blockquote>
-
-          <h2 id="background">背景与问题</h2>
-          <p>实体产品 Demo 缺失的关键中间环节：</p>
-          <ul>
-            <li><strong>每个 SKU 都从零设计</strong> —— 成本爆炸、迭代极慢</li>
-            <li><strong>外包打样一次性消耗</strong> —— 几百块一个样品，错了就报废</li>
-            <li><strong>结构错了重来</strong> —— LED 灯带贴塑料外壳、电源藏不进底座、散热不够外壳发黄</li>
-            <li><strong>没有任何"可定制"的中间形态</strong> —— 要么全定制，要么完全标准款</li>
-            <li><strong>现有"配置器"只做配色</strong> —— Nike By You、自行车配置器都没有架构推理</li>
-          </ul>
-
-          <h3>现有受控定制参考</h3>
-          <div class="workflow-box">
-Gantri           — 3D 打印灯厂，核心工程一次做好，只换表面
-Framework Laptop — 主板固定，端口/键盘/外壳可换
-Bourbon Barrel   — E26 灯座 + 通用 LED + 回收木桶外壳
-Local Motors     — 动力总成固定 + 车身可换
-          </div>
-          <p>共同点：<strong>把"不变的部分"做成强 IP，把"变的部分"做成可定制项</strong>。</p>
-
-          <h2 id="users">目标用户</h2>
-          <div class="article">
-            <table>
-              <thead><tr><th>用户角色</th><th>使用场景</th><th>价值</th></tr></thead>
-              <tbody>
-                <tr><td>独立开发者</td><td>想试水实体产品但不敢大批量打样</td><td>先用 Demo 验证想法</td></tr>
-                <tr><td>文创产品设计师</td><td>想做"有北京味儿"的灯具</td><td>用受控定制快速出款</td></tr>
-                <tr><td>产品经理</td><td>想跟客户解释"为什么这个灯值这个价"</td><td>用架构图直观说明</td></tr>
-                <tr><td>AI Agent 使用者</td><td>想让 AI 把"想法"变成"产品 Demo"</td><td>直接复用 Prompt 模板</td></tr>
-                <tr><td>硬件原型爱好者</td><td>想做 1:1 实物</td><td>按 JSON 找元器件自己打样</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="overview">方案概述</h2>
-          <p>DIY Lamp Builder 是一个<strong>纯静态单页 Demo</strong>，由 4 个区组成：</p>
-          <ul>
-            <li><strong>A. Idea Input</strong> —— 一句话产品想法输入</li>
-            <li><strong>B. AI Analyze</strong> —— 自动产品架构（ReadingCore-01 固定 / Shell 可变）</li>
-            <li><strong>C. Configurator</strong> —— 风格 / 颜色 / 刻字 + SVG 实时预览</li>
-            <li><strong>D. Manufacturing Plan</strong> —— 实时 JSON 输出 + 装配步骤</li>
-          </ul>
-          <p>整个 Demo 不依赖任何外部资源（无 CDN、无 build step、无 Three.js），用 HTML/CSS/JS 直接表达"实体产品想法 → 受控定制 Demo"的完整链路。</p>
-
-          <h2 id="mvp">Demo MVP</h2>
-          <p><strong>目标</strong>：用 1-2 天时间，做出能让"产品小白" 5 分钟看懂"ReadingCore-01 + 可定制外壳"架构的可交互 Demo。</p>
-
-          <h3>输入 / 输出</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>输入</th><th>输出</th></tr></thead>
-              <tbody>
-                <tr><td>一句话产品想法（textarea）</td><td>AI Analyze 6 字段表</td></tr>
-                <tr><td>4 个 Shell Style 选项</td><td>SVG 预览（外壳随选择变化，Core 区不变）</td></tr>
-                <tr><td>4 个 Color 选项</td><td>Manufacturing Plan JSON</td></tr>
-                <tr><td>1 个 Engraving 文本输入</td><td>Copy 按钮可复制 JSON</td></tr>
-                <tr><td>Core 字段固定</td><td>装配步骤列表（8 步，带状态标签）</td></tr>
-                <tr><td>4 个 Idea 示例按钮</td><td>动态 BOM 成本表</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>第一版策略</h3>
-          <ul>
-            <li>不做真实 LLM 调用 —— AI Analyze 区使用轻量规则解析器，把关键词映射到产品决策；真实场景可复用 Prompt 模板接入 LLM。</li>
-            <li>不做真实 CAD —— SVG mock 预览足够</li>
-            <li>不做真实采购/支付 —— BOM 估算给动态范围即可</li>
-            <li>不做真实光路计算 —— 500-800 lm 是设计目标，不是实测</li>
-          </ul>
-
-          <h2 id="architecture">技术架构</h2>
-          <div class="article">
-            <table>
-              <thead><tr><th>组件</th><th>技术</th><th>说明</th></tr></thead>
-              <tbody>
-                <tr><td>页面结构</td><td>HTML</td><td>4 个 <code>&lt;section&gt;</code> 区块</td></tr>
-                <tr><td>样式</td><td>CSS</td><td>CSS 变量 + 媒体查询</td></tr>
-                <tr><td>交互</td><td>Vanilla JS</td><td>无框架，无构建</td></tr>
-                <tr><td>预览</td><td>SVG</td><td>4 种外壳形状 + 4 种颜色 + 文本</td></tr>
-                <tr><td>JSON 输出</td><td>JSON.stringify</td><td>实时序列化</td></tr>
-                <tr><td>部署</td><td>GitHub Pages</td><td>静态托管</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="workflow">数据流</h2>
-          <div class="workflow-box">
-用户输入想法
-  → AI 推导产品架构
-    → ReadingCore-01 锁定 / Shell 解锁
-      → 用户选外壳风格 + 颜色 + 刻字
-        → SVG 实时预览更新
-          → Manufacturing Plan JSON 实时更新
-            → Copy 按钮可复制 JSON
-              → 工程师按 JSON 找元器件打样
-          </div>
-
-          <h3>核心架构图</h3>
-          <div class="workflow-box">
-[Idea Input]
-   │
-   ▼
-[AI Analyze] ──▶ ReadingCore-01（固定灯芯模块）
-   │                 - 24V 线性 LED
-   │                 - 500–800 lm
-   │                 - 35–45 cm 阅读距离
-   │                 - M3 dual mount / 铝槽卡扣
-   ▼
-[Configurator] ─▶ Shell（可定制外壳）
-   │                - Style: Minimal Bar / Hutong Window / Beijing Pavilion / Book Arc
-   │                - Color: Warm White / Hutong Gray / Palace Red / Night Black
-   │                - Engraving: 自由文本
-   ▼
-[Manufacturing Plan] ─▶ 制造 JSON
-                        - LED 贴装 → 铝槽 → 扩散罩 → 外壳装配 → 校验
-          </div>
-
-          <h2 id="structure">物理结构图（ReadingCore-01 内核）</h2>
-          <div class="workflow-box">
-       [可定制外壳]      ← 只承担造型，不参与散热和电气
-            │
-            ▼
-       [乳白扩散罩]      ← 柔光，避免眩光
-            │
-            ▼
-       [铝型材/铝槽]      ← 关键散热通道
-            │
-            ▼
-       [24V 线性 LED]    ← 切到灯头长度
-            │
-            ▼
-       [M3 双孔法兰]     ← 装配接口
-
-结构原则：LED 灯带 不直接贴塑料外壳。
-          </div>
-
-          <h2 id="demo-pack">Demo Pack</h2>
-          <p>Demo Pack 文件结构（canonical 在 <code>demos/diy-lamp-builder/</code>，镜像在 <code>docs/demos/diy-lamp-builder/</code> 和 <code>public/demos/diy-lamp-builder/</code>）：</p>
-          <div class="workflow-box">
-demos/diy-lamp-builder/
-├── README.md              # 复现说明
-├── inputs/
-│   ├── source-idea.md     # 原始想法原文
-│   ├── background.md      # 背景与受控定制参考
-│   └── transcript.md      # 与 Agent 的需求对话模拟
-├── prompts/
-│   └── build-prompt.md    # 驱动 Agent 生成 Demo 的 Prompt 模板
-├── outputs/
-│   ├── brief.md           # AI 生成的方案 Brief
-│   ├── task-plan.md       # AI 生成的任务计划
-│   ├── generated-demo-notes.md  # Demo 构建说明
-│   ├── productization-pass.md   # IDB-6B 产品化目标与变化
-│   └── bom-model.json           # BOM 成本模型数据结构
-├── app/
-│   ├── index.html         # 4 区单页应用
-│   ├── style.css          # 样式
-│   └── app.js             # 交互与 JSON 输出
-└── validation/
-    └── acceptance-checklist.md  # 验收清单（全部勾选完成）
-          </div>
-
-          <p><strong>Demo Pack 路径</strong>：<code>demos/diy-lamp-builder/</code></p>
-          <p><strong>本地体验入口</strong>：<a href="../demos/diy-lamp-builder/">docs/demos/diy-lamp-builder/index.html</a> （会自动跳转到 <code>app/index.html</code>）</p>
-
-          <h2 id="config-json">配置 JSON 示例</h2>
-          <p>Demo 实时输出的 Manufacturing Plan JSON 结构（IDB-6C 格式，用户在 Configurator 改变选择时整段 JSON 会更新）：</p>
-          <div class="workflow-box">
-{
-  "phase": "IDB-6C",
-  "core_locked": true,
-  "idea_summary": "北京风格阅读台灯，外壳可定制，适合书桌使用",
-  "use_case": "Reading desk lamp",
-  "shell_style": "Hutong Window",
-  "color": "Warm White",
-  "engraving": "北京之光",
-  "reading_target": {
-    "luminous_flux": "500-800 lm",
-    "desk_lux": "300-500 lux",
-    "distance": "35-45 cm",
-    "glare_control": "recessed opal diffuser + downward beam"
-  },
-  "core_stack": [
-    "24V high-CRI linear LED strip",
-    "aluminum channel heat sink",
-    "opal diffuser",
-    "M3 dual mount",
-    "custom shell"
-  ],
-  "estimated_bom_cost": "$58-126 prototype",
-  "estimated_print_time": "5h",
-  "risk_notes": [
-    "Shell complexity multiplier: 1.25x",
-    "Finishing level: medium",
-    "Risk level: medium",
-    "Recommended iteration: 2nd"
-  ],
-  "assembly_steps": [
-    { "step": "Cut 24V high-CRI LED strip to lamp-head length", "status": "manual" },
-    { "step": "Attach LED strip to aluminum channel", "status": "manual" },
-    { "step": "Install opal diffuser", "status": "manual" },
-    { "step": "Mount ReadingCore-01 into custom shell", "status": "prototype-ready" },
-    { "step": "Attach arm and base", "status": "manual" },
-    { "step": "Run 30-min heat check", "status": "prototype-ready" },
-    { "step": "Run glare check at 35-45 cm reading distance", "status": "prototype-ready" },
-    { "step": "Save configuration JSON as prototype spec", "status": "future-automation" },
-    { "step": "Export STL with OpenSCAD and send to slicer", "status": "future-automation" }
-  ],
-  "cad_export": {
-    "format": "OpenSCAD",
-    "generated_file": "shell_export.scad",
-    "optional_stl_command": "openscad -o shell_export.stl shell_export.scad",
-    "cad_scope": "shell_only",
-    "core_keepout_included": true,
-    "stl_export_requires": "local OpenSCAD CLI"
-  }
-}
-          </div>
-
-          <h3>页面结构表</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>页面</th><th>功能</th><th>关键交互</th></tr></thead>
-              <tbody>
-                <tr><td>A. Idea Input</td><td>一句话想法输入</td><td>Generate 按钮触发后续 3 区渲染</td></tr>
-                <tr><td>B. AI Analyze</td><td>产品架构 6 字段</td><td>Core 字段带锁定标记</td></tr>
-                <tr><td>C. Configurator</td><td>风格 / 颜色 / 刻字</td><td>左侧表单 + 右侧 SVG 实时预览</td></tr>
-                <tr><td>D. Manufacturing Plan</td><td>JSON + 装配步骤</td><td>Copy 按钮复制 JSON</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          
-
-
-<h2 id="idb-6h">IDB-6H First Prototype Build Pass</h2>
-<p>IDB-6H 将 sourcing pack 推进到首台样机 build day workflow：组件到货检查、fit-test coupon、完整外壳打印、ReadingCore-01 cassette 装配、首次通电观察、IDB-6E 测量，以及 first-build report。</p>
-
-<table>
-  <thead><tr><th>交付物</th><th>说明</th></tr></thead>
-  <tbody>
-    <tr><td>first-build-runbook.md</td><td>首台样机从到货到测试的完整装配流程。</td></tr>
-    <tr><td>first-build-report-template.md/json</td><td>记录组件、fit-test、装配、测量和迭代决策。</td></tr>
-    <tr><td>assembly-photo-shot-list.md</td><td>必须拍摄的装配证据清单。</td></tr>
-    <tr><td>troubleshooting-guide.md</td><td>M3 孔、扩散罩槽、发热、眩光、底座稳定等常见问题排查。</td></tr>
-    <tr><td>prototype-iteration-decision.md</td><td>决定进入第二台样机、迭代 CAD、换 BOM 或停止重设计。</td></tr>
-  </tbody>
-</table>
-
-<h2 id="idb-6g">IDB-6G Real Component Research Pass</h2>
-<p>IDB-6G 将采购框架推进到真实组件候选研究，形成 first prototype 的 sourcing pack。它不是最终采购建议，也不是供应商背书。</p>
-<table>
-  <thead><tr><th>交付物</th><th>说明</th></tr></thead>
-  <tbody>
-    <tr><td>real-component-candidates.csv/json</td><td>记录 LED 灯带、铝槽、电源、调光器等真实候选件。</td></tr>
-    <tr><td>supplier-shortlist.md</td><td>按组件类型整理候选供应渠道和风险。</td></tr>
-    <tr><td>purchase-search-keywords.md</td><td>中英文搜索关键词。</td></tr>
-    <tr><td>sourcing-decision-matrix.csv</td><td>用价格、规格可信度、匹配度、交付和风险打分。</td></tr>
-    <tr><td>first-prototype-shopping-list.md</td><td>第一台样机的 shopping list。</td></tr>
-  </tbody>
-</table>
-<p><strong>边界：</strong>价格、库存、链接和安全标识都需要在下单前再次确认。真实 purchase execution 留到后续阶段。</p>
-
-<h2 id="idb-6f">IDB-6F Build Package Pass</h2>
-<p>IDB-6F 将 DIY Lamp Builder 推进到第一台实体样机的采购与装配准备阶段。它提供 purchase-ready BOM、component spec sheet、sourcing checklist、quote comparison template、assembly runbook、supplier risk register 和 purchase decision gate。</p>
-
-<table>
-  <thead><tr><th>模块</th><th>用途</th></tr></thead>
-  <tbody>
-    <tr><td>Purchase-ready BOM</td><td>列出 24V LED 灯带、铝槽、扩散罩、电源、调光器、五金、打印材料和底座/支臂 mock。</td></tr>
-    <tr><td>Sourcing Checklist</td><td>采购前检查电压、CRI、尺寸、调光器、电源电流和线缆应力释放。</td></tr>
-    <tr><td>Component Spec Sheet</td><td>定义最低规格、推荐规格和禁止规格。</td></tr>
-    <tr><td>First Build Runbook</td><td>从 fit-test coupon 到完整 shell 装配，再到 IDB-6E 实物测试。</td></tr>
-    <tr><td>Purchase Decision Gate</td><td>确认是否可以买一套样机料，还是需要修改 BOM。</td></tr>
-  </tbody>
-</table>
-
-<p><strong>边界：</strong>IDB-6F 不是供应商背书，不是认证采购，也不是量产建议。真实 supplier shortlist 和实时价格对比留到 IDB-6G。</p>
-
-<h2 id="idb-6e">IDB-6E Physical Testing Pass</h2>
-          <p>本阶段在 IDB-6D Print Validation 之后把验证推进到“第一台实物样机”：增加可执行的照度测试（lux grid）、热稳定测试（heat soak）、眩光检查（glare review）、样机装配清单和数据记录模板。它不是认证或实验室测试，而是给第一次物理 build 一个结构化的决策流程。</p>
-
-          <h3>数据流</h3>
-          <pre><code>Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Physical Prototype → Lux Grid → Heat Soak → Glare Review → Readiness Gate</code></pre>
-
-          <h3>Lux Grid</h3>
-          <table>
-            <thead><tr><th>测量点</th><th>目标值</th><th>备注</th></tr></thead>
-            <tbody>
-              <tr><td>Center</td><td>≥ 300 lux</td><td>阅读面中心</td></tr>
-              <tr><td>Left page</td><td>≥ 200 lux</td><td>左侧书页</td></tr>
-              <tr><td>Right page</td><td>≥ 200 lux</td><td>右侧书页</td></tr>
-              <tr><td>Front edge</td><td>trend only</td><td>前边缘</td></tr>
-              <tr><td>Back edge</td><td>trend only</td><td>后边缘</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Heat Soak</h3>
-          <table>
-            <thead><tr><th>阶段</th><th>时长</th><th>通过标准</th></tr></thead>
-            <tbody>
-              <tr><td>First pass</td><td>30 min</td><td>记录 5 点温度/触感</td></tr>
-              <tr><td>Extended</td><td>60 min</td><td>无软化、翘曲、异味、变色</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Glare Review</h3>
-          <table>
-            <thead><tr><th>检查项</th><th>目标</th></tr></thead>
-            <tbody>
-              <tr><td>Direct LED visibility</td><td>not visible</td></tr>
-              <tr><td>Diffuser recess</td><td>recessed or shielded</td></tr>
-              <tr><td>Paper hot spot</td><td>no sharp hot spot</td></tr>
-              <tr><td>Reflection</td><td>no harsh glare</td></tr>
-              <tr><td>Shadow</td><td>acceptable</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Prototype Checklist</h3>
-          <table>
-            <thead><tr><th>分组</th><th>关键项</th></tr></thead>
-            <tbody>
-              <tr><td>Electrical boundary</td><td>低压适配器、无裸露导体、strain relief</td></tr>
-              <tr><td>Mechanical fit</td><td>ReadingCore-01 装入、M3 配合、扩散罩顺畅、底座稳定</td></tr>
-              <tr><td>Print quality</td><td>无翘曲、安装孔无层裂、无毛刺</td></tr>
-              <tr><td>Measurement completion</td><td>lux / heat / glare 完成</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Risk Register</h3>
-          <table>
-            <thead><tr><th>风险</th><th>症状</th><th>缓解</th></tr></thead>
-            <tbody>
-              <tr><td>Heat buildup</td><td>外壳过热、发软、变色</td><td>加壁厚、通风、PETG、降低功率</td></tr>
-              <tr><td>Glare / direct LED</td><td>可见 LED 点光源、刺眼</td><td>扩散罩内缩、加遮光沿</td></tr>
-              <tr><td>Poor diffuser fit</td><td>扩散罩松/紧/掉</td><td>fit-test coupon 校准 ±0.2 mm</td></tr>
-              <tr><td>Cable strain</td><td>线缆拉扯、断裂</td><td>加大出口半径、加 cable tie anchor</td></tr>
-              <tr><td>Base instability</td><td>灯易倾倒</td><td>加底座、加重、降低重心</td></tr>
-              <tr><td>Print warping</td><td>翘角、底面不平</td><td>brim、热床、封闭仓、PETG</td></tr>
-              <tr><td>Engraving too small</td><td>刻字糊掉</td><td>加大字号、0.2 mm 层高</td></tr>
-              <tr><td>Material softening</td><td>近 LED 处变形</td><td>换 PETG、改善铝槽接触</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Readiness Gate</h3>
-          <p>样机决策门：<code>PENDING_PHYSICAL_TESTS</code> → <code>READY_FOR_FULL_BUILD</code> / <code>ITERATE_BEFORE_FULL_BUILD</code>。</p>
-
-<h2 id="idb-6d">IDB-6D Print Validation Pass</h2>
-          <p>本阶段在 IDB-6C CAD Export 之后增加“第一轮 FDM 打样前验证包”：CAD validation、打印方向、切片配置、fit-test coupon、测量日志。它不是工程合格认证，而是让 DIY 台灯在真实打印前有一个结构化的检查清单。</p>
-
-          <h3>新增数据链路</h3>
-          <div class="workflow-box">
-Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Measured Fit Log → Full Shell Print
-          </div>
-
-          <h3>CAD Validation 检查项</h3>
-          <table>
-            <thead><tr><th>检查项</th><th>规则</th><th>状态</th></tr></thead>
-            <tbody>
-              <tr><td>ReadingCore-01 keepout</td><td>外壳不能与 240×24×18 mm 内核保护区相交</td><td>PASS</td></tr>
-              <tr><td>Diffuser slot clearance</td><td>标称 18 mm，测试 17.8 / 18.0 / 18.2 / 18.4 mm</td><td>实测</td></tr>
-              <tr><td>M3 mount holes</td><td>标称 3.2 mm，测试 3.0 / 3.2 / 3.4 mm</td><td>实测</td></tr>
-              <tr><td>Cable exit</td><td>最小半径 4 mm，推荐 5 mm</td><td>PASS</td></tr>
-              <tr><td>Minimum wall thickness</td><td>≥ 2.0 mm，推荐 2.4 mm</td><td>WARN</td></tr>
-              <tr><td>Engraving manufacturability</td><td>高度 ≥ 0.3 mm、线条宽度 ≥ 0.4 mm</td><td>WARN</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Shell Style → Print Orientation</h3>
-          <table>
-            <thead><tr><th>Shell Style</th><th>推荐方向</th><th>支撑策略</th><th>风险</th></tr></thead>
-            <tbody>
-              <tr><td>Minimal Bar</td><td>扩散罩开口向上或侧向上</td><td>通常无需支撑</td><td>低</td></tr>
-              <tr><td>Hutong Window</td><td>背面贴床，格栅向上</td><td>格栅细节需要支撑</td><td>中</td></tr>
-              <tr><td>Beijing Pavilion</td><td>屋脊向上，背面贴床</td><td>屋檐需要支撑</td><td>高</td></tr>
-              <tr><td>Book Arc</td><td>弧形向上，背面贴床</td><td>弧形下方需要支撑</td><td>中高</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Slicer Profile</h3>
-          <ul>
-            <li>Nozzle: 0.4 mm</li>
-            <li>Layer height: 0.20 mm</li>
-            <li>Perimeters: 3</li>
-            <li>Top / bottom layers: 5</li>
-            <li>Infill: 18%（PLA+ 15%，PETG 20%）</li>
-            <li>Supports: 按 shell style 决定</li>
-            <li>Brim: 5 mm</li>
-            <li>Seam: 背面</li>
-            <li>Material: PETG 功能原型 / PLA+ 视觉 mock-up</li>
-          </ul>
-
-          <h3>Fit-Test Coupon</h3>
-          <p>先打印 <code>demos/diy-lamp-builder/outputs/cad-validation/fit-test-coupon.scad</code>，测试 M3 孔、diffuser slot、cable exit、刻字后再决定是否打印完整外壳。</p>
-
-          <h3>Measurement Log</h3>
-          <p>使用 <code>outputs/cad-validation/measured-fit-test-log-template.csv</code> 或 <code>.md</code> 记录实测结果，只有 fit-test coupon 通过后才把 <code>ready_for_full_shell_print</code> 改为 true。</p>
-
-          <h3>限制</h3>
-          <ul>
-            <li>不含热仿真</li>
-            <li>不含电气认证</li>
-            <li>不保证结构强度</li>
-            <li>只是 first prototype validation</li>
-          </ul>
-
-          <h2 id="idb-6c">IDB-6C CAD Export Pass</h2>
-          <p>本阶段把 IDB-6B 的 Demo 升级为"可输出可打印 3D 模型"的产品原型工具，新增 SVG-to-CAD / OpenSCAD STL 导出能力。</p>
-
-          <h3>新增能力（IDB-6C）</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>能力</th><th>说明</th><th>状态</th></tr></thead>
-              <tbody>
-                <tr><td><strong>SVG-to-CAD Mapping</strong></td><td>4 种 Shell Style 各自映射到 1 个 OpenSCAD 参数化模块</td><td>已完成</td></tr>
-                <tr><td><strong>OpenSCAD Modules</strong></td><td>每个模块使用 <code>linear_extrude()</code> 将 2D 外壳轮廓拉伸为 3D 壳体</td><td>已完成</td></tr>
-                <tr><td><strong>STL Export Command</strong></td><td>提供可直接复制的 <code>openscad -o shell.stl shell.scad</code> 命令</td><td>已完成</td></tr>
-                <tr><td><strong>CAD Export Panel</strong></td><td>Demo 新增第 5 区，实时展示当前 Shell 的 OpenSCAD 代码</td><td>已完成</td></tr>
-                <tr><td><strong>Historical Compatibility</strong></td><td>保留 IDB-6 / IDB-6A / IDB-6B 全部内容与章节</td><td>已完成</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>4 种 Shell 设计</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>Shell Style</th><th>视觉特征</th><th>复杂度</th><th>打印时间</th><th>风险</th></tr></thead>
-              <tbody>
-                <tr><td>Minimal Bar</td><td>极简长条、圆角、干净线条</td><td>1.0</td><td>3.5h</td><td>low</td></tr>
-                <tr><td>Hutong Window</td><td>窗棂网格/格栅，北京胡同元素</td><td>1.25</td><td>5h</td><td>medium</td></tr>
-                <tr><td>Beijing Pavilion</td><td>屋檐/檐口轮廓，中式亭阁屋顶线</td><td>1.45</td><td>6.5h</td><td>medium</td></tr>
-                <tr><td>Book Arc</td><td>书页弧线/拱形灯罩，适合床头</td><td>1.35</td><td>5.5h</td><td>low</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>BOM Cost Model</h3>
-          <p>总成本 = 基础元器件 + 3D 打印外壳 + 颜色涂装。基础元器件合计 $38-87，外壳按复杂度在 $6-24 之间浮动，涂装按颜色在 $4-16 之间浮动。输出格式示例：<code>$58-126 prototype</code>。</p>
-          <div class="article">
-            <table>
-              <thead><tr><th>Component</th><th>Low</th><th>High</th></tr></thead>
-              <tbody>
-                <tr><td>24V high-CRI LED strip</td><td>$8</td><td>$18</td></tr>
-                <tr><td>Aluminum channel + opal diffuser</td><td>$6</td><td>$14</td></tr>
-                <tr><td>24V power adapter</td><td>$8</td><td>$15</td></tr>
-                <tr><td>Dimmer / controller</td><td>$4</td><td>$12</td></tr>
-                <tr><td>Wires / screws / M3 inserts</td><td>$2</td><td>$5</td></tr>
-                <tr><td>3D printed shell</td><td>$6</td><td>$24</td></tr>
-                <tr><td>Finishing / paint</td><td>$4</td><td>$16</td></tr>
-                <tr><td>Base + arm mock</td><td>$10</td><td>$25</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>CAD Export 能力矩阵（IDB-6C）</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>能力</th><th>当前实现</th><th>后续扩展</th></tr></thead>
-              <tbody>
-                <tr><td>SVG 路径解析</td><td>4 种 Shell Style 的 SVG <code>d</code> 路径已硬编码为 OpenSCAD 多边形</td><td>后续支持上传自定义 SVG 并自动解析</td></tr>
-                <tr><td>参数化 OpenSCAD 模块</td><td>4 个模块：<code>shell_minimal_bar()</code> / <code>shell_hutong_window()</code> / <code>shell_beijing_pavilion()</code> / <code>shell_book_arc()</code></td><td>后续可支持 <code>height</code> / <code>wall_thickness</code> / <code>clearance</code> 参数</td></tr>
-                <tr><td>3D 拉伸</td><td><code>linear_extrude(height = 40)</code> 统一厚度</td><td>后续可区分灯头罩、底座盖、装饰板等厚度</td></tr>
-                <tr><td>STL 导出命令</td><td><code>openscad -o shell.stl shell.scad</code></td><td>后续可打包为 <code>.zip</code> 或一键下载 <code>.scad</code> 文件</td></tr>
-                <tr><td>ReadingCore-01 安装槽</td><td>每个模块预留 <code>core_slot()</code> 负形挖孔</td><td>后续可导出装配爆炸图 / BOM 中的 3D 打印件</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>OpenSCAD 模块表（Shell → Module 映射）</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>Shell Style</th><th>OpenSCAD 模块名</th><th>2D 轮廓特征</th><th>拉伸高度</th><th>关键参数</th></tr></thead>
-              <tbody>
-                <tr><td>Minimal Bar</td><td><code>shell_minimal_bar()</code></td><td>圆角长条矩形</td><td>40 mm</td><td><code>length=240</code>, <code>radius=12</code>, <code>slot=30x8</code></td></tr>
-                <tr><td>Hutong Window</td><td><code>shell_hutong_window()</code></td><td>长条矩形 + 3 条竖窗棂</td><td>40 mm</td><td><code>length=240</code>, <code>bar_w=6</code>, <code>slot=30x8</code></td></tr>
-                <tr><td>Beijing Pavilion</td><td><code>shell_beijing_pavilion()</code></td><td>梯形屋顶 + 矩形檐口</td><td>40 mm</td><td><code>length=240</code>, <code>roof_h=35</code>, <code>slot=30x8</code></td></tr>
-                <tr><td>Book Arc</td><td><code>shell_book_arc()</code></td><td>拱形外框 + 内凹弧线</td><td>40 mm</td><td><code>length=240</code>, <code>arc_h=40</code>, <code>slot=30x8</code></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Shell Style → CAD 模块使用示例</h3>
-          <div class="workflow-box">
-// Include the matching module based on selected shell style
-use &lt;lamp-shells.scad&gt;
-
-shell_beijing_pavilion();
-
-// Subtract ReadingCore-01 mounting slot
-module core_slot() {
-    translate([105, 10, 8])
-        cube([30, 8, 40 + 2]);
-}
-
-difference() {
-    shell_beijing_pavilion();
-    core_slot();
-}
-          </div>
-
-          <h3>STL 导出命令</h3>
-          <div class="workflow-box">
-openscad -o shell.stl shell.scad
-
-# 推荐参数（quality 与 speed 平衡）
-openscad -o shell.stl --enable=fast-csg --D quality=24 shell.scad
-          </div>
-
-          <h3>在 Manufacturing JSON 中的 CAD 字段（IDB-6C）</h3>
-          <div class="workflow-box">
-{
-  "phase": "IDB-6C",
-  "cad_export": {
-    "format": "OpenSCAD",
-    "module": "shell_beijing_pavilion",
-    "extrusion_height_mm": 40,
-    "core_slot": "30x8 mm",
-    "stl_command": "openscad -o shell.stl shell.scad",
-    "svg_to_cad_ready": true
-  }
-}
-          </div>
-
-          <h3>Idea Parser 规则示例</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>关键词</th><th>推荐决策</th></tr></thead>
-              <tbody>
-                <tr><td>孩子 / 儿童 / 睡前</td><td>warm 2700K、Book Arc、low glare</td></tr>
-                <tr><td>北京 / 胡同 / 四合院 / 窗</td><td>Hutong Window、Warm White / Hutong Gray</td></tr>
-                <tr><td>天坛 / 宫殿 / 中式 / 亭 / 阁</td><td>Beijing Pavilion、Palace Red</td></tr>
-                <tr><td>极简 / 黑色 / 工作 / 桌面</td><td>Minimal Bar、Night Black、600-800 lm</td></tr>
-                <tr><td>书卷 / 床头 / 弧形</td><td>Book Arc</td></tr>
-                <tr><td>阅读 / 读书 / 书桌 / 图书</td><td>Reading Lamp、ReadingCore-01</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Assembly Workflow</h3>
-          <ol>
-            <li><span style="display:inline-block;background:#e6f4ea;color:#1e7e34;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">manual</span>Cut 24V high-CRI LED strip to lamp-head length</li>
-            <li><span style="display:inline-block;background:#e6f4ea;color:#1e7e34;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">manual</span>Attach LED strip to aluminum channel</li>
-            <li><span style="display:inline-block;background:#e6f4ea;color:#1e7e34;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">manual</span>Install opal diffuser</li>
-            <li><span style="display:inline-block;background:#fff8ee;color:#8a6d3b;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">prototype-ready</span>Mount ReadingCore-01 into custom shell</li>
-            <li><span style="display:inline-block;background:#e6f4ea;color:#1e7e34;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">manual</span>Attach arm and base</li>
-            <li><span style="display:inline-block;background:#fff8ee;color:#8a6d3b;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">prototype-ready</span>Run 30-min heat check</li>
-            <li><span style="display:inline-block;background:#fff8ee;color:#8a6d3b;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">prototype-ready</span>Run glare check at 35-45 cm reading distance</li>
-            <li><span style="display:inline-block;background:#eef2f7;color:#4a6fa5;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">future-automation</span>Save configuration JSON as prototype spec</li>
-            <li><span style="display:inline-block;background:#eef2f7;color:#4a6fa5;padding:1px 6px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-right:6px;">future-automation</span>Export STL with OpenSCAD and send to slicer（IDB-6C）</li>
-          </ol>
-
-          <h3>Before / After：IDB-6 → IDB-6C</h3>
-          <div class="article">
-            <table>
-              <thead><tr><th>维度</th><th>IDB-6</th><th>IDB-6B</th><th>IDB-6C</th></tr></thead>
-              <tbody>
-                <tr><td>Manufacturing JSON</td><td>简单字段</td><td>含 phase、core_locked、reading_target、core_stack、risk_notes</td><td>新增 <code>cad_export</code> 字段，含 OpenSCAD 模块、拉伸高度、STL 命令</td></tr>
-                <tr><td>BOM 成本</td><td>固定范围</td><td>按 shell / 颜色动态计算</td><td>保持 IDB-6B 动态模型，未来可接入 3D 打印耗材重量估算</td></tr>
-                <tr><td>Idea 解析</td><td>无</td><td>规则解析器 + 4 个示例按钮</td><td>保持 IDB-6B 解析器，新增 CAD Export 联动</td></tr>
-                <tr><td>装配流程</td><td>6 步文字</td><td>8 步带状态标签</td><td>保持 8 步，新增第 9 步"导出 STL 并切片"（future-automation）</td></tr>
-                <tr><td>外壳预览</td><td>基础差异</td><td>轮廓、纹样、刻字位置明显不同</td><td>相同 SVG 预览，新增 OpenSCAD 模块映射与 STL 导出命令</td></tr>
-                <tr><td>3D 可打印</td><td>无</td><td>仅提及后续扩展</td><td>正式输出 OpenSCAD 模块与 <code>openscad -o shell.stl shell.scad</code> 命令</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="prompt">关键 Prompt</h2>
-          <p>完整 Prompt 见 <code>demos/diy-lamp-builder/prompts/build-prompt.md</code>，下面是精简核心：</p>
-          <div class="workflow-box">
-你是「DIY 可定制阅读台灯构建器」的方案 Agent。
-
-# 用户原始想法（粘到这里）
-{{USER_IDEA}}
-
-# 你的任务
-
-请基于用户的想法，按以下五步生成产物：
-
-1. Product Architecture（产品架构推理）
-   识别输入想法，把它拆成两层结构：
-   - 固定灯芯模块：默认命名 ReadingCore-01
-   - 可定制外壳（Shell）：包含 Style / Color / Engraving 三类自由度
-
-2. Brief（方案 Brief）
-   300-500 字，包含定位、人群、价值主张、关键风险。
-
-3. Task Plan（任务计划）
-   按 [Idea Input → AI Analyze → Configurator → Manufacturing Plan → CAD Export] 五步列出。
-
-4. Manufacturing Plan JSON
-   按 README 中规定的字段输出，并在 IDB-6C 中新增 <code>cad_export</code> 字段。
-
-5. CAD Export（IDB-6C）
-   输出选中 Shell Style 对应的 OpenSCAD 模块名与 STL 导出命令。
-
-# 约束
-
-- 灯芯模块不可编辑
-- 外壳只承担造型，不承担散热和电气
-- 输出必须是结构化 JSON
-- 不要给真实采购链接；CAD/STL 部分在 IDB-6C 中已提供 OpenSCAD 代码片段与导出命令，但不生成真实可下载文件
-          </div>
-
-          <h2 id="risks">风险与限制</h2>
-          <div class="article">
-            <table>
-              <thead><tr><th>风险</th><th>影响</th><th>应对</th></tr></thead>
-              <tbody>
-                <tr><td>AI Analyze 区是 mock 不是真 LLM</td><td>中</td><td>在 generated-demo-notes.md 中明确标注；真实场景复用 Prompt 模板</td></tr>
-                <tr><td>SVG 预览精度有限</td><td>中</td><td>仅作示意；IDB-6C 已提供 OpenSCAD / SVG-to-CAD 导出真实 STL</td></tr>
-                <tr><td>BOM 估算成本不准确</td><td>中</td><td>输出动态 BOM range，例如 <code>$58-126 prototype</code>；具体范围随 shell style、颜色涂装和 mock base/arm 变化，明确免责声明。</td></tr>
-                <tr><td>散热设计未在 Demo 中验证</td><td>低</td><td>结构图中明确"铝槽是散热通道"，建议实际打样做热测试</td></tr>
-                <tr><td>风格 / 颜色只有 4 款</td><td>低</td><td>Demo 演示架构正确性，款式扩展留给后续版本</td></tr>
-                <tr><td>CAD Export 仍需本地 OpenSCAD 环境</td><td>低</td><td>提供 STL 命令与 <code>.scad</code> 代码片段；未来可打包下载</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>已知限制</h3>
-          <ul>
-            <li>不支持自定义 Style（仅 4 款预定义）</li>
-            <li>不支持上传图片 / 文件</li>
-            <li>不支持保存 / 分享配置（仅 Copy JSON）</li>
-            <li>装配步骤是英文（不针对中文用户改写）</li>
-            <li>BOM 价格是估算范围，不根据地区浮动</li>
-            <li>CAD Export 为代码片段，仍需本地 OpenSCAD 运行（未打包下载）</li>
-          </ul>
-
-          <h2 id="acceptance">验收结果</h2>
-          <p>所有验收项均已勾选（详见 <code>demos/diy-lamp-builder/validation/acceptance-checklist.md</code>）：</p>
-          <ul class="checklist">
-            <li>Demo Pack 6 个标准目录全部就位，新增 productization-pass.md 和 bom-model.json</li>
-            <li>docs/ 和 public/ 镜像完整</li>
-            <li>blueprints.json 三份完全一致（sha256 校验通过）</li>
-            <li>meta.total = 5 / meta.last_updated = "2026-07-03"</li>
-            <li>项目版本徽章 v0.1.1-alpha 不变</li>
-            <li>catalog schema 版本 meta.version = 4.2 不变</li>
-            <li>ReadingCore-01 字段在 UI 和代码层都不可编辑</li>
-            <li>4 种 Shell Style 预览明显不同，刻字实时显示</li>
-            <li>4 个 Idea 示例按钮可自动更新配置</li>
-            <li>BOM 成本随 shell style 和颜色变化</li>
-            <li>Manufacturing JSON 含 phase: IDB-6C</li>
-            <li>Manufacturing JSON 含 cad_export 字段（OpenSCAD 模块 + STL 命令）</li>
-            <li>Assembly Workflow 9 步可见（含 IDB-6C 新增 STL 导出步骤），带状态标签</li>
-            <li>JSON 输出格式正确，Copy 按钮工作</li>
-            <li>不依赖外部 CDN / build / Three.js</li>
-            <li>移动端可读（响应式布局）</li>
-            <li><code>bash scripts/check-catalog.sh</code> 输出 <code>RESULT: PASS</code></li>
-          </ul>
-
-          <h2 id="reproduce">复现</h2>
-          <ol>
-            <li>阅读 <code>docs/diy-lamp-builder.md</code> 和本页</li>
-            <li>阅读 <code>demos/diy-lamp-builder/README.md</code></li>
-            <li>查看 <code>inputs/</code> 中的原始想法、背景、对话模拟</li>
-            <li>查看 <code>prompts/build-prompt.md</code> 中的关键 Prompt</li>
-            <li>查看 <code>outputs/</code> 中的 Brief、任务计划、构建说明</li>
-            <li>打开 <code>app/index.html</code> 体验 4 区 Demo</li>
-            <li>在 Configurator 改变 Style / Color / Engraving，观察 SVG + JSON 实时更新</li>
-            <li>对照 <code>validation/acceptance-checklist.md</code> 逐项验收</li>
-          </ol>
-
-          <h2 id="extensions">后续扩展方向</h2>
-          <ol>
-            <li><strong>更多 Style</strong> —— 把 4 款外壳扩展到 8 / 12 款，加入材质选项（PETG / PLA+ / 树脂 / 木材）</li>
-            <li><strong>真实 CAD / STL 导出</strong> —— 用 OpenSCAD 或 SVG-to-CAD 把预览转成可打印 STL</li>
-            <li><strong>真实元器件 sourcing</strong> —— 给出可采购的 SKU 和替代方案</li>
-            <li><strong>真实亮度/照度测试</strong> —— 用 lux meter 验证 35-45 cm 处的 desk lux</li>
-            <li><strong>更多 Color</strong> —— 加入 Pantone 色卡导入、自定义 hex</li>
-            <li><strong>装配动画</strong> —— SVG 中做分步装配动画，每步高亮一个部件</li>
-            <li><strong>配置保存 / 分享</strong> —— URL hash 编码当前配置，方便分享链接</li>
-            <li><strong>多 ReadingCore 变体</strong> —— ReadingCore-02（高显色 95+）、ReadingCore-03（带 USB-C 充电口）</li>
-            <li><strong>真实 LLM 接入</strong> —— 把 Idea Input 接到 Claude / GPT，按 build-prompt.md 输出架构和 JSON</li>
-            <li><strong>与本 IDB 库联动</strong> —— 用「项目记忆型会议助手」管理 ReadingCore-01 迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态</li>
-          </ol>
-
-          <h2 id="reference">参考资源</h2>
-          <ul>
-            <li><a href="https://gantri.com" target="_blank">Gantri</a> —— 3D 打印灯厂，受控定制典范</li>
-            <li><a href="https://frame.work" target="_blank">Framework Laptop</a> —— 主板固定 + 外壳可换的受控定制模式</li>
-            <li><a href="https://openscad.org" target="_blank">OpenSCAD</a> —— 程序化生成 3D 模型，可作为后续 STL 导出扩展</li>
-            <li><a href="https://www.pantone.com" target="_blank">Pantone</a> —— 颜色一致性参考</li>
-            <li><a href="https://github.com/conanxin/idea-to-demo-blueprints/blob/main/docs/blueprint-template.md" target="_blank">Blueprint Template</a> —— 本方案遵循的模板</li>
-          </ul>
-        </article>
-      </div>
+    <div class="container article">
+      <section class="section">
+        <h2>Blueprint 摘要</h2>
+        <p>把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON、BOM 成本模型与制造计划。后续阶段逐步加入 CAD 导出、打印验证、物理测试、采购清单、真实组件研究和首台样机 build runbook。</p>
+      </section>
+
+      <section class="section">
+        <h2>核心假设</h2>
+        <ul>
+          <li><strong>ReadingCore-01 固定：</strong>24V 线性 LED 灯芯，决定散热、光学和电气边界。</li>
+          <li><strong>Shell 可变：</strong>风格、颜色、纹样、刻字由用户配置，但不可破坏核心 keepout。</li>
+          <li><strong>输出物：</strong>产品架构、配置 JSON、BOM、制造计划、装配步骤、CAD 导出、打印验证、物理测试、采购清单、供应商研究、build runbook。</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>使用流程</h2>
+        <ol>
+          <li>在 Demo App 输入一句话想法。</li>
+          <li>AI 分析生成产品架构 6 字段。</li>
+          <li>在 Configurator 选择风格、颜色、纹样、刻字。</li>
+          <li>查看实时 SVG 预览。</li>
+          <li>生成配置 JSON、BOM 和装配步骤。</li>
+          <li>导出 OpenSCAD 文件进行 3D 打印。</li>
+          <li>执行打印验证、物理测试、采购和样机装配。</li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <h2>技术栈</h2>
+        <ul>
+          <li>纯 HTML / CSS / JavaScript，无构建工具。</li>
+          <li>SVG 实时渲染外壳预览。</li>
+          <li>OpenSCAD 文本导出，可在本地生成 STL。</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6c">IDB-6C CAD Export Pass</h2>
+        <p>IDB-6C 将外壳预览转化为可制造的 OpenSCAD 几何。它输出 <code>shell_export.scad</code> 文件，包含 core keepout、diffuser slot、mounting holes 和 cable exit，并提供一个手动 STL 导出命令。</p>
+        <table>
+          <thead><tr><th>字段</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>core_keepout</code></td><td>ReadingCore-01 占用空间，避免外壳侵入。</td></tr>
+            <tr><td><code>diffuser_slot</code></td><td>乳白扩散罩安装槽。</td></tr>
+            <tr><td><code>m3_mount_holes</code></td><td>铝槽安装用 M3 孔位。</td></tr>
+            <tr><td><code>cable_exit</code></td><td>线缆出口通道。</td></tr>
+            <tr><td><code>engraving</code></td><td>用户刻字凹槽。</td></tr>
+          </tbody>
+        </table>
+        <p><a href="../../demos/diy-lamp-builder/app/index.html#cad-export" class="button">在 Demo 中打开 CAD Export</a></p>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6d">IDB-6D Print Validation Pass</h2>
+        <p>IDB-6D 把 CAD 导出推进到打印验证。它包括打印方向建议、slicer 配置、fit-test coupon 和实测尺寸 log。</p>
+        <table>
+          <thead><tr><th>交付物</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>print-orientation-guide.md</td><td>不同外壳的推荐打印方向。</td></tr>
+            <tr><td>slicer-profile-petg.ini</td><td>PETG 原型打印参数。</td></tr>
+            <tr><td>fit-test-coupon.scad</td><td>孔位、槽位、出口的装配测试件。</td></tr>
+            <tr><td>measured-fit-log.md</td><td>实测尺寸与 CAD 偏差。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6e">IDB-6E Physical Testing Pass</h2>
+        <p>IDB-6E 增加实物测量流程：照度网格、30 分钟热稳定、眩光检查，并给出原型就绪 gate。</p>
+        <table>
+          <thead><tr><th>测试</th><th>目标</th></tr></thead>
+          <tbody>
+            <tr><td>Lux Grid</td><td>阅读区 300-500 lux，重点区 500-750 lux。</td></tr>
+            <tr><td>Heat Soak</td><td>30 分钟后外壳温升 ≤ 15°C。</td></tr>
+            <tr><td>Glare Review</td><td>正常坐姿看不到直射 LED / 高亮点。</td></tr>
+            <tr><td>Readiness Gate</td><td>通过全部测试后标记为 prototype-ready。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6f">IDB-6F Build Package Pass</h2>
+        <p>IDB-6F 将 DIY Lamp Builder 推进到第一台实体样机的采购与装配准备阶段。它提供 purchase-ready BOM、component spec sheet、sourcing checklist、quote comparison template、assembly runbook、supplier risk register 和 purchase decision gate。</p>
+        <table>
+          <thead><tr><th>模块</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>Purchase-ready BOM</td><td>列出 24V LED 灯带、铝槽、扩散罩、电源、调光器、五金、打印材料和底座/支臂 mock。</td></tr>
+            <tr><td>Sourcing Checklist</td><td>采购前检查电压、CRI、尺寸、调光器、电源电流和线缆应力释放。</td></tr>
+            <tr><td>Component Spec Sheet</td><td>定义最低规格、推荐规格和禁止规格。</td></tr>
+            <tr><td>First Build Runbook</td><td>从 fit-test coupon 到完整 shell 装配，再到 IDB-6E 实物测试。</td></tr>
+            <tr><td>Purchase Decision Gate</td><td>确认是否可以买一套样机料，还是需要修改 BOM。</td></tr>
+          </tbody>
+        </table>
+        <p><strong>边界：</strong>IDB-6F 不是供应商背书，不是认证采购，也不是量产建议。真实 supplier shortlist 和实时价格对比留到 IDB-6G。</p>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6g">IDB-6G Real Component Research Pass</h2>
+        <p>IDB-6G 将采购框架推进到真实组件候选研究，形成 first prototype 的 sourcing pack。它不是最终采购建议，也不是供应商背书。</p>
+        <table>
+          <thead><tr><th>交付物</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>real-component-candidates.csv/json</td><td>记录 LED 灯带、铝槽、电源、调光器等真实候选件。</td></tr>
+            <tr><td>supplier-shortlist.md</td><td>按组件类型整理候选供应渠道和风险。</td></tr>
+            <tr><td>purchase-search-keywords.md</td><td>中英文搜索关键词。</td></tr>
+            <tr><td>sourcing-decision-matrix.csv</td><td>用价格、规格可信度、匹配度、交付和风险打分。</td></tr>
+            <tr><td>first-prototype-shopping-list.md</td><td>第一台样机的 shopping list。</td></tr>
+          </tbody>
+        </table>
+        <p><strong>边界：</strong>价格、库存、链接和安全标识都需要在下单前再次确认。真实 purchase execution 留到后续阶段。</p>
+      </section>
+
+      <section class="section">
+        <h2 id="idb-6h">IDB-6H First Prototype Build Pass</h2>
+        <p>IDB-6H 将 sourcing pack 推进到首台样机 build day workflow：组件到货检查、fit-test coupon、完整外壳打印、ReadingCore-01 cassette 装配、首次通电观察、IDB-6E 测量，以及 first-build report。</p>
+        <table>
+          <thead><tr><th>交付物</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>first-build-runbook.md</td><td>首台样机从到货到测试的完整装配流程。</td></tr>
+            <tr><td>first-build-report-template.md/json</td><td>记录组件、fit-test、装配、测量和迭代决策。</td></tr>
+            <tr><td>assembly-photo-shot-list.md</td><td>必须拍摄的装配证据清单。</td></tr>
+            <tr><td>troubleshooting-guide.md</td><td>M3 孔、扩散罩槽、发热、眩光、底座稳定等常见问题排查。</td></tr>
+            <tr><td>prototype-iteration-decision.md</td><td>决定进入第二台样机、迭代 CAD、换 BOM 或停止重设计。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2>输出文件</h2>
+        <ul>
+          <li><a href="../../data/blueprints.json">blueprints.json</a> — 全局 Blueprint 元数据。</li>
+          <li><code>demos/diy-lamp-builder/app/</code> — Demo App 源码。</li>
+          <li><code>demos/diy-lamp-builder/outputs/</code> — 设计、CAD、测试、采购、样机构建文档。</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>边界与免责</h2>
+        <p>这是一个 maker prototype 教育 Demo，不是认证产品、电气安全审查、光学认证或生产采购建议。任何真实装配请自行评估风险，并在低压、有保护的条件下进行。</p>
+      </section>
     </div>
   </div>
 
   <footer class="site-footer">
     <div class="container">
-      <p>
-        <a href="https://github.com/conanxin/idea-to-demo-blueprints">Idea-to-Demo Blueprints</a> —
-        可复现 Demo 蓝图库 · MIT License · 2026
-      </p>
+      <p>Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6H.2</p>
     </div>
   </footer>
-  <!-- IDB-6H.1 Pages Refresh: sync IDB-6G/6H sections to GitHub Pages. -->
 </body>
 </html>
