@@ -207,3 +207,13 @@
 - [x] IDB-6C / IDB-6D / IDB-6E functionality remains unchanged.
 - [x] No 6th Blueprint added; meta.total remains 5.
 - [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
+
+## IDB-6E.3 Chinese UI Complete Pass Acceptance
+
+- [x] Removed remaining English-first main UI fragments from Demo App.
+- [x] Physical testing panels are Chinese-first.
+- [x] Print validation warnings are Chinese-first.
+- [x] Technical terms remain where useful: CAD, OpenSCAD, STL, BOM, JSON, ReadingCore-01.
+- [x] IDB-6C / IDB-6D / IDB-6E functionality remains unchanged.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
