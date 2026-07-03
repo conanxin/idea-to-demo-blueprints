@@ -1004,3 +1004,27 @@ Idea → Fixed Core → Variable Shell → Configurator → CAD Export → Print
 - 牙签盒
 - 小音箱外壳
 - 展示支架
+
+## IDB-6I.1 Closeout + Future Roadmap
+
+当前阶段停止继续堆叠 DIY Lamp Builder 功能，改为记录暂停点和后续路线。
+
+### 已完成
+
+DIY Lamp Builder 已经成为第一个实体产品编译器样板：
+
+Idea -> Fixed Core -> Variable Shell -> Configurator -> CAD Export -> Print Validation -> Physical Testing -> Build Package -> Sourcing -> First Build Runbook -> Compiler Abstraction
+
+### 推荐后续路线
+
+- **IDB-7 City Night Light Builder**：用同一个 compiler pattern 做第二个实体产品 Demo。
+- **Real Prototype Build Track**：按 IDB-6G/6H 的采购与 build 包，购买一套样机件并真实装配。
+- **Compiler Platform Extraction**：把 DIY Lamp Builder 中的 schema、prompt、validation、build package 抽成通用模块。
+- **Chinese UI Polish Later**：仅通过 render dictionary 做，不再对 JavaScript 做 broad replacement。
+
+### 暂停原则
+
+- 不继续修改 app runtime。
+- 不新增第 6 个 Blueprint。
+- 不再做 Pages-only 修复。
+- 下一次启动时先选择 IDB-7 或 Real Prototype Build Track。

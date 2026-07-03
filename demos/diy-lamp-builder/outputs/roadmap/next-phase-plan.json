@@ -1,0 +1,43 @@
+{
+  "phase": "IDB-6I.1",
+  "status": "closeout",
+  "current_reference_demo": "DIY Lamp Builder",
+  "recommended_next_tracks": [
+    {
+      "id": "IDB-7",
+      "name": "City Night Light Builder",
+      "goal": "Use the compiler pattern to create a second physical product demo",
+      "fixed_core": "LampCore-01 low-power night-light module",
+      "variable_shell": "city skyline / architecture silhouette / engraving",
+      "priority": "high"
+    },
+    {
+      "id": "REAL-BUILD-1",
+      "name": "ReadingCore-01 First Physical Prototype",
+      "goal": "Buy one prototype set and build the first physical lamp",
+      "inputs": [
+        "IDB-6G sourcing pack",
+        "IDB-6H first-build runbook",
+        "IDB-6E physical testing workflow"
+      ],
+      "priority": "high"
+    },
+    {
+      "id": "COMPILER-EXTRACT-1",
+      "name": "Generic Idea-to-Physical-Product Compiler",
+      "goal": "Extract reusable compiler templates from DIY Lamp Builder",
+      "priority": "medium"
+    },
+    {
+      "id": "UI-POLISH-LATER",
+      "name": "Code-aware Chinese UI polish",
+      "goal": "Use render dictionary, not broad replacement",
+      "priority": "low"
+    }
+  ],
+  "do_not_do_next": [
+    "do not run broad localization over app.js",
+    "do not add more DIY Lamp Builder features before choosing a track",
+    "do not treat sourcing candidates as final purchase recommendations"
+  ]
+}

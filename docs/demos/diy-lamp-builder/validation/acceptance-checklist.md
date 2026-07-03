@@ -295,3 +295,13 @@
 - [x] Next product candidates added.
 - [x] Compiler validation script PASS.
 - [x] No 6th Blueprint added; meta.total remains 5.
+
+## IDB-6I.1 Closeout + Future Roadmap Acceptance
+
+- [x] Roadmap package added.
+- [x] Pause state documented.
+- [x] Future tracks documented.
+- [x] Handoff notes added.
+- [x] No app runtime changes.
+- [x] No 6th Blueprint added.
+- [x] JavaScript integrity guard remains PASS.
