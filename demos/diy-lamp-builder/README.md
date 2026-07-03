@@ -3,7 +3,7 @@
 > **方案：** DIY 可定制阅读台灯构建器
 > **Demo 场景：** 把"做一个北京风格、可定制外壳、适合桌旁阅读"的台灯想法，转成可交互配置器 + 产品架构 + 制造计划
 > **状态：** demo-ready
-> **阶段：** IDB-6D
+> **阶段：** IDB-6E
 
 ---
 
@@ -64,6 +64,9 @@
    │
    ▼
 [Print Validation] ──▶ CAD validation / orientation / slicer / fit-test coupon / measurement log
+   │
+   ▼
+[Physical Prototype Testing] ──▶ lux grid / heat soak / glare review / readiness gate
 ```
 
 关键原则：
@@ -130,25 +133,28 @@ demos/diy-lamp-builder/
 - **手势实时视觉实验室** — 解决"手势怎么驱动视觉"
 - **DIY Lamp Builder（这个）** — 解决"实体产品想法怎么变成可定制 Demo + 打印前验证"
 
-它跟前四个最大的不同是：**输出可以是一个真实存在的物体**。在 IDB-6C 中，我们增加了 OpenSCAD 示意文件与可选的 STL 导出脚本；在 IDB-6D 中，进一步增加了 CAD validation、打印方向、切片配置、fit-test coupon 和测量日志，展示“想法 → 可定制配置 → 可制造几何 → 打样前检查包”的链路。但 Demo 本身不做真实采购、不做支付、不做真实加工，也不提供工程认证。
+它跟前四个最大的不同是：**输出可以是一个真实存在的物体**。在 IDB-6C 中，我们增加了 OpenSCAD 示意文件与可选的 STL 导出脚本；在 IDB-6D 中，进一步增加了 CAD validation、打印方向、切片配置、fit-test coupon 和测量日志；在 IDB-6E 中，进一步增加了 lux grid、heat soak、glare review、physical prototype checklist 和 readiness gate，展示“想法 → 可定制配置 → 可制造几何 → 打样前检查包 → 第一台样机测量”的链路。但 Demo 本身不做真实采购、不做支付、不做真实加工，也不提供工程认证。
 
----
+|---
 
-## IDB-6D 新增能力
+## IDB-6E 新增能力
 
-- **CAD Validation** — 检查 ReadingCore-01 keepout、diffuser slot、M3 孔位、cable exit、壁厚、刻字可制造性。
-- **Print Orientation** — 按 shell style 给出打印方向、支撑策略、风险等级。
-- **Slicer Profile** — 提供 PrusaSlicer / Cura 基线配置（0.4 mm 喷嘴、0.2 mm 层高、3 层壁、18% 填充、brim、支撑按需）。
-- **Fit-Test Coupon** — 生成 OpenSCAD 测试件，包含 M3 孔阶梯、diffuser slot 阶梯、cable exit 测试、刻字样本。
-- **Measurement Log** — CSV / Markdown 模板记录实测结果和下一次 CAD 调整。
-- **Validation Script** — `scripts/validate-cad-export.py` 检查必需文件、模块、规则；如果检测到 OpenSCAD CLI，可导出 STL 并检查非空。
+- **Physical Prototype Testing** — Demo 内新增 Physical Prototype Testing 区块，包含 lux grid、heat soak、glare review、prototype checklist、downloads。
+- **Lux Test Grid** — 35–45 cm 阅读距离，中心 ≥ 300 lux，阅读区 ≥ 200 lux，5 点网格。
+- **Heat Soak Test** — 30 / 60 分钟热稳定观察，5 个测量点，触感通过标准。
+- **Glare Review** — 5 项从正常阅读姿势出发的主观检查。
+- **Prototype Readiness Checklist** — 4 组检查 + PENDING/READY/ITERATE 决策门。
+- **Downloads** — Test Protocol.md、Measurement Log CSV、Readiness Report JSON、Prototype Checklist.md。
+- **Physical Testing Pack** — `outputs/physical-testing/` 包含协议、CSV/MD 模板、checklist、report template、risk register、sample report。
+- **Validation Scripts** — `scripts/validate-physical-test-pack.py` 检查 pack 完整性；`scripts/evaluate-physical-test-report.py` 读取样例报告并给出简短评估。
 
 ## 限制
 
-- IDB-6D 是**第一轮 FDM 打样前验证包**，不是工程合格承诺。
+- IDB-6E 是**第一台物理样机测量工作流**，不是工程合格承诺、不是认证、不是实验室测试。
 - 不包含热仿真、电气认证、结构强度计算或最终量产图纸。
+- 手机 lux app 仅作为趋势参考，不能替代专业照度计。
 - 所有建议尺寸都需要根据实际打印机、耗材、环境和后处理校准。
 
----
+|---
 
-*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6D.*
+*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6E.*

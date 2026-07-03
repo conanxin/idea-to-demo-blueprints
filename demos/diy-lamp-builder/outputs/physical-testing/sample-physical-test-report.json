@@ -1,0 +1,38 @@
+{
+  "phase": "IDB-6E",
+  "prototype_id": "sample-hutong-window-001",
+  "core": "ReadingCore-01",
+  "shell_style": "Hutong Window",
+  "color": "Warm White",
+  "engraving": "在北京读书",
+  "lux": {
+    "center": 420,
+    "left_page": 310,
+    "right_page": 295,
+    "front_edge": 210,
+    "back_edge": 180,
+    "distance_cm": 40
+  },
+  "heat": {
+    "aluminum_channel_c": {
+      "0_min": 28,
+      "30_min": 35,
+      "60_min": 38
+    },
+    "shell_near_led_c": {
+      "0_min": 26,
+      "30_min": 32,
+      "60_min": 34
+    }
+  },
+  "glare_review": {
+    "direct_led_visible": false,
+    "paper_hotspot": false,
+    "harsh_reflection": false,
+    "shadow_acceptable": true,
+    "notes": "Direct LED hidden by diffuser; no harsh reflection"
+  },
+  "readiness_gate": "ITERATE_BEFORE_FULL_BUILD",
+  "next_adjustment": "Increase diffuser recess and widen cable exit radius",
+  "not_certification": true
+}

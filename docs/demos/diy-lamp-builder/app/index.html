@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Lamp Builder · IDB-6D Print Validation</title>
+  <title>DIY Lamp Builder · IDB-6E Physical Testing</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,10 +12,13 @@
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
       <div class="header-titles">
         <h1>DIY Lamp Builder</h1>
-        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6D Print Validation</p>
+        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6E Physical Testing</p>
       </div>
-      <span class="badge badge-idb">IDB-6D</span>
+      <span class="badge badge-idb">IDB-6E</span>
     </header>
+    <p class="idb-chain" id="idb-chain" aria-label="IDB evolution chain">
+      <span>IDB-6</span> → <span>IDB-6B</span> → <span>IDB-6B.1</span> → <span>IDB-6B.2</span> → <span>IDB-6C</span> → <span>IDB-6D</span> → <span class="idb-current">IDB-6E</span>
+    </p>
 
     <main class="demo-main">
 
@@ -318,12 +321,98 @@
         </p>
       </section>
 
+      <!-- G. Physical Prototype Testing -->
+      <section class="card physical-testing-card" id="physical-testing-section">
+        <div class="card-head">
+          <span class="step-tag">G</span>
+          <h2>Physical Prototype Testing</h2>
+        </div>
+        <p class="card-hint">measured lux · heat soak · glare review · readiness gate</p>
+
+        <div class="physical-grid">
+          <div class="test-card lux-card" id="lux-test-card">
+            <h3>Lux Test Grid</h3>
+            <div class="metric-row">
+              <span class="metric-label">Use case</span>
+              <span class="metric-value">reading desk lamp</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Target distance</span>
+              <span class="metric-value">35–45 cm</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Desk illuminance</span>
+              <span class="metric-value">300–500 lux at reading zone</span>
+            </div>
+            <div class="lux-grid" id="lux-grid"></div>
+            <div class="pass-rule" id="lux-pass-rule">
+              Center ≥ 300 lux; no reading-zone point below 200 lux.
+            </div>
+            <div class="measurement-note">
+              Lux meter preferred; phone lux app acceptable for trend-only prototype checks.
+            </div>
+          </div>
+
+          <div class="test-card heat-card" id="heat-soak-card">
+            <h3>Heat Soak Test</h3>
+            <div class="metric-row">
+              <span class="metric-label">First pass</span>
+              <span class="metric-value">30 minutes</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Extended pass</span>
+              <span class="metric-value">60 minutes</span>
+            </div>
+            <div class="heat-points" id="heat-points"></div>
+            <div class="pass-rule" id="heat-pass-rule">
+              No softening, warping, smell, discoloration, or uncomfortable touch temperature.
+            </div>
+            <div class="measurement-note">
+              Not a certification test. Thermal camera or IR thermometer optional.
+            </div>
+          </div>
+
+          <div class="test-card glare-card" id="glare-review-card">
+            <h3>Glare Review</h3>
+            <p class="card-hint" style="margin-top:0;">Check from normal seated reading posture at 35–45 cm from the book.</p>
+            <div class="glare-checks" id="glare-checks"></div>
+            <div class="pass-rule" id="glare-pass-rule">
+              Direct LED should not be visible; diffuser recessed; no harsh reflection or shadow.
+            </div>
+          </div>
+
+          <div class="test-card checklist-card" id="prototype-checklist-card">
+            <h3>Prototype Readiness Checklist</h3>
+            <div class="prototype-checklist" id="prototype-checklist"></div>
+            <div class="readiness-gate" id="readiness-gate">
+              <span class="gate-label">Readiness gate:</span>
+              <span class="gate-value gate-pending" id="gate-value">PENDING_PHYSICAL_TESTS</span>
+            </div>
+          </div>
+
+          <div class="test-card download-card" id="physical-downloads-card">
+            <h3>Downloads</h3>
+            <p class="card-hint" style="margin-top:0;">Export test protocols, measurement logs, and readiness reports for your first physical build.</p>
+            <div class="cad-actions" style="margin-top:12px;flex-direction:column;align-items:flex-start;gap:10px;">
+              <button type="button" id="btn-download-test-protocol" class="primary-btn">Download Test Protocol.md</button>
+              <button type="button" id="btn-download-measurement-log" class="secondary-btn">Download Measurement Log CSV</button>
+              <button type="button" id="btn-download-readiness-report" class="secondary-btn">Download Readiness Report JSON</button>
+              <button type="button" id="btn-download-prototype-checklist" class="secondary-btn">Download Prototype Checklist.md</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="cad-note" style="margin-top:16px;">
+          <strong>First physical prototype only:</strong> this is not a certified photometric, thermal, or electrical safety test. Record measurements, decide if the shell/CAD/diffuser needs iteration, and only proceed to a full build when the readiness gate is satisfied.
+        </p>
+      </section>
+
     </main>
 
     <footer class="demo-footer">
       <p>
         <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
-        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6D · MIT
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6E · MIT
       </p>
     </footer>
   </div>

@@ -160,6 +160,27 @@
 - [x] Updated `docs/diy-lamp-builder.md` and blueprints HTML with IDB-6D section.
 - [x] Synchronized all three mirrors (demos, docs, public).
 
+## IDB-6E Measured Lux / Heat / Glare + Physical Prototype Checklist Acceptance
+
+- [x] Physical Prototype Testing section visible in `app/index.html`.
+- [x] `buildLuxTestPlan` implemented in `app.js`.
+- [x] `buildHeatSoakPlan` implemented in `app.js`.
+- [x] `buildGlareReview` implemented in `app.js`.
+- [x] `buildPrototypeChecklist` implemented in `app.js`.
+- [x] `buildPhysicalReadinessReport` implemented in `app.js`.
+- [x] Download Test Protocol.md button present.
+- [x] Download Measurement Log CSV button present.
+- [x] Download Readiness Report JSON button present.
+- [x] Download Prototype Checklist.md button present.
+- [x] `outputs/physical-testing/` directory added with README, protocol, CSV/MD templates, checklist, report template, risk register, sample report.
+- [x] `validate-physical-test-pack.py` runs and reports PASS.
+- [x] `evaluate-physical-test-report.py` runs and reports PASS.
+- [x] `bash scripts/check-catalog.sh` still PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version remains v0.1.1-alpha and catalog schema remains 4.2.
+- [x] Updated `docs/diy-lamp-builder.md` and blueprints HTML with IDB-6E section.
+- [x] Synchronized all three mirrors (demos, docs, public).
+
 ## IDB-6C.1 Pages Demo Refresh Fix Acceptance
 
 - [x] Demo app is already IDB-6C and contains CAD Export.

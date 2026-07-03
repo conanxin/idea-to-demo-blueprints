@@ -5,13 +5,14 @@
 - **难度：** 中等
 - **Demo 周期：** 1-2 天
 - **适合对象：** 独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者
-- **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan、CAD、OpenSCAD、STL Export、SVG-to-CAD
+- **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan、CAD、OpenSCAD、STL Export、SVG-to-CAD、Lux Test、Heat Soak、Glare Review、Physical Prototype
 - **状态：** demo-ready
 - **创建阶段：** IDB-6
-- **更新阶段：** IDB-6D
+- **更新阶段：** IDB-6E
 - **productization_pass：** completed
 - **cad_export_pass：** completed
 - **print_validation_pass：** completed
+- **physical_testing_pass：** completed
 
 ---
 
@@ -366,12 +367,89 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成，并在
 - [x] 质量项 5：移动端可读（响应式布局）
 - [x] 质量项 6：项目版本徽章 v0.1.1-alpha 不变
 - [x] 质量项 7：catalog schema 版本 meta.version 4.2 不变
-- [x] 质量项 8：blueprints.json 三份完全一致，meta.total = 5，updated_phase = IDB-6D
+- [x] 质量项 8：blueprints.json 三份完全一致，meta.total = 5，updated_phase = IDB-6E
 
 ### 性能验收（可选）
 
 - [x] 性能项 1：3 个 JS / CSS / HTML 文件总大小 < 30 KB
 - [x] 性能项 2：页面加载到首次渲染 < 200 ms（本地静态文件）
+
+---
+
+## IDB-6E Measured Lux / Heat / Glare Workflow + Physical Prototype Checklist
+
+本阶段在 IDB-6D Print Validation 之后，把验证从"打印前"推进到"第一台实物样机"：增加可执行的照度测试、热稳定测试、眩光检查、样机装配清单与数据记录模板。它不是任何认证或实验室测试，而是给第一次物理 build 一个结构化的决策流程。
+
+### 为什么需要 IDB-6E
+
+打印出来的几何正确，不代表装配后的灯适合阅读。第一版样机经常暴露这些问题：
+
+- 阅读中心照度不足，边缘衰减过快。
+- 扩散罩或外壳没有遮住直射 LED，产生眩光。
+- LED 热量让打印外壳发软、变色、产生气味。
+- 底座不稳、线缆拉扯、装配间隙。
+- 刻字太小、分层开裂、外观面有严重层纹。
+
+IDB-6E 给出一个低成本的测量工作流：
+
+```
+Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Physical Prototype → Lux Grid → Heat Soak → Glare Review → Readiness Gate
+```
+
+### Lux Grid 测量方法
+
+- 目标距离：灯头到书本/阅读面 35–45 cm。
+- 目标中心照度：300–500 lux（阅读台灯常用范围）。
+- 最低点要求：阅读区域（中心、左右页）不得低于 200 lux。
+- 工具：照度计优先；手机 lux app 仅用于趋势对比。
+
+| 测量点 | 目标值 | 备注 |
+|--------|--------|------|
+| Center | ≥ 300 lux | 阅读面中心 |
+| Left page | ≥ 200 lux | 左侧书页 |
+| Right page | ≥ 200 lux | 右侧书页 |
+| Front edge | trend only | 前边缘，仅作趋势参考 |
+| Back edge | trend only | 后边缘，仅作趋势参考 |
+
+### Heat Soak 测量方法
+
+- 第一档：常亮 30 分钟，记录铝槽、外壳近 LED 处、扩散罩、底座、线缆出口的温度和触感。
+- 第二档：如 30 分钟安全，可延长至 60 分钟。
+- 通过标准：外壳不发软、不翘曲、无异味、不变色、手触不觉烫。
+- 如果手触不舒服，应降低功率或改善散热路径。
+
+### Glare Review 方法
+
+- 观察者坐在正常阅读姿势，眼高 35–45 cm 距离。
+- 检查清单：
+  - 直射 LED 不可见。
+  - 扩散罩内缩或被外壳遮蔽。
+  - 纸面无锐利高光点。
+  - 光面书页无刺眼光斑。
+  - 手或书产生的阴影不遮挡阅读。
+
+### Physical Prototype Checklist
+
+- **电气边界**：仅使用低压适配器，无裸露导体，线缆出口有 strain relief。
+- **机械装配**：ReadingCore-01 装入外壳、M3 孔位配合、扩散罩顺畅、底座稳定。
+- **打印质量**：无翘曲、安装孔附近无层裂、无毛刺锐边。
+- **测量完成**：lux grid、heat soak、glare review 均已记录。
+- **决策门**：Ready for full build / Iterate CAD。
+
+### 如何判断进入下一轮 CAD 调整
+
+- 如果 lux 不达标 → 检查 LED 功率、扩散罩透光率、灯头高度。
+- 如果眩光失败 → 增加扩散罩内缩深度、加外壳遮光沿。
+- 如果外壳过热 → 改用 PETG、增加壁厚、改善铝槽接触、降低电流。
+- 如果装配过松/过紧 → 按 fit-test coupon 重新校准孔径和槽宽。
+- 如果刻字不清 → 放大字号、减薄层纹（0.2 mm 层高）、换更细喷嘴。
+
+### 限制
+
+- **不含认证**：本阶段不是 UL、CCC、IEC、GB 或任何国家/地区电气安全认证。
+- **不含热仿真**：仅通过实测和触感观察判断热稳定性。
+- **不含电气安全认证**：低压适配器仍需符合其自身规格，Demo 不保证任何电气参数。
+- **手机 lux app 仅作趋势参考**：精度远低于专业照度计，不能用于正式光学评估。
 
 ---
 

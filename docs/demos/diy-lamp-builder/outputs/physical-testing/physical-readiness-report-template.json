@@ -1,0 +1,13 @@
+{
+  "phase": "IDB-6E",
+  "prototype_id": "sample-hutong-window-001",
+  "core": "ReadingCore-01",
+  "shell_style": "Hutong Window",
+  "measurements": {
+    "lux_grid": "PENDING",
+    "heat_soak": "PENDING",
+    "glare_review": "PENDING"
+  },
+  "readiness_gate": "PENDING_PHYSICAL_TESTS",
+  "not_certification": true
+}

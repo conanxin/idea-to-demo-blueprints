@@ -1,4 +1,4 @@
-/* DIY Lamp Builder Demo — IDB-6C CAD Export */
+/* DIY Lamp Builder Demo — IDB-6E Physical Testing */
 
 /* ---------- 基础变量 ---------- */
 :root {
@@ -666,6 +666,212 @@ code {
 /* ---------- F. Print Validation ---------- */
 .print-validation-card .card-head {
   margin-bottom: 8px;
+}
+
+/* ---------- G. Physical Prototype Testing ---------- */
+.physical-testing-card .card-head {
+  margin-bottom: 8px;
+}
+
+.physical-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.test-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.test-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.88rem;
+}
+
+.metric-row:last-of-type {
+  border-bottom: none;
+}
+
+.metric-label {
+  color: var(--text-muted);
+}
+
+.metric-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.lux-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+  text-align: center;
+}
+
+.measurement-point {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 6px;
+  font-size: 0.82rem;
+}
+
+.measurement-point .point-id {
+  display: block;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.measurement-point .point-target {
+  display: block;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.heat-points {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.heat-point {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+.glare-checks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.glare-check {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+.glare-check .check-target {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.prototype-checklist {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.checklist-group {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.checklist-group h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.checklist-group ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.checklist-group li {
+  margin-bottom: 4px;
+}
+
+.pass-rule {
+  background: var(--warm-white);
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 10px;
+}
+
+.measurement-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.readiness-gate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+}
+
+.gate-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.gate-value {
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.gate-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.gate-pass {
+  background: #d4edda;
+  color: #155724;
+}
+
+.gate-warn {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 760px) {
+  .lux-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .physical-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .validation-grid {

@@ -1,8 +1,9 @@
-/* DIY Lamp Builder Demo — IDB-6C CAD Export
+/* DIY Lamp Builder Demo — IDB-6E Physical Testing
  * Pure vanilla JS. No dependencies. No build step.
  * Drives: SVG shell style + engraving, real-time Manufacturing Plan JSON,
  * BOM cost model, idea-to-config parser, assembly workflow,
- * OpenSCAD export with controlled core keepout.
+ * OpenSCAD export with controlled core keepout, print validation,
+ * and physical prototype testing (lux / heat / glare / readiness).
  */
 
 (function () {
@@ -210,7 +211,16 @@
     slicerProfileBody:    $('slicer-profile-body'),
     btnDownloadFitTest:   $('btn-download-fit-test'),
     btnDownloadSlicerProfile: $('btn-download-slicer-profile'),
-    btnDownloadValidationReport: $('btn-download-validation-report')
+    btnDownloadValidationReport: $('btn-download-validation-report'),
+    luxGrid:                  $('lux-grid'),
+    heatPoints:               $('heat-points'),
+    glareChecks:              $('glare-checks'),
+    prototypeChecklist:     $('prototype-checklist'),
+    gateValue:                $('gate-value'),
+    btnDownloadTestProtocol:  $('btn-download-test-protocol'),
+    btnDownloadMeasurementLog: $('btn-download-measurement-log'),
+    btnDownloadReadinessReport: $('btn-download-readiness-report'),
+    btnDownloadPrototypeChecklist: $('btn-download-prototype-checklist')
   };
 
   // ---------- State ----------
@@ -444,7 +454,8 @@
           generated_file: 'fit-test-coupon.scad',
           optional_stl_command: 'openscad -o fit-test-coupon.stl fit-test-coupon.scad'
         }
-      }
+      },
+      physical_testing: buildPhysicalReadinessReport()
     };
   }
 
@@ -1026,6 +1037,280 @@
     renderManufacturingJSON();
     renderCadExport();
     renderPrintValidation();
+    renderPhysicalTesting();
+  }
+
+  // ---------- IDB-6E Physical Testing helpers ----------
+
+  function buildLuxTestPlan() {
+    return {
+      phase: 'IDB-6E',
+      test_name: 'reading-zone lux grid',
+      target_distance_cm: '35-45',
+      target_lux: '300-500',
+      points: [
+        { id: 'center', target: '>=300 lux' },
+        { id: 'left_page', target: '>=200 lux' },
+        { id: 'right_page', target: '>=200 lux' },
+        { id: 'front_edge', target: 'trend only' },
+        { id: 'back_edge', target: 'trend only' }
+      ],
+      device: 'lux meter preferred; phone app acceptable for trend-only prototype checks',
+      status: 'PENDING_MEASUREMENT'
+    };
+  }
+
+  function buildHeatSoakPlan() {
+    return {
+      phase: 'IDB-6E',
+      duration_first_pass_min: 30,
+      duration_extended_min: 60,
+      measurement_points: [
+        'aluminum_channel',
+        'printed_shell_near_led',
+        'diffuser_edge',
+        'base_or_controller',
+        'cable_exit'
+      ],
+      pass_rule: 'no softening, warping, smell, discoloration, or uncomfortable touch temperature',
+      status: 'PENDING_MEASUREMENT'
+    };
+  }
+
+  function buildGlareReview() {
+    return {
+      phase: 'IDB-6E',
+      review_position: 'normal seated reading posture',
+      checks: [
+        { name: 'Direct LED visibility', target: 'not visible' },
+        { name: 'Diffuser recess', target: 'recessed or shielded' },
+        { name: 'Paper hot spot', target: 'no sharp hot spot' },
+        { name: 'Reflection', target: 'no harsh glare on glossy page' },
+        { name: 'Shadow', target: 'hand/book shadow acceptable' }
+      ],
+      status: 'PENDING_REVIEW'
+    };
+  }
+
+  function buildPrototypeChecklist() {
+    return {
+      electrical_boundary: {
+        label: 'Electrical boundary',
+        items: [
+          'low-voltage adapter only',
+          'no exposed conductor',
+          'strain relief at cable exit'
+        ]
+      },
+      mechanical_fit: {
+        label: 'Mechanical fit',
+        items: [
+          'ReadingCore-01 fits shell',
+          'M3 holes fit',
+          'diffuser slides in',
+          'base stable'
+        ]
+      },
+      print_quality: {
+        label: 'Print quality',
+        items: [
+          'no warping',
+          'no layer crack near mount',
+          'no sharp edges'
+        ]
+      },
+      measurement_completion: {
+        label: 'Measurement completion',
+        items: [
+          'lux grid completed',
+          'heat soak completed',
+          'glare review completed'
+        ]
+      }
+    };
+  }
+
+  function buildPhysicalReadinessReport() {
+    var p = buildCadParams();
+    return {
+      phase: 'IDB-6E',
+      core: 'ReadingCore-01',
+      shell_style: p.shell_style,
+      color: state.color,
+      engraving: p.engraving_text,
+      lux_test: buildLuxTestPlan(),
+      heat_soak: buildHeatSoakPlan(),
+      glare_review: buildGlareReview(),
+      prototype_checklist: buildPrototypeChecklist(),
+      readiness_gate: 'PENDING_PHYSICAL_TESTS',
+      not_certification: true
+    };
+  }
+
+  function generateTestProtocolMarkdown() {
+    var p = buildCadParams();
+    var lines = [];
+    lines.push('# IDB-6E Physical Prototype Test Protocol');
+    lines.push('');
+    lines.push('Generated by DIY Lamp Builder for: **' + p.shell_style + ' / ' + state.color + '**');
+    lines.push('');
+    lines.push('## Test setup');
+    lines.push('- ReadingCore-01 module installed');
+    lines.push('- Lamp placed at normal reading height');
+    lines.push('- Book / reading surface at 35–45 cm from lamp head');
+    lines.push('');
+    lines.push('## Tools');
+    lines.push('- Lux meter (preferred) or phone lux app (trend only)');
+    lines.push('- IR or contact thermometer (optional)');
+    lines.push('- Timer');
+    lines.push('- Measurement log sheet');
+    lines.push('');
+    lines.push('## Lux grid protocol');
+    lines.push('1. Turn lamp on and wait 2 minutes.');
+    lines.push('2. Measure illuminance at: center, left page, right page, front edge, back edge.');
+    lines.push('3. Pass: center >= 300 lux; no reading-zone point below 200 lux.');
+    lines.push('');
+    lines.push('## Heat soak protocol');
+    lines.push('1. Run lamp at normal power in a ventilated room.');
+    lines.push('2. Record touch/feel observations at 0, 30, and 60 minutes.');
+    lines.push('3. Check: shell softening, warping, smell, discoloration.');
+    lines.push('');
+    lines.push('## Glare review protocol');
+    lines.push('1. Sit at normal reading posture.');
+    lines.push('2. Confirm direct LED is hidden by diffuser / shell.');
+    lines.push('3. Confirm no harsh reflection on glossy page.');
+    lines.push('4. Confirm shadow is acceptable.');
+    lines.push('');
+    lines.push('## Limitations');
+    lines.push('- This is a first-prototype workflow, not a certified photometric, thermal, or electrical safety test.');
+    lines.push('- Not medical, not eye-safety, not UL/CCC/IEC/GB certification.');
+    lines.push('');
+    lines.push('## Next step');
+    lines.push('Record results in the Measurement Log CSV and decide whether to iterate CAD before a full build.');
+    return lines.join('\\n');
+  }
+
+  function generateMeasurementLogCsv() {
+    var header = 'date,prototype_id,shell_style,color,engraving,material,led_module,power_setting,distance_cm,lux_center,lux_left_page,lux_right_page,lux_front_edge,lux_back_edge,heat_0_min_aluminum_c,heat_30_min_aluminum_c,heat_60_min_aluminum_c,heat_30_min_shell_c,heat_60_min_shell_c,direct_led_visible,paper_hotspot,glare_notes,heat_notes,pass_warn_fail,next_adjustment';
+    var sample = '2026-07-03,sample-' + (buildCadParams().shell_style || 'minimal-bar').toLowerCase().replace(/ /g, '-') + '-001,' + (buildCadParams().shell_style || '') + ',' + (state.color || '') + ',' + (buildCadParams().engraving_text || '') + ',PETG,24V linear LED,100%,40,,,,,,,,,,,no,no,record here,record here,PENDING,record here';
+    return header + '\\n' + sample + '\\n';
+  }
+
+  function generatePrototypeChecklistMarkdown() {
+    var lines = [];
+    lines.push('# IDB-6E Prototype Readiness Checklist');
+    lines.push('');
+    lines.push('## Low voltage boundary');
+    lines.push('- [ ] Low-voltage adapter only');
+    lines.push('- [ ] No exposed conductor');
+    lines.push('- [ ] Strain relief at cable exit');
+    lines.push('');
+    lines.push('## Mechanical fit');
+    lines.push('- [ ] ReadingCore-01 fits shell');
+    lines.push('- [ ] M3 holes fit');
+    lines.push('- [ ] Diffuser slides in');
+    lines.push('- [ ] Base stable');
+    lines.push('');
+    lines.push('## Print quality');
+    lines.push('- [ ] No warping');
+    lines.push('- [ ] No layer crack near mount');
+    lines.push('- [ ] No sharp edges');
+    lines.push('');
+    lines.push('## Thermal observation');
+    lines.push('- [ ] 30 min heat soak completed');
+    lines.push('- [ ] No shell softening or smell');
+    lines.push('');
+    lines.push('## Lux target');
+    lines.push('- [ ] Center >= 300 lux');
+    lines.push('- [ ] No reading-zone point below 200 lux');
+    lines.push('');
+    lines.push('## Glare review');
+    lines.push('- [ ] Direct LED not visible');
+    lines.push('- [ ] No harsh reflection on glossy page');
+    lines.push('- [ ] Shadow acceptable');
+    lines.push('');
+    lines.push('## Documentation');
+    lines.push('- [ ] Measurement log filled');
+    lines.push('- [ ] Next CAD adjustment recorded');
+    lines.push('');
+    lines.push('## Ready / Iterate decision');
+    lines.push('_Only proceed to full build when all critical checks pass. Otherwise iterate CAD and re-print._');
+    return lines.join('\\n');
+  }
+
+  function renderPhysicalTesting() {
+    var lux = buildLuxTestPlan();
+    var luxGrid = dom.luxGrid;
+    while (luxGrid.firstChild) luxGrid.removeChild(luxGrid.firstChild);
+    for (var i = 0; i < lux.points.length; i++) {
+      var pt = lux.points[i];
+      var div = document.createElement('div');
+      div.className = 'measurement-point';
+      div.innerHTML = '<span class="point-id">' + esc(pt.id) + '</span><span class="point-target">' + esc(pt.target) + '</span>';
+      luxGrid.appendChild(div);
+    }
+
+    var heat = buildHeatSoakPlan();
+    var heatPoints = dom.heatPoints;
+    while (heatPoints.firstChild) heatPoints.removeChild(heatPoints.firstChild);
+    for (var j = 0; j < heat.measurement_points.length; j++) {
+      var hp = heat.measurement_points[j];
+      var hdiv = document.createElement('div');
+      hdiv.className = 'heat-point';
+      hdiv.textContent = hp.replace(/_/g, ' ');
+      heatPoints.appendChild(hdiv);
+    }
+
+    var glare = buildGlareReview();
+    var glareChecks = dom.glareChecks;
+    while (glareChecks.firstChild) glareChecks.removeChild(glareChecks.firstChild);
+    for (var k = 0; k < glare.checks.length; k++) {
+      var gc = glare.checks[k];
+      var gdiv = document.createElement('div');
+      gdiv.className = 'glare-check';
+      gdiv.innerHTML = '<span class="check-name">' + esc(gc.name) + '</span><span class="check-target">' + esc(gc.target) + '</span>';
+      glareChecks.appendChild(gdiv);
+    }
+
+    var checklist = buildPrototypeChecklist();
+    var cl = dom.prototypeChecklist;
+    while (cl.firstChild) cl.removeChild(cl.firstChild);
+    var groups = Object.keys(checklist);
+    for (var g = 0; g < groups.length; g++) {
+      var group = checklist[groups[g]];
+      var gdiv = document.createElement('div');
+      gdiv.className = 'checklist-group';
+      var ul = document.createElement('ul');
+      for (var item = 0; item < group.items.length; item++) {
+        var li = document.createElement('li');
+        li.textContent = group.items[item];
+        ul.appendChild(li);
+      }
+      gdiv.innerHTML = '<h4>' + esc(group.label) + '</h4>';
+      gdiv.appendChild(ul);
+      cl.appendChild(gdiv);
+    }
+
+    var report = buildPhysicalReadinessReport();
+    dom.gateValue.textContent = report.readiness_gate;
+    dom.gateValue.className = 'gate-value gate-pending';
+  }
+
+  function downloadTestProtocol() {
+    downloadBlob('test-protocol-idb-6e.md', generateTestProtocolMarkdown(), 'text/markdown');
+  }
+
+  function downloadMeasurementLogCsv() {
+    downloadBlob('measurement-log-idb-6e.csv', generateMeasurementLogCsv(), 'text/csv');
+  }
+
+  function downloadReadinessReportJson() {
+    var report = buildPhysicalReadinessReport();
+    downloadBlob('readiness-report-idb-6e.json', JSON.stringify(report, null, 2), 'application/json');
+  }
+
+  function downloadPrototypeChecklist() {
+    downloadBlob('prototype-checklist-idb-6e.md', generatePrototypeChecklistMarkdown(), 'text/markdown');
   }
 
   // ---------- Color chip handling ----------
@@ -1135,6 +1420,10 @@
     dom.btnDownloadFitTest.addEventListener('click', downloadFitTestScad);
     dom.btnDownloadSlicerProfile.addEventListener('click', downloadSlicerProfile);
     dom.btnDownloadValidationReport.addEventListener('click', downloadValidationReport);
+    dom.btnDownloadTestProtocol.addEventListener('click', downloadTestProtocol);
+    dom.btnDownloadMeasurementLog.addEventListener('click', downloadMeasurementLogCsv);
+    dom.btnDownloadReadinessReport.addEventListener('click', downloadReadinessReportJson);
+    dom.btnDownloadPrototypeChecklist.addEventListener('click', downloadPrototypeChecklist);
   }
 
   // ---------- Init ----------

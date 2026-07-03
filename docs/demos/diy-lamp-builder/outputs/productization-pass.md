@@ -1,3 +1,64 @@
+# IDB-6E Measured Lux / Heat / Glare + Physical Prototype Checklist Pass
+
+## 产品化目标
+
+在 IDB-6D 打印前验证的基础上，把 DIY Lamp Builder 延伸到“第一台实物样机”：
+
+- 新增 Demo 内 **Physical Prototype Testing** 区块（lux · heat · glare · readiness gate）
+- 新增 `outputs/physical-testing/` 目录，包含测试协议、CSV/MD 测量日志、checklist、report template、risk register、sample report
+- 新增 `scripts/validate-physical-test-pack.py` 本地验证脚本（标准库，无外部依赖）
+- 新增 `scripts/evaluate-physical-test-report.py` 样例报告评估脚本
+- 更新 README.md、productization-pass.md、acceptance-checklist.md
+- 同步所有镜像与 Blueprint 文档
+
+## 与 IDB-6D 的差异
+
+| 维度 | IDB-6D | IDB-6E |
+|------|--------|--------|
+| 输出 | 打印前验证包 + 测试件 | 增加第一台物理样机测量工作流 |
+| 测试类型 | 几何/打印/装配检查 | 照度、热稳定、眩光、主观检查 |
+| 数据记录 | fit-test log | 完整测量 CSV + 报告 + checklist |
+| 决策门 | 是否适合打印 | 是否适合全量制造/迭代 CAD |
+
+## Physical Testing 文件说明
+
+| 文件 | 作用 |
+|------|------|
+| `lux-heat-glare-test-protocol.md` | 完整测试协议 |
+| `measurement-log-template.csv` | 实测 CSV 模板 |
+| `measurement-log-template.md` | 人类可读测量日志 |
+| `prototype-readiness-checklist.md` | 样机准备清单 |
+| `physical-readiness-report-template.json` | 报告模板 |
+| `risk-register.md` | 8 项风险与缓解措施 |
+| `sample-physical-test-report.json` | mock 示例报告 |
+| `scripts/validate-physical-test-pack.py` | pack 完整性验证 |
+| `scripts/evaluate-physical-test-report.py` | 样例报告评估 |
+
+## 结构正确性保留
+
+- ReadingCore-01 固定不变，外壳通过 keepout 与其隔离。
+- LED → 铝槽 + 扩散罩 → 外壳 的三层结构不变。
+- 外壳不承担散热。
+- 不新增第 6 个 Blueprint。
+- `meta.total` 保持 5，`meta.version` 保持 4.2，项目版本保持 `v0.1.1-alpha`。
+
+## 限制
+
+- IDB-6E 是**第一台物理样机测量工作流**，不是认证、不是实验室测试、不是电气安全评估。
+- 不包含热仿真、电气认证、结构强度计算或最终量产图纸。
+- 手机 lux app 仅作为趋势参考。
+- 所有建议都需要根据实际测量结果校准。
+
+## 后续真实方向
+
+- 替换 mock 照度/热数据为真实测量数据。
+- 增加真实 ReadingCore-01 工程图纸尺寸。
+- 为 4 种 Shell Style 分别建立完整 SCAD 文件。
+- 增加光照方向与扩散罩光学模拟。
+- 增加采购-ready BOM 与 sourcing 检查清单。
+
+---
+
 # IDB-6D CAD Validation + Print Orientation + Slicer Profile Pass
 
 ## 产品化目标
