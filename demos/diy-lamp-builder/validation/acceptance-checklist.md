@@ -198,3 +198,12 @@
 - [x] updated_phase set to IDB-6E.1 in all synchronized blueprint JSON files.
 - [x] Did not add a 6th Blueprint; meta.total remains 5.
 - [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
+
+## IDB-6E.2 Chinese UI Copy Pass Acceptance
+- [x] Demo App main section titles are Chinese-first.
+- [x] Main controls and buttons are Chinese-first.
+- [x] Product decisions, BOM, assembly workflow, CAD export, print validation, and physical testing panels are Chinese-first.
+- [x] Technical terms may retain short English forms where useful: OpenSCAD, STL, CAD, BOM, JSON, ReadingCore-01.
+- [x] IDB-6C / IDB-6D / IDB-6E functionality remains unchanged.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.

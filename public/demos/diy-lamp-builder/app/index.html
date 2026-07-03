@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Lamp Builder · IDB-6E Physical Testing</title>
+  <title>DIY 可定制阅读台灯构建器 · IDB-6E 实物测试</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,8 +11,8 @@
     <header class="demo-header">
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
       <div class="header-titles">
-        <h1>DIY Lamp Builder</h1>
-        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6E Physical Testing</p>
+        <h1>DIY 可定制阅读台灯构建器</h1>
+        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6E 实物测试</p>
       </div>
       <span class="badge badge-idb">IDB-6E</span>
     </header>
@@ -22,11 +22,11 @@
 
     <main class="demo-main">
 
-      <!-- A. Idea Input -->
+      <!-- A. 想法输入 -->
       <section class="card idea-card" id="idea-section">
         <div class="card-head">
           <span class="step-tag">A</span>
-          <h2>Idea Input</h2>
+          <h2>想法输入</h2>
         </div>
         <p class="card-hint">输一句产品想法，内置轻量规则解析器会自动拆成"固定内核 + 可定制外壳"两层结构。</p>
         <textarea id="idea-input" rows="3" placeholder="例如：北京风格阅读台灯，外壳可定制，适合书桌使用">北京风格阅读台灯，外壳可定制，适合书桌使用</textarea>
@@ -36,46 +36,46 @@
           <button type="button" class="idea-chip" data-idea="极简黑色桌面工作灯">极简黑色桌面工作灯</button>
           <button type="button" class="idea-chip" data-idea="书卷造型床头阅读灯">书卷造型床头阅读灯</button>
         </div>
-        <button id="btn-generate" class="primary-btn">Generate Product Demo</button>
+        <button id="btn-generate" class="primary-btn">生成产品 Demo</button>
       </section>
 
       <!-- B. AI Analyze / Product Architecture -->
       <section class="card analyze-card" id="analyze-section">
         <div class="card-head">
           <span class="step-tag">B</span>
-          <h2>AI Analyze · Product Architecture</h2>
+          <h2>AI 解析 · 产品架构</h2>
         </div>
         <p class="card-hint">解析后的产品决策卡片（Demo 中由轻量规则解析器驱动，非真实 LLM）。</p>
         <div class="arch-grid" id="arch-grid">
           <div class="arch-item">
-            <span class="arch-label">Use Case</span>
-            <span class="arch-value" id="arch-use-case">Reading desk lamp</span>
+            <span class="arch-label">使用场景</span>
+            <span class="arch-value" id="arch-use-case">桌面阅读台灯</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Core Choice</span>
+            <span class="arch-label">灯芯选择</span>
             <span class="arch-value" id="arch-core-choice">
               <span class="locked">🔒 ReadingCore-01</span>
             </span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Brightness Target</span>
+            <span class="arch-label">亮度目标</span>
             <span class="arch-value" id="arch-brightness">500–800 lm</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Color Temperature</span>
-            <span class="arch-value" id="arch-color-temp">Warm 3000K</span>
+            <span class="arch-label">颜色 Temperature</span>
+            <span class="arch-value" id="arch-color-temp">暖白 3000K</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Shell Style</span>
-            <span class="arch-value" id="arch-shell">Hutong Window</span>
+            <span class="arch-label">外壳风格</span>
+            <span class="arch-value" id="arch-shell">胡同窗棂</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Glare Strategy</span>
-            <span class="arch-value" id="arch-glare">Recessed opal diffuser</span>
+            <span class="arch-label">防眩策略</span>
+            <span class="arch-value" id="arch-glare">内缩式乳白扩散罩</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">Estimated Position</span>
-            <span class="arch-value" id="arch-position">Desk, 35–45 cm</span>
+            <span class="arch-label">建议摆放位置</span>
+            <span class="arch-value" id="arch-position">书桌旁，距书页 35–45 cm</span>
           </div>
         </div>
         <div class="arch-note">
@@ -86,54 +86,54 @@
         </div>
       </section>
 
-      <!-- C. Configurator -->
+      <!-- C. 参数配置器 -->
       <section class="card config-card" id="configurator-section">
         <div class="card-head">
           <span class="step-tag">C</span>
-          <h2>Configurator</h2>
+          <h2>参数配置器</h2>
         </div>
         <p class="card-hint">左侧选参数，右侧 SVG 预览实时变化。Core 字段固定不可改。</p>
 
         <div class="config-layout">
           <div class="config-controls">
             <div class="control-group">
-              <label for="cfg-lamp-type">Lamp Type</label>
+              <label for="cfg-lamp-type">灯具类型</label>
               <select id="cfg-lamp-type">
-                <option value="Reading Lamp">Reading Lamp</option>
-                <option value="Ambient Lamp">Ambient Lamp</option>
+                <option value="阅读台灯">阅读台灯</option>
+                <option value="氛围灯">氛围灯</option>
               </select>
             </div>
 
             <div class="control-group">
-              <label for="cfg-shell-style">Shell Style</label>
+              <label for="cfg-shell-style">外壳风格</label>
               <select id="cfg-shell-style">
-                <option value="Minimal Bar">Minimal Bar</option>
-                <option value="Hutong Window">Hutong Window</option>
-                <option value="Beijing Pavilion">Beijing Pavilion</option>
-                <option value="Book Arc">Book Arc</option>
+                <option value="极简长条">极简长条</option>
+                <option value="胡同窗棂">胡同窗棂</option>
+                <option value="北京亭檐">北京亭檐</option>
+                <option value="书卷弧形">书卷弧形</option>
               </select>
             </div>
 
             <div class="control-group">
-              <label>Color</label>
+              <label>颜色</label>
               <div class="color-row" id="color-row">
-                <button type="button" class="color-chip" data-color="Warm White" data-hex="#f5efe6" aria-label="Warm White"></button>
-                <button type="button" class="color-chip" data-color="Hutong Gray" data-hex="#7a7a78" aria-label="Hutong Gray"></button>
-                <button type="button" class="color-chip" data-color="Palace Red" data-hex="#a83232" aria-label="Palace Red"></button>
-                <button type="button" class="color-chip" data-color="Night Black" data-hex="#1c1c1e" aria-label="Night Black"></button>
+                <button type="button" class="color-chip" data-color="暖白" data-hex="#f5efe6" aria-label="暖白"></button>
+                <button type="button" class="color-chip" data-color="胡同灰" data-hex="#7a7a78" aria-label="胡同灰"></button>
+                <button type="button" class="color-chip" data-color="宫墙红" data-hex="#a83232" aria-label="宫墙红"></button>
+                <button type="button" class="color-chip" data-color="夜黑" data-hex="#1c1c1e" aria-label="夜黑"></button>
               </div>
-              <span class="color-name" id="color-name">Warm White</span>
+              <span class="color-name" id="color-name">暖白</span>
             </div>
 
             <div class="control-group">
-              <label for="cfg-engraving">Engraving</label>
+              <label for="cfg-engraving">刻字</label>
               <input type="text" id="cfg-engraving" value="北京之光" maxlength="24">
             </div>
 
             <div class="control-group">
-              <label>Core（固定不可改）</label>
+              <label>固定灯芯（不可修改）</label>
               <input type="text" value="ReadingCore-01" disabled class="locked-input">
-              <small class="locked-hint">🔒 所有款式共享 ReadingCore-01</small>
+              <small class="locked-hint">🔒 所有外壳共用 ReadingCore-01</small>
             </div>
           </div>
 
@@ -163,16 +163,16 @@
               <ellipse id="lamp-base" cx="160" cy="325" rx="46" ry="10" fill="#5a5648"></ellipse>
               <ellipse cx="160" cy="322" rx="38" ry="6" fill="#7a7666"></ellipse>
             </svg>
-            <p class="preview-caption" id="preview-caption">Hutong Window · Warm White · 北京之光</p>
+            <p class="preview-caption" id="preview-caption">胡同窗棂 · 暖白 · 北京之光</p>
           </div>
         </div>
       </section>
 
-      <!-- D. Manufacturing Plan -->
+      <!-- D. 制造计划 -->
       <section class="card mfg-card" id="manufacturing-section">
         <div class="card-head">
           <span class="step-tag">D</span>
-          <h2>Manufacturing Plan</h2>
+          <h2>制造计划</h2>
         </div>
         <p class="card-hint">实时更新的 Manufacturing JSON、BOM 成本估算与装配流程。</p>
 
@@ -180,7 +180,7 @@
           <div class="mfg-json">
             <div class="mfg-json-head">
               <span id="json-filename">manufacturing_plan.json</span>
-              <button type="button" id="btn-copy-json" class="ghost-btn">Copy</button>
+              <button type="button" id="btn-copy-json" class="ghost-btn">复制</button>
             </div>
             <pre id="manufacturing-json"></pre>
           </div>
@@ -188,27 +188,27 @@
           <div class="mfg-side">
             <div class="bom-panel">
               <h3>Idea Parser &amp; BOM Cost Model</h3>
-              <p class="hint" style="font-size:0.85rem;color:var(--text-muted);margin:0 0 10px;">Idea Parser converts keywords into product decisions. BOM updates live with shell and color.</p>
+              <p class="hint" style="font-size:0.85rem;color:var(--text-muted);margin:0 0 10px;">想法解析器会把关键词转换成产品决策；BOM 成本会随外壳和颜色实时变化。</p>
               <div class="bom-summary" id="bom-summary">$58-126 prototype</div>
               <table class="bom-table" id="bom-table">
                 <thead>
-                  <tr><th>Component</th><th>Low</th><th>High</th></tr>
+                  <tr><th>部件</th><th>低估</th><th>高估</th></tr>
                 </thead>
                 <tbody id="bom-tbody"></tbody>
               </table>
             </div>
 
             <div class="mfg-steps">
-              <h3>Assembly Workflow</h3>
+              <h3>装配流程</h3>
               <ol id="assembly-steps">
-                <li><span class="step-status manual">manual</span> Cut 24V high-CRI LED strip to lamp-head length</li>
-                <li><span class="step-status manual">manual</span> Attach LED strip to aluminum channel</li>
-                <li><span class="step-status manual">manual</span> Install opal diffuser</li>
-                <li><span class="step-status prototype-ready">prototype-ready</span> Mount ReadingCore-01 into custom shell</li>
-                <li><span class="step-status manual">manual</span> Attach arm and base</li>
-                <li><span class="step-status prototype-ready">prototype-ready</span> Run 30-min heat check</li>
-                <li><span class="step-status prototype-ready">prototype-ready</span> Run glare check at 35-45 cm reading distance</li>
-                <li><span class="step-status future-automation">future-automation</span> Save configuration JSON as prototype spec</li>
+                <li><span class="step-status 手动">手动</span> 按灯头长度裁剪 24V 高显色 LED 灯带</li>
+                <li><span class="step-status 手动">手动</span> 将 LED 灯带贴到铝槽/铝型材上</li>
+                <li><span class="step-status 手动">手动</span> 安装乳白扩散罩</li>
+                <li><span class="step-status 样机可用">样机可用</span> 把 ReadingCore-01 装入定制外壳</li>
+                <li><span class="step-status 手动">手动</span> 安装支臂和底座</li>
+                <li><span class="step-status 样机可用">样机可用</span> 进行 30 分钟发热检查</li>
+                <li><span class="step-status 样机可用">样机可用</span> 在 35–45 cm 阅读距离做眩光检查</li>
+                <li><span class="step-status 未来自动化">未来自动化</span> 保存配置 JSON 作为样机规格</li>
               </ol>
             </div>
 
@@ -219,11 +219,11 @@
         </div>
       </section>
 
-      <!-- E. CAD Export -->
+      <!-- E. CAD 导出 -->
       <section class="card cad-card" id="cad-section">
         <div class="card-head">
           <span class="step-tag">E</span>
-          <h2>CAD Export</h2>
+          <h2>CAD 导出</h2>
         </div>
         <p class="card-hint">受控生成 OpenSCAD 外壳源码，包含 ReadingCore-01 内核保护区与结构安装位。可直接下载 .scad 或配置 JSON。</p>
 
@@ -231,22 +231,22 @@
           <div class="cad-source">
             <div class="cad-code-head">
               <span id="cad-filename">shell_export.scad</span>
-              <button type="button" id="btn-copy-openscad" class="ghost-btn">Copy OpenSCAD</button>
+              <button type="button" id="btn-copy-openscad" class="ghost-btn">复制 OpenSCAD</button>
             </div>
             <pre id="cad-openscad" aria-label="OpenSCAD source code"></pre>
           </div>
 
           <div class="cad-side">
             <div class="cad-actions">
-              <button type="button" id="btn-download-scad" class="primary-btn">Download .scad</button>
-              <button type="button" id="btn-download-config" class="secondary-btn">Download Config JSON</button>
+              <button type="button" id="btn-download-scad" class="primary-btn">下载 .scad</button>
+              <button type="button" id="btn-download-config" class="secondary-btn">下载配置 JSON</button>
             </div>
 
             <div class="cad-param-table">
-              <h3>CAD Parameters</h3>
+              <h3>CAD 参数</h3>
               <table>
                 <thead>
-                  <tr><th>Parameter</th><th>Value</th></tr>
+                  <tr><th>参数</th><th>数值</th></tr>
                 </thead>
                 <tbody id="cad-param-tbody"></tbody>
               </table>
@@ -258,7 +258,7 @@
               需使用 OpenSCAD 2021+ 的 <code>render()</code> 或导出 STL 后进一步处理。
             </p>
             <p class="cad-note" style="margin-top:10px;">
-              <strong>Optional STL Export：</strong>
+              <strong>可选 STL 导出：</strong>
               <code>openscad -o shell_export.stl shell_export.scad</code>
               <br>请在本地安装 OpenSCAD CLI 后运行，得到 3D 打印可用的 STL 文件。
             </p>
@@ -266,52 +266,52 @@
         </div>
       </section>
 
-      <!-- F. Print Validation -->
+      <!-- F. 打印验证 -->
       <section class="card print-validation-card" id="print-validation-section">
         <div class="card-head">
           <span class="step-tag">F</span>
-          <h2>Print Validation</h2>
+          <h2>打印验证</h2>
         </div>
-        <p class="card-hint">CAD validation · print orientation · slicer profile</p>
+        <p class="card-hint">CAD 检查 · 打印方向 · 切片参数</p>
 
         <div class="validation-grid">
           <div class="validation-card" id="cad-validation-card">
-            <h3>CAD Validation</h3>
+            <h3>CAD 检查</h3>
             <ul class="check-list" id="cad-validation-list"></ul>
             <div class="risk-row">
-              <span class="risk-label">Risk level:</span>
+              <span class="risk-label">风险等级:</span>
               <span class="risk-value" id="cad-risk-level">medium</span>
             </div>
             <div class="risk-row">
-              <span class="risk-label">Next test:</span>
-              <span class="risk-value" id="cad-next-test">Print fit-test coupon before full shell</span>
+              <span class="risk-label">下一步测试:</span>
+              <span class="risk-value" id="cad-next-test">先打印装配测试件，再打印完整外壳</span>
             </div>
           </div>
 
           <div class="validation-card orientation-card" id="print-orientation-card">
-            <h3>Print Orientation</h3>
+            <h3>打印方向</h3>
             <div class="orientation-body" id="print-orientation-body"></div>
           </div>
 
           <div class="validation-card slicer-card" id="slicer-profile-card">
-            <h3>Slicer Profile</h3>
+            <h3>切片参数</h3>
             <div class="slicer-body" id="slicer-profile-body"></div>
           </div>
 
           <div class="validation-card coupon-card" id="fit-test-coupon-card">
-            <h3>Fit-Test Coupon</h3>
-            <p class="card-hint" style="margin-top:0;">Print a small coupon before committing to the full shell to validate M3 holes, diffuser slot, and cable exit.</p>
+            <h3>装配测试件</h3>
+            <p class="card-hint" style="margin-top:0;">打印完整外壳前，先打印一个小测试件，用来验证 M3 孔、扩散罩槽和线缆出口。</p>
             <ul class="coupon-list">
-              <li>M3 hole ladder: 3.0 / 3.2 / 3.4 mm</li>
-              <li>Diffuser slot ladder: 17.8 / 18.0 / 18.2 / 18.4 mm</li>
-              <li>Aluminum channel clearance test</li>
-              <li>Cable exit radius test</li>
-              <li>Small engraving text sample</li>
+              <li>M3 孔径阶梯: 3.0 / 3.2 / 3.4 mm</li>
+              <li>扩散罩槽宽阶梯: 17.8 / 18.0 / 18.2 / 18.4 mm</li>
+              <li>铝槽间隙测试</li>
+              <li>线缆出口半径测试</li>
+              <li>小尺寸刻字样本</li>
             </ul>
             <div class="cad-actions" style="margin-top:12px;">
-              <button type="button" id="btn-download-fit-test" class="primary-btn">Download Fit-Test .scad</button>
-              <button type="button" id="btn-download-slicer-profile" class="secondary-btn">Download Slicer Profile</button>
-              <button type="button" id="btn-download-validation-report" class="secondary-btn">Download Validation Report JSON</button>
+              <button type="button" id="btn-download-fit-test" class="primary-btn">下载装配测试件 .scad</button>
+              <button type="button" id="btn-download-slicer-profile" class="secondary-btn">下载切片参数</button>
+              <button type="button" id="btn-download-validation-report" class="secondary-btn">下载验证报告 JSON</button>
             </div>
           </div>
         </div>
@@ -321,27 +321,27 @@
         </p>
       </section>
 
-      <!-- G. Physical Prototype Testing -->
+      <!-- G. 实体样机测试 -->
       <section class="card physical-testing-card" id="physical-testing-section">
         <div class="card-head">
           <span class="step-tag">G</span>
-          <h2>Physical Prototype Testing</h2>
+          <h2>实体样机测试</h2>
         </div>
-        <p class="card-hint">measured lux · heat soak · glare review · readiness gate</p>
+        <p class="card-hint">照度实测 · 热稳定测试 · 眩光评估 · 样机就绪判断</p>
 
         <div class="physical-grid">
           <div class="test-card lux-card" id="lux-test-card">
-            <h3>Lux Test Grid</h3>
+            <h3>照度网格测试</h3>
             <div class="metric-row">
-              <span class="metric-label">Use case</span>
+              <span class="metric-label">使用场景</span>
               <span class="metric-value">reading desk lamp</span>
             </div>
             <div class="metric-row">
-              <span class="metric-label">Target distance</span>
+              <span class="metric-label">目标距离</span>
               <span class="metric-value">35–45 cm</span>
             </div>
             <div class="metric-row">
-              <span class="metric-label">Desk illuminance</span>
+              <span class="metric-label">桌面照度</span>
               <span class="metric-value">300–500 lux at reading zone</span>
             </div>
             <div class="lux-grid" id="lux-grid"></div>
@@ -354,13 +354,13 @@
           </div>
 
           <div class="test-card heat-card" id="heat-soak-card">
-            <h3>Heat Soak Test</h3>
+            <h3>热稳定测试</h3>
             <div class="metric-row">
-              <span class="metric-label">First pass</span>
+              <span class="metric-label">首轮测试</span>
               <span class="metric-value">30 minutes</span>
             </div>
             <div class="metric-row">
-              <span class="metric-label">Extended pass</span>
+              <span class="metric-label">延长测试</span>
               <span class="metric-value">60 minutes</span>
             </div>
             <div class="heat-points" id="heat-points"></div>
@@ -373,8 +373,8 @@
           </div>
 
           <div class="test-card glare-card" id="glare-review-card">
-            <h3>Glare Review</h3>
-            <p class="card-hint" style="margin-top:0;">Check from normal seated reading posture at 35–45 cm from the book.</p>
+            <h3>眩光评估</h3>
+            <p class="card-hint" style="margin-top:0;">以正常坐姿阅读，从距离书本 35–45 cm 的位置检查。</p>
             <div class="glare-checks" id="glare-checks"></div>
             <div class="pass-rule" id="glare-pass-rule">
               Direct LED should not be visible; diffuser recessed; no harsh reflection or shadow.
@@ -382,28 +382,28 @@
           </div>
 
           <div class="test-card checklist-card" id="prototype-checklist-card">
-            <h3>Prototype Readiness Checklist</h3>
+            <h3>样机就绪检查清单</h3>
             <div class="prototype-checklist" id="prototype-checklist"></div>
             <div class="readiness-gate" id="readiness-gate">
-              <span class="gate-label">Readiness gate:</span>
-              <span class="gate-value gate-pending" id="gate-value">PENDING_PHYSICAL_TESTS</span>
+              <span class="gate-label">就绪判断:</span>
+              <span class="gate-value gate-pending" id="gate-value">等待实物测试</span>
             </div>
           </div>
 
           <div class="test-card download-card" id="physical-downloads-card">
-            <h3>Downloads</h3>
+            <h3>下载</h3>
             <p class="card-hint" style="margin-top:0;">Export test protocols, measurement logs, and readiness reports for your first physical build.</p>
             <div class="cad-actions" style="margin-top:12px;flex-direction:column;align-items:flex-start;gap:10px;">
-              <button type="button" id="btn-download-test-protocol" class="primary-btn">Download Test Protocol.md</button>
-              <button type="button" id="btn-download-measurement-log" class="secondary-btn">Download Measurement Log CSV</button>
-              <button type="button" id="btn-download-readiness-report" class="secondary-btn">Download Readiness Report JSON</button>
-              <button type="button" id="btn-download-prototype-checklist" class="secondary-btn">Download Prototype Checklist.md</button>
+              <button type="button" id="btn-download-test-protocol" class="primary-btn">下载测试协议.md</button>
+              <button type="button" id="btn-download-measurement-log" class="secondary-btn">下载测量记录 CSV</button>
+              <button type="button" id="btn-download-readiness-report" class="secondary-btn">下载就绪报告 JSON</button>
+              <button type="button" id="btn-download-prototype-checklist" class="secondary-btn">下载样机检查清单.md</button>
             </div>
           </div>
         </div>
 
         <p class="cad-note" style="margin-top:16px;">
-          <strong>First physical prototype only:</strong> this is not a certified photometric, thermal, or electrical safety test. Record measurements, decide if the shell/CAD/diffuser needs iteration, and only proceed to a full build when the readiness gate is satisfied.
+          <strong>First physical prototype only:</strong> this is not a certified photometric, thermal, or electrical safety test. 记录测量结果，判断外壳、CAD 或扩散罩是否需要迭代；只有通过就绪判断后再进入完整打样。
         </p>
       </section>
 
@@ -411,7 +411,7 @@
 
     <footer class="demo-footer">
       <p>
-        <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
+        <a href="../../blueprints/diy-lamp-builder.html">DIY 可定制阅读台灯构建器 Blueprint</a>
         · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6E · MIT
       </p>
     </footer>
