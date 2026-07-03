@@ -273,3 +273,13 @@
 - [x] First-build validation script PASS.
 - [x] First-build report evaluator PASS.
 - [x] No 6th Blueprint added; meta.total remains 5.
+
+## IDB-6H.1 Pages Refresh / Blueprint Sync Acceptance
+
+- [x] Source contains IDB-6G sourcing section.
+- [x] Source contains IDB-6H first-build section.
+- [x] Docs/public publishing files include IDB-6H.1-pages-refresh-193135b build marker.
+- [x] updated_phase set to IDB-6H.1 in all synchronized blueprint JSON files.
+- [x] Demo App functionality remains unchanged.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
