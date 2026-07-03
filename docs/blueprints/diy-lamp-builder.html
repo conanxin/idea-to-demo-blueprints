@@ -6,7 +6,7 @@
   <title>DIY 可定制阅读台灯构建器 · Idea-to-Demo Blueprints</title>
   <link rel="stylesheet" href="../style.css">
 </head>
-<body data-build-marker="IDB-6H.2-first-build-section-reconcile" data-build-marker="IDB-6H.1-pages-refresh-193135b">
+<body data-build-marker="IDB-6I-compiler-abstraction" data-build-marker="IDB-6I-first-build-section-reconcile" data-build-marker="IDB-6H.1-pages-refresh-193135b">
   <header class="site-header">
     <div class="container">
       <a href="../index.html" class="logo">Idea-to-Demo <span>Blueprints</span></a>
@@ -174,12 +174,30 @@
         <h2>边界与免责</h2>
         <p>这是一个 maker prototype 教育 Demo，不是认证产品、电气安全审查、光学认证或生产采购建议。任何真实装配请自行评估风险，并在低压、有保护的条件下进行。</p>
       </section>
-    </div>
+    
+      <section class="section">
+        <h2 id="idb-6i">IDB-6I Idea-to-Physical-Product Compiler Pass</h2>
+        <p>IDB-6I 把 DIY Lamp Builder 从单一灯具 demo 抽象成通用实体产品编译器模式。它定义了固定功能内核 + 可变外壳的结构、编译器 schema、复用 agent prompt、产品类型迁移矩阵和下一个 demo 候选。</p>
+        <table>
+          <thead><tr><th>交付物</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>idea-to-physical-product-compiler.md</td><td>编译器定义和核心规则。</td></tr>
+            <tr><td>compiler-schema.json</td><td>编译器输入输出 schema。</td></tr>
+            <tr><td>fixed-core-vs-variable-shell-pattern.md</td><td>固定核心与可变外壳的分离模式。</td></tr>
+            <tr><td>product-type-adaptation-matrix.md</td><td>不同产品类型的适配矩阵与风险。</td></tr>
+            <tr><td>reusable-agent-prompt.md</td><td>复用 prompt，用于编译新产品想法。</td></tr>
+            <tr><td>next-product-candidates.md</td><td>下一个产品候选和推荐顺序。</td></tr>
+          </tbody>
+        </table>
+        <p><strong>边界：</strong>IDB-6I 是方法抽象和原型模式，不是认证、量产平台或生产级制造系统。</p>
+      </section>
+
+</div>
   </div>
 
   <footer class="site-footer">
     <div class="container">
-      <p>Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6H.2</p>
+      <p>Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6I</p>
     </div>
   </footer>
 </body>

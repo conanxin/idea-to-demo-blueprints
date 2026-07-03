@@ -1,0 +1,63 @@
+{
+  "phase": "IDB-6I",
+  "schema_name": "idea_to_physical_product_compiler",
+  "version": "0.1",
+  "not_certification": true,
+  "pipeline": [
+    "idea_input",
+    "intent_parse",
+    "fixed_core_selection",
+    "variable_shell_configuration",
+    "visual_preview",
+    "cad_export",
+    "print_validation",
+    "physical_testing",
+    "build_package",
+    "sourcing_pack",
+    "first_build_runbook",
+    "iteration_decision"
+  ],
+  "compiled_product": {
+    "idea": {
+      "raw_text": "",
+      "use_case": "",
+      "user_constraints": []
+    },
+    "fixed_core": {
+      "name": "",
+      "locked": true,
+      "risk_boundary": "",
+      "interfaces": []
+    },
+    "variable_shell": {
+      "style": "",
+      "material": "",
+      "color": "",
+      "custom_fields": []
+    },
+    "configuration": {
+      "schema_version": "0.1",
+      "parameters": {}
+    },
+    "cad_export": {
+      "format": "OpenSCAD",
+      "scope": "shell mock only",
+      "keepout_included": true
+    },
+    "validation": {
+      "fit_test": [],
+      "print_orientation": "",
+      "slicer_profile": "",
+      "physical_tests": []
+    },
+    "build_package": {
+      "bom": [],
+      "sourcing_keywords": [],
+      "assembly_steps": []
+    },
+    "readiness_gate": {
+      "status": "PENDING",
+      "next_iteration": ""
+    }
+  }
+}

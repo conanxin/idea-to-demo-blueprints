@@ -283,3 +283,15 @@
 - [x] Demo App functionality remains unchanged.
 - [x] No 6th Blueprint added; meta.total remains 5.
 - [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
+
+## IDB-6I Compiler Abstraction Acceptance
+
+- [x] `outputs/compiler/` directory added.
+- [x] Idea-to-Physical-Product compiler explanation added.
+- [x] Compiler schema JSON added.
+- [x] Fixed Core / Variable Shell pattern added.
+- [x] Product adaptation matrix added.
+- [x] Reusable agent prompt added.
+- [x] Next product candidates added.
+- [x] Compiler validation script PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.

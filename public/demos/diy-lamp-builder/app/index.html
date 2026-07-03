@@ -6,7 +6,7 @@
   <title>DIY 可定制阅读台灯构建器 · IDB-6E 实物测试</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-build-marker="IDB-6H.2-first-build-section-reconcile" data-build-marker="IDB-6H.1-pages-refresh-193135b" data-ui-pass="IDB-6E.5-code-aware-chinese-ui">
+<body data-build-marker="IDB-6I-compiler-abstraction" data-build-marker="IDB-6H.2-first-build-section-reconcile" data-build-marker="IDB-6H.1-pages-refresh-193135b" data-ui-pass="IDB-6E.5-code-aware-chinese-ui">
   <div class="demo-app">
     <header class="demo-header">
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
@@ -547,12 +547,50 @@
   <p class="measurement-note">IDB-6H 是首台样机 build workflow，不是认证、质检或量产 SOP。它的目标是把第一轮实物结果记录清楚，帮助下一轮迭代。</p>
 </section>
 
+
+<section class="panel compiler-card" id="compiler-abstraction">
+  <div class="panel-header">
+    <span class="section-kicker">K. Idea-to-Physical-Product Compiler</span>
+    <h2>从灯具 Demo 抽象成实体产品编译器</h2>
+    <p>把 DIY Lamp Builder 提炼成一个可复用的模式：固定功能内核 + 可变外壳，把风险锁死在核心，让用户自由表达外观和文化。</p>
+  </div>
+
+  <div class="physical-grid">
+    <div class="test-card">
+      <h3>Compiler Pipeline</h3>
+      <p>Idea → Fixed Core → Variable Shell → Configurator → CAD → Print → Test → Build → Sourcing → First Build</p>
+    </div>
+
+    <div class="test-card">
+      <h3>Fixed Core / Variable Shell</h3>
+      <p>风险高的功能内核保持固定；用户主要定制外壳、样式、颜色、纹样、刻字和场景表达。</p>
+    </div>
+
+    <div class="test-card">
+      <h3>可迁移产品</h3>
+      <p>城市夜灯、香薰灯外壳、桌面收纳、牙签盒、小音箱外壳、展示支架等，都能复用同一结构。</p>
+    </div>
+
+    <div class="test-card">
+      <h3>Downloads</h3>
+      <div class="download-row">
+        <a class="button secondary" href="../outputs/compiler/idea-to-physical-product-compiler.md" download>下载 Compiler 说明.md</a>
+        <a class="button secondary" href="../outputs/compiler/compiler-schema.json" download>下载 Compiler Schema.json</a>
+        <a class="button secondary" href="../outputs/compiler/reusable-agent-prompt.md" download>下载 Agent Prompt.md</a>
+        <a class="button secondary" href="../outputs/compiler/next-product-candidates.md" download>下载下一个产品候选.md</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="measurement-note">IDB-6I 是通用方法抽象，不是认证、量产或平台化保证。下一个实体产品 demo 将验证这个编译器是否可迁移。</p>
+</section>
+
 </main>
 
     <footer class="demo-footer">
       <p>
         <a href="../../blueprints/diy-lamp-builder.html">DIY 可定制阅读台灯构建器 Blueprint</a>
-        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6H.2 · MIT
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6I · MIT
       </p>
     </footer>
   </div>

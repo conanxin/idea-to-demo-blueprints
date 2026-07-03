@@ -1,0 +1,41 @@
+{
+  "phase": "IDB-6I",
+  "compiled_product": {
+    "idea": {
+      "raw_text": "北京风格阅读台灯，外壳可定制，适合书桌使用",
+      "use_case": "desktop reading lamp",
+      "constraints": ["low voltage", "reading distance 35-45cm", "customizable shell"]
+    },
+    "fixed_core": {
+      "name": "ReadingCore-01",
+      "locked": true,
+      "risk_boundary": "24V linear LED cassette with aluminum channel and opal diffuser",
+      "interfaces": ["M3 mount", "diffuser slot", "cable exit", "keepout volume"]
+    },
+    "variable_shell": {
+      "style": "Hutong Window",
+      "material": "PETG",
+      "color": "Warm White",
+      "custom_fields": ["engraving", "shell style", "color"]
+    },
+    "cad_export": {
+      "format": "OpenSCAD",
+      "scope": "custom shell mock only",
+      "keepout_included": true
+    },
+    "validation": {
+      "fit_test": ["M3 holes", "diffuser slot", "cable exit"],
+      "print_validation": ["orientation", "slicer profile", "fit-test coupon"],
+      "physical_tests": ["lux grid", "heat soak", "glare review"]
+    },
+    "build_package": {
+      "bom": ["LED strip", "aluminum channel", "diffuser", "24V adapter", "dimmer", "M3 hardware", "PETG"],
+      "sourcing_keywords": ["24V high CRI COB LED strip", "LED aluminum channel opal diffuser"],
+      "assembly_steps": ["print coupon", "print shell", "assemble cassette", "test prototype"]
+    },
+    "readiness_gate": {
+      "status": "PENDING_FIRST_BUILD",
+      "next_iteration": "collect first-build report"
+    }
+  }
+}
