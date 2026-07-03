@@ -138,3 +138,12 @@
 - [ ] `docs/demos/diy-lamp-builder/` 镜像包含上述更新
 - [ ] `public/demos/diy-lamp-builder/` 镜像包含上述更新
 - [ ] 未引入新的外部依赖（OpenSCAD 为可选，脚本不强制安装）
+
+## IDB-6C.1 Pages Demo Refresh Fix Acceptance
+
+- [x] Demo app is already IDB-6C and contains CAD Export.
+- [x] Redirect / entry page title synchronized to IDB-6C CAD Export.
+- [x] Added IDB-6C.1-pages-refresh build marker to entry pages.
+- [x] updated_phase set to IDB-6C.1 in all three synchronized blueprint JSON files.
+- [x] Did not add a 6th Blueprint; meta.total remains 5.
+- [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
