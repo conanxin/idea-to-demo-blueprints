@@ -217,3 +217,12 @@
 - [x] IDB-6C / IDB-6D / IDB-6E functionality remains unchanged.
 - [x] No 6th Blueprint added; meta.total remains 5.
 - [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
+
+## IDB-6E.4 JS Runtime Repair Acceptance
+
+- [x] Restored app.js mirrors from known-good IDB-6E.1 runtime.
+- [x] Added JS localization integrity guard to catch unsafe code-level translations.
+- [x] Verified corrupted fragments such as workf低, 高light, color温度, cable_出口, 低: and 高: are absent.
+- [x] Preserved CAD export, print validation, and physical testing functions.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.

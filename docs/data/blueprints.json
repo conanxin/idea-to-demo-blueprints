@@ -172,7 +172,7 @@
       "title": "DIY 可定制阅读台灯构建器",
       "title_en": "DIY Lamp Builder",
       "slug": "diy-lamp-builder",
-      "summary": "把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON、BOM 成本模型与制造计划。IDB-6B 增加产品化流程：Idea Parser、动态 BOM、4 种 Shell 视觉差异化、8 步 Assembly Workflow。IDB-6B.1 polish fixes synchronized copy, dynamic BOM wording, and optional browser-smoke documentation. IDB-6B.2 mirror fix removed stale Blueprint copy from docs/public pages. IDB-6C adds OpenSCAD CAD export demo pack with keepout geometry, sample Hutong Window shell, config file, and optional STL export script. IDB-6C.1 synchronized the Pages redirect entry and cache marker with the CAD Export demo. IDB-6D adds CAD validation, print orientation, slicer profile, fit-test coupon, and measured fit logs. IDB-6E adds measured lux, heat soak, glare review, physical prototype checklist, and readiness gates. IDB-6E.1 removes a duplicate Blueprint section while preserving the IDB-6E physical testing workflow. IDB-6E.2 localizes the Demo App UI copy to Chinese-first while preserving all IDB-6E functionality. IDB-6E.3 completes remaining Chinese-first UI copy for the Demo App.",
+      "summary": "把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON、BOM 成本模型与制造计划。IDB-6B 增加产品化流程：Idea Parser、动态 BOM、4 种 Shell 视觉差异化、8 步 Assembly Workflow。IDB-6B.1 polish fixes synchronized copy, dynamic BOM wording, and optional browser-smoke documentation. IDB-6B.2 mirror fix removed stale Blueprint copy from docs/public pages. IDB-6C adds OpenSCAD CAD export demo pack with keepout geometry, sample Hutong Window shell, config file, and optional STL export script. IDB-6C.1 synchronized the Pages redirect entry and cache marker with the CAD Export demo. IDB-6D adds CAD validation, print orientation, slicer profile, fit-test coupon, and measured fit logs. IDB-6E adds measured lux, heat soak, glare review, physical prototype checklist, and readiness gates. IDB-6E.1 removes a duplicate Blueprint section while preserving the IDB-6E physical testing workflow. IDB-6E.2 localizes the Demo App UI copy to Chinese-first while preserving all IDB-6E functionality. IDB-6E.3 completes remaining Chinese-first UI copy for the Demo App. IDB-6E.4 repairs JavaScript runtime after unsafe localization substitutions and adds a localization integrity guard.",
       "category": "Physical Product / AI Workflow / Configurator",
       "difficulty": "中等",
       "difficulty_en": "Medium",
@@ -220,7 +220,9 @@
         "Readiness Gate",
         "Cleanup",
         "Chinese UI",
-        "Chinese UI Complete"
+        "Chinese UI Complete",
+        "Runtime Repair",
+        "Localization Guard"
       ],
       "status": "demo-ready",
       "created_at": "2026-07-03",
@@ -230,7 +232,7 @@
       "demo_pack_path": "demos/diy-lamp-builder/",
       "md_url": "docs/diy-lamp-builder.md",
       "created_phase": "IDB-6",
-      "updated_phase": "IDB-6E.3"
+      "updated_phase": "IDB-6E.4"
     }
   ],
   "meta": {
