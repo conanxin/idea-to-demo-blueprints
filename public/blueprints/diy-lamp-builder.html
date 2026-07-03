@@ -394,75 +394,7 @@ demos/diy-lamp-builder/
           <h3>Readiness Gate</h3>
           <p>样机决策门：<code>PENDING_PHYSICAL_TESTS</code> → <code>READY_FOR_FULL_BUILD</code> / <code>ITERATE_BEFORE_FULL_BUILD</code>。</p>
 
-          <h2 id="idb-6e">IDB-6E Physical Testing Pass</h2>
-          <p>本阶段在 IDB-6D Print Validation 之后把验证推进到“第一台实物样机”：增加可执行的照度测试（lux grid）、热稳定测试（heat soak）、眩光检查（glare review）、样机装配清单和数据记录模板。它不是认证或实验室测试，而是给第一次物理 build 一个结构化的决策流程。</p>
-
-          <h3>数据流</h3>
-          <pre><code>Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Physical Prototype → Lux Grid → Heat Soak → Glare Review → Readiness Gate</code></pre>
-
-          <h3>Lux Grid</h3>
-          <table>
-            <thead><tr><th>测量点</th><th>目标值</th><th>备注</th></tr></thead>
-            <tbody>
-              <tr><td>Center</td><td>≥ 300 lux</td><td>阅读面中心</td></tr>
-              <tr><td>Left page</td><td>≥ 200 lux</td><td>左侧书页</td></tr>
-              <tr><td>Right page</td><td>≥ 200 lux</td><td>右侧书页</td></tr>
-              <tr><td>Front edge</td><td>trend only</td><td>前边缘</td></tr>
-              <tr><td>Back edge</td><td>trend only</td><td>后边缘</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Heat Soak</h3>
-          <table>
-            <thead><tr><th>阶段</th><th>时长</th><th>通过标准</th></tr></thead>
-            <tbody>
-              <tr><td>First pass</td><td>30 min</td><td>记录 5 点温度/触感</td></tr>
-              <tr><td>Extended</td><td>60 min</td><td>无软化、翘曲、异味、变色</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Glare Review</h3>
-          <table>
-            <thead><tr><th>检查项</th><th>目标</th></tr></thead>
-            <tbody>
-              <tr><td>Direct LED visibility</td><td>not visible</td></tr>
-              <tr><td>Diffuser recess</td><td>recessed or shielded</td></tr>
-              <tr><td>Paper hot spot</td><td>no sharp hot spot</td></tr>
-              <tr><td>Reflection</td><td>no harsh glare</td></tr>
-              <tr><td>Shadow</td><td>acceptable</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Prototype Checklist</h3>
-          <table>
-            <thead><tr><th>分组</th><th>关键项</th></tr></thead>
-            <tbody>
-              <tr><td>Electrical boundary</td><td>低压适配器、无裸露导体、strain relief</td></tr>
-              <tr><td>Mechanical fit</td><td>ReadingCore-01 装入、M3 配合、扩散罩顺畅、底座稳定</td></tr>
-              <tr><td>Print quality</td><td>无翘曲、安装孔无层裂、无毛刺</td></tr>
-              <tr><td>Measurement completion</td><td>lux / heat / glare 完成</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Risk Register</h3>
-          <table>
-            <thead><tr><th>风险</th><th>症状</th><th>缓解</th></tr></thead>
-            <tbody>
-              <tr><td>Heat buildup</td><td>外壳过热、发软、变色</td><td>加壁厚、通风、PETG、降低功率</td></tr>
-              <tr><td>Glare / direct LED</td><td>可见 LED 点光源、刺眼</td><td>扩散罩内缩、加遮光沿</td></tr>
-              <tr><td>Poor diffuser fit</td><td>扩散罩松/紧/掉</td><td>fit-test coupon 校准 ±0.2 mm</td></tr>
-              <tr><td>Cable strain</td><td>线缆拉扯、断裂</td><td>加大出口半径、加 cable tie anchor</td></tr>
-              <tr><td>Base instability</td><td>灯易倾倒</td><td>加底座、加重、降低重心</td></tr>
-              <tr><td>Print warping</td><td>翘角、底面不平</td><td>brim、热床、封闭仓、PETG</td></tr>
-              <tr><td>Engraving too small</td><td>刻字糊掉</td><td>加大字号、0.2 mm 层高</td></tr>
-              <tr><td>Material softening</td><td>近 LED 处变形</td><td>换 PETG、改善铝槽接触</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Readiness Gate</h3>
-          <p>样机决策门：<code>PENDING_PHYSICAL_TESTS</code> → <code>READY_FOR_FULL_BUILD</code> / <code>ITERATE_BEFORE_FULL_BUILD</code>。</p>
-
-          <h2 id="idb-6d">IDB-6D Print Validation Pass</h2>
+<h2 id="idb-6d">IDB-6D Print Validation Pass</h2>
           <p>本阶段在 IDB-6C CAD Export 之后增加“第一轮 FDM 打样前验证包”：CAD validation、打印方向、切片配置、fit-test coupon、测量日志。它不是工程合格认证，而是让 DIY 台灯在真实打印前有一个结构化的检查清单。</p>
 
           <h3>新增数据链路</h3>
