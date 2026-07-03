@@ -39,7 +39,7 @@
         <button id="btn-generate" class="primary-btn">生成产品 Demo</button>
       </section>
 
-      <!-- B. AI Analyze / Product Architecture -->
+      <!-- B. AI 解析 / 产品架构 -->
       <section class="card analyze-card" id="analyze-section">
         <div class="card-head">
           <span class="step-tag">B</span>
@@ -62,7 +62,7 @@
             <span class="arch-value" id="arch-brightness">500–800 lm</span>
           </div>
           <div class="arch-item">
-            <span class="arch-label">颜色 Temperature</span>
+            <span class="arch-label">色温</span>
             <span class="arch-value" id="arch-color-temp">暖白 3000K</span>
           </div>
           <div class="arch-item">
@@ -174,7 +174,7 @@
           <span class="step-tag">D</span>
           <h2>制造计划</h2>
         </div>
-        <p class="card-hint">实时更新的 Manufacturing JSON、BOM 成本估算与装配流程。</p>
+        <p class="card-hint">实时更新的 制造 JSON、BOM 成本估算与装配流程。</p>
 
         <div class="mfg-layout">
           <div class="mfg-json">
@@ -189,7 +189,7 @@
             <div class="bom-panel">
               <h3>Idea Parser &amp; BOM Cost Model</h3>
               <p class="hint" style="font-size:0.85rem;color:var(--text-muted);margin:0 0 10px;">想法解析器会把关键词转换成产品决策；BOM 成本会随外壳和颜色实时变化。</p>
-              <div class="bom-summary" id="bom-summary">$58-126 prototype</div>
+              <div class="bom-summary" id="bom-summary">$58-126 样机估算</div>
               <table class="bom-table" id="bom-table">
                 <thead>
                   <tr><th>部件</th><th>低估</th><th>高估</th></tr>
@@ -280,7 +280,7 @@
             <ul class="check-list" id="cad-validation-list"></ul>
             <div class="risk-row">
               <span class="risk-label">风险等级:</span>
-              <span class="risk-value" id="cad-risk-level">medium</span>
+              <span class="risk-value" id="cad-risk-level">中等</span>
             </div>
             <div class="risk-row">
               <span class="risk-label">下一步测试:</span>
@@ -317,7 +317,7 @@
         </div>
 
         <p class="cad-note" style="margin-top:16px;">
-          <strong>First-prototype validation only:</strong> this is not engineering certification, thermal simulation, or electrical approval. Print the fit-test coupon, measure the critical features, and decide whether to adjust the shell before the full build.
+          <strong>仅用于第一轮样机验证：</strong>这不是工程认证、热仿真或电气安全审批。请先打印装配测试件，测量关键尺寸，再决定是否调整外壳后打印完整版本。
         </p>
       </section>
 
@@ -334,7 +334,7 @@
             <h3>照度网格测试</h3>
             <div class="metric-row">
               <span class="metric-label">使用场景</span>
-              <span class="metric-value">reading desk lamp</span>
+              <span class="metric-value">桌面阅读台灯</span>
             </div>
             <div class="metric-row">
               <span class="metric-label">目标距离</span>
@@ -346,10 +346,10 @@
             </div>
             <div class="lux-grid" id="lux-grid"></div>
             <div class="pass-rule" id="lux-pass-rule">
-              Center ≥ 300 lux; no reading-zone point below 200 lux.
+              中心点 ≥ 300 lux；阅读区域任一点不低于 200 lux。
             </div>
             <div class="measurement-note">
-              Lux meter preferred; phone lux app acceptable for trend-only prototype checks.
+              优先使用照度计；手机照度 App 仅适合样机趋势参考。
             </div>
           </div>
 
@@ -357,18 +357,18 @@
             <h3>热稳定测试</h3>
             <div class="metric-row">
               <span class="metric-label">首轮测试</span>
-              <span class="metric-value">30 minutes</span>
+              <span class="metric-value">30 分钟</span>
             </div>
             <div class="metric-row">
               <span class="metric-label">延长测试</span>
-              <span class="metric-value">60 minutes</span>
+              <span class="metric-value">60 分钟</span>
             </div>
             <div class="heat-points" id="heat-points"></div>
             <div class="pass-rule" id="heat-pass-rule">
-              No softening, warping, smell, discoloration, or uncomfortable touch temperature.
+              外壳不应软化、变形、异味、变色，也不应达到让人不适的触摸温度。
             </div>
             <div class="measurement-note">
-              Not a certification test. Thermal camera or IR thermometer optional.
+              这不是认证测试；可选用热像仪或红外测温仪辅助记录。
             </div>
           </div>
 
@@ -377,7 +377,7 @@
             <p class="card-hint" style="margin-top:0;">以正常坐姿阅读，从距离书本 35–45 cm 的位置检查。</p>
             <div class="glare-checks" id="glare-checks"></div>
             <div class="pass-rule" id="glare-pass-rule">
-              Direct LED should not be visible; diffuser recessed; no harsh reflection or shadow.
+              不应直接看到 LED；扩散罩应内缩或被遮挡；纸面不应出现刺眼反光或明显遮挡阴影。
             </div>
           </div>
 
@@ -392,7 +392,7 @@
 
           <div class="test-card download-card" id="physical-downloads-card">
             <h3>下载</h3>
-            <p class="card-hint" style="margin-top:0;">Export test protocols, measurement logs, and readiness reports for your first physical build.</p>
+            <p class="card-hint" style="margin-top:0;">导出第一台实物样机所需的测试协议、测量记录和就绪报告。</p>
             <div class="cad-actions" style="margin-top:12px;flex-direction:column;align-items:flex-start;gap:10px;">
               <button type="button" id="btn-download-test-protocol" class="primary-btn">下载测试协议.md</button>
               <button type="button" id="btn-download-measurement-log" class="secondary-btn">下载测量记录 CSV</button>
@@ -403,7 +403,7 @@
         </div>
 
         <p class="cad-note" style="margin-top:16px;">
-          <strong>First physical prototype only:</strong> this is not a certified photometric, thermal, or electrical safety test. 记录测量结果，判断外壳、CAD 或扩散罩是否需要迭代；只有通过就绪判断后再进入完整打样。
+          <strong>仅用于第一台实物样机：</strong>这不是认证级光度、热学或电气安全测试。记录测量结果，判断外壳、CAD 或扩散罩是否需要迭代；只有通过就绪判断后再进入完整打样。
         </p>
       </section>
 
