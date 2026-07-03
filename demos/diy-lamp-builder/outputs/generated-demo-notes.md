@@ -29,7 +29,7 @@ app/
 
 ### B. AI Analyze
 
-- 表格 6 字段，硬编码常量
+- 表格 6 字段，轻量规则解析器
 - "Core Module" 字段加 `disabled` 标记，强调 ReadingCore-01 不可编辑
 - 这一步在 Demo 里**不是真实 LLM 调用**，而是用固定 schema 模拟"AI 推理后会输出什么"
 
@@ -53,7 +53,7 @@ app/
 
 - ❌ **不真实采购** —— 不接任何电商 API
 - ❌ **不真实 CAD/STL 生成** —— SVG 只是 mock 预览
-- ❌ **不真实 LLM 调用** —— AI Analyze 区是硬编码常量
+- ❌ **不真实 LLM 调用** —— AI Analyze 区是轻量规则解析器
 - ❌ **不真实制造计划成本** —— BOM 价格是估算范围，不是报价
 - ❌ **不真实光路计算** —— 500-800 lm 是 ReadingCore-01 设计目标
 

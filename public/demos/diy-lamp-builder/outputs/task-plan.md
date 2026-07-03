@@ -28,7 +28,7 @@
 
 实现要点：
 
-- 这一步在 Demo 里**不是真的调用 LLM**，而是用硬编码常量展示"AI 推理后会输出什么"
+- 这一步在 Demo 里**不是真的调用 LLM**，而是用轻量规则解析器展示"AI 推理后会输出什么"
 - 6 字段：Lamp Type / Core Module / Light Type / Brightness Target / Reading Distance / Shell / Interface
 
 ## Step 3: Configurator（配置区）

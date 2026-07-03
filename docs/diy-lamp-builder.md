@@ -141,9 +141,9 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 ### 第一版策略
 
-- 不做真实 LLM 调用 —— AI Analyze 区是硬编码常量（因为 Demo 重点不是 LLM 推理，而是结构表达）
+- 不做真实 LLM 调用 —— AI Analyze 区使用轻量规则解析器，把关键词映射到产品决策；真实场景可复用 Prompt 模板接入 LLM。
 - 不做真实 CAD —— SVG mock 预览足够
-- 不做真实采购/支付 —— BOM 估算给范围即可
+- 不做真实采购/支付 —— BOM 估算给动态范围即可
 - 不做真实光路计算 —— 500-800 lm 是设计目标，不是实测
 
 ### 输入
@@ -191,8 +191,8 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 [Idea Input]                              ← 用户输入想法
        │
        ▼
-[AI Analyze]                              ← 自动推导产品架构
-       │                                       (Demo 中为硬编码常量)
+[AI Analyze]                              ← 轻量规则解析器（非真实 LLM）
+       │                                       （演示 AI 推导后的结构，真实场景复用 Prompt 模板）
        ├─ Lamp Type: Reading Desk Lamp
        ├─ Core Module: 🔒 ReadingCore-01   ← 固定不可变
        ├─ Light Type: 24V Linear LED
@@ -259,7 +259,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 ### 每个步骤说明
 
 1. **步骤 1（Idea Input）**：用户在 textarea 输入想法，默认填入 demo idea。点击 Generate 触发后续 3 区渲染。
-2. **步骤 2（AI Analyze）**：硬编码常量展示 6 字段 + 锁定标记。代表"AI 推理后会输出什么"，演示中**不是真实 LLM 调用**。
+2. **步骤 2（AI Analyze）**：轻量规则解析器展示 6 字段 + 锁定标记。代表"AI 推理后会输出什么"，演示中**不是真实 LLM 调用**，真实场景可复用 Prompt 模板。
 3. **步骤 3（Configurator）**：用户改变任一控件，SVG preview + JSON 实时更新。Core 字段永远显示 ReadingCore-01。
 4. **步骤 4（Manufacturing Plan）**：实时 JSON 输出在 dark code block 里，可 Copy。assembly_steps 数组固化。
 
@@ -424,9 +424,9 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 | 风险 | 影响 | 应对 |
 |------|------|------|
-| AI Analyze 区是 mock 不是真 LLM | 中 | 在 generated-demo-notes.md 中明确标注；架构推理逻辑交给真实 LLM 处理时复用 Prompt 模板 |
+| AI Analyze 区是 mock 不是真 LLM | 中 | 使用轻量规则解析器；真实场景复用 Prompt 模板 |
 | SVG 预览精度有限 | 中 | 仅作示意用，不替代真实 CAD / STL；如需高精度可后续接 Three.js |
-| BOM 估算成本不准确 | 中 | 给范围并动态计算；明确免责声明 |
+| BOM 估算成本不准确 | 中 | 输出动态 BOM range，例如 `$58-126 prototype`；明确免责声明 |
 | 散热设计未在 Demo 中验证 | 低 | 在结构图中明确"铝槽是散热通道"，建议实际打样做热测试 |
 | 风格 / 颜色只有 4 款 | 低 | Demo 演示架构正确性，款式扩展留给后续版本 |
 
@@ -499,7 +499,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
   "estimated_luminous_flux": "500-800 lm",
   "estimated_print_time": "4h",
   "estimated_material": "PETG / PLA+",
-  "estimated_bom_cost": "$40-80 prototype",
+  "estimated_bom_cost": "$58-126 prototype",  // 动态 BOM，随 shell style / 颜色 / base mock 变化
   "assembly_steps": ["...", "...", ...]
 }
 
@@ -518,7 +518,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - [x] 确认点 1：ReadingCore-01 是固定模块（不可编辑）
 - [x] 确认点 2：外壳风格选 4 款（Minimal Bar / Hutong Window / Beijing Pavilion / Book Arc）
 - [x] 确认点 3：颜色选 4 款（Warm White / Hutong Gray / Palace Red / Night Black）
-- [x] 确认点 4：BOM 价格范围定为 `$40-80 prototype`
+- [x] 确认点 4：BOM 价格范围为动态范围，例如 `$58-126 prototype`，随 shell style / 颜色 / base mock 变化
 - [x] 确认点 5：装配步骤数 ≥ 6
 - [x] 确认点 6：不做真实 LLM 调用 / 真实 CAD / 真实采购
 

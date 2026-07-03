@@ -102,3 +102,13 @@
 - [x] `scripts/check-catalog.sh` 不再硬编码 `total=3`
 - [x] `scripts/check-catalog.sh` 遍历 `blueprints[].slug` 动态检查文件
 - [x] `bash scripts/check-catalog.sh` 输出 `RESULT: PASS`
+
+## IDB-6B.1 Polish Fix Acceptance
+
+- [x] Removed stale current-stage copy that described AI Analyze as hardcoded constants.
+- [x] Updated stale $40-80 prototype current-cost copy to dynamic BOM range wording.
+- [x] Kept historical “IDB-6 → IDB-6B” comparison intact.
+- [x] Updated updated_phase to IDB-6B.1 in all three synchronized blueprint JSON files.
+- [x] Did not add a 6th Blueprint; meta.total remains 5.
+- [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
+- [x] Browser smoke is optional and recorded as SKIP in the phase report.

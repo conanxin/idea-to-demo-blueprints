@@ -156,7 +156,7 @@ Local Motors     — 动力总成固定 + 车身可换
 
           <h3>第一版策略</h3>
           <ul>
-            <li>不做真实 LLM 调用 —— AI Analyze 区是硬编码常量（因为 Demo 重点不是 LLM 推理，而是结构表达）</li>
+            <li>不做真实 LLM 调用 —— AI Analyze 区使用轻量规则解析器，把关键词映射到产品决策；真实场景可复用 Prompt 模板接入 LLM。</li>
             <li>不做真实 CAD —— SVG mock 预览足够</li>
             <li>不做真实采购/支付 —— BOM 估算给范围即可</li>
             <li>不做真实光路计算 —— 500-800 lm 是设计目标，不是实测</li>
@@ -444,7 +444,7 @@ demos/diy-lamp-builder/
               <tbody>
                 <tr><td>AI Analyze 区是 mock 不是真 LLM</td><td>中</td><td>在 generated-demo-notes.md 中明确标注；真实场景复用 Prompt 模板</td></tr>
                 <tr><td>SVG 预览精度有限</td><td>中</td><td>仅作示意；如需高精度可后续接 Three.js 或真实 CAD</td></tr>
-                <tr><td>BOM 估算成本不准确</td><td>中</td><td>给范围 <code>$40-80 prototype</code>；明确免责声明</td></tr>
+                <tr><td>BOM 估算成本不准确</td><td>中</td><td>输出动态 BOM range，例如 <code>$58-126 prototype</code>；具体范围随 shell style、颜色涂装和 mock base/arm 变化，明确免责声明。</td></tr>
                 <tr><td>散热设计未在 Demo 中验证</td><td>低</td><td>结构图中明确"铝槽是散热通道"，建议实际打样做热测试</td></tr>
                 <tr><td>风格 / 颜色只有 4 款</td><td>低</td><td>Demo 演示架构正确性，款式扩展留给后续版本</td></tr>
               </tbody>

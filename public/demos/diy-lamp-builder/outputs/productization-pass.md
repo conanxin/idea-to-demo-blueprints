@@ -16,7 +16,7 @@
 | 维度 | IDB-6 | IDB-6B |
 |------|-------|--------|
 | Manufacturing JSON | 简单字段 + assembly_steps | 扩展为 IDB-6B 完整结构，含 phase、core_locked、reading_target、core_stack、risk_notes |
-| BOM 成本 | 固定范围 `$40-80 prototype` | 按 shell style 复杂度 + 颜色涂装动态计算 |
+| BOM 成本 | 动态 BOM range，例如 `$58-126 prototype` | 按 shell style 复杂度 + 颜色涂装动态计算 |
 | Idea 解析 | 无解析，点击 Generate 只重新渲染 | 轻量规则解析器，4 个示例按钮可自动触发解析 |
 | 装配流程 | 6 步文字列表 | 8 步，带状态标签（prototype-ready / manual / future-automation） |
 | 预览 | 4 种外壳有基础差异 | 4 种外壳在轮廓、纹样、刻字位置上有明显差异 |

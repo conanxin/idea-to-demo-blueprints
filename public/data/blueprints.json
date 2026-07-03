@@ -11,9 +11,23 @@
       "difficulty_en": "Medium",
       "demo_time": "1-2 天",
       "demo_time_en": "1-2 days",
-      "audience": ["项目负责人", "研发团队", "AI Agent 使用者"],
-      "audience_en": ["Project Lead", "R&D Team", "AI Agent User"],
-      "tags": ["AI", "会议纪要", "知识库", "项目助理", "RAG"],
+      "audience": [
+        "项目负责人",
+        "研发团队",
+        "AI Agent 使用者"
+      ],
+      "audience_en": [
+        "Project Lead",
+        "R&D Team",
+        "AI Agent User"
+      ],
+      "tags": [
+        "AI",
+        "会议纪要",
+        "知识库",
+        "项目助理",
+        "RAG"
+      ],
       "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
@@ -35,9 +49,28 @@
       "difficulty_en": "Medium-High",
       "demo_time": "2-3 天",
       "demo_time_en": "2-3 days",
-      "audience": ["产品经理", "售前团队", "研发团队", "AI Agent 使用者", "创业团队"],
-      "audience_en": ["Product Manager", "Sales Engineer", "R&D Team", "AI Agent User", "Startup Team"],
-      "tags": ["AI", "客户会议", "需求验证", "Agent Automation", "原型构建", "Demo"],
+      "audience": [
+        "产品经理",
+        "售前团队",
+        "研发团队",
+        "AI Agent 使用者",
+        "创业团队"
+      ],
+      "audience_en": [
+        "Product Manager",
+        "Sales Engineer",
+        "R&D Team",
+        "AI Agent User",
+        "Startup Team"
+      ],
+      "tags": [
+        "AI",
+        "客户会议",
+        "需求验证",
+        "Agent Automation",
+        "原型构建",
+        "Demo"
+      ],
       "status": "demo-ready",
       "created_at": "2026-06-12",
       "updated_at": "2026-06-12",
@@ -59,9 +92,28 @@
       "difficulty_en": "Medium",
       "demo_time": "2-3 天",
       "demo_time_en": "2-3 days",
-      "audience": ["项目负责人", "AI Agent 使用者", "独立开发者", "研发团队", "多项目管理者"],
-      "audience_en": ["Project Lead", "AI Agent User", "Indie Developer", "R&D Team", "Multi-project Manager"],
-      "tags": ["AI Agent", "AgentOps", "Project Dashboard", "Git", "Reports", "Workflow"],
+      "audience": [
+        "项目负责人",
+        "AI Agent 使用者",
+        "独立开发者",
+        "研发团队",
+        "多项目管理者"
+      ],
+      "audience_en": [
+        "Project Lead",
+        "AI Agent User",
+        "Indie Developer",
+        "R&D Team",
+        "Multi-project Manager"
+      ],
+      "tags": [
+        "AI Agent",
+        "AgentOps",
+        "Project Dashboard",
+        "Git",
+        "Reports",
+        "Workflow"
+      ],
       "status": "demo-ready",
       "created_at": "2026-06-13",
       "updated_at": "2026-06-13",
@@ -83,9 +135,28 @@
       "difficulty_en": "Medium-High",
       "demo_time": "2-3 天",
       "demo_time_en": "2-3 days",
-      "audience": ["创意技术人员", "设计师", "AI Agent 使用者", "互动装置创作者", "实时视觉学习者"],
-      "audience_en": ["Creative Technologist", "Designer", "AI Agent User", "Interactive Installation Creator", "Realtime Visual Learner"],
-      "tags": ["TouchDesigner", "MediaPipe", "Gesture Control", "Realtime Visual", "Creative Coding", "Claude Code"],
+      "audience": [
+        "创意技术人员",
+        "设计师",
+        "AI Agent 使用者",
+        "互动装置创作者",
+        "实时视觉学习者"
+      ],
+      "audience_en": [
+        "Creative Technologist",
+        "Designer",
+        "AI Agent User",
+        "Interactive Installation Creator",
+        "Realtime Visual Learner"
+      ],
+      "tags": [
+        "TouchDesigner",
+        "MediaPipe",
+        "Gesture Control",
+        "Realtime Visual",
+        "Creative Coding",
+        "Claude Code"
+      ],
       "status": "demo-ready",
       "created_at": "2026-06-13",
       "updated_at": "2026-06-13",
@@ -101,15 +172,38 @@
       "title": "DIY 可定制阅读台灯构建器",
       "title_en": "DIY Lamp Builder",
       "slug": "diy-lamp-builder",
-      "summary": "把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON、BOM 成本模型与制造计划。IDB-6B 增加产品化流程：Idea Parser、动态 BOM、4 种 Shell 视觉差异化、8 步 Assembly Workflow。",
+      "summary": "把一个实体产品想法转化为可配置的阅读台灯 Demo：固定 24V 线性 ReadingCore-01 灯芯模块，用户定制外壳风格、颜色、纹样和刻字，并输出产品架构、配置 JSON、BOM 成本模型与制造计划。IDB-6B 增加产品化流程：Idea Parser、动态 BOM、4 种 Shell 视觉差异化、8 步 Assembly Workflow。IDB-6B.1 polish fixes synchronized copy, dynamic BOM wording, and optional browser-smoke documentation.",
       "category": "Physical Product / AI Workflow / Configurator",
       "difficulty": "中等",
       "difficulty_en": "Medium",
       "demo_time": "1-2 天",
       "demo_time_en": "1-2 days",
-      "audience": ["独立开发者", "产品经理", "文创产品设计师", "AI Agent 使用者", "硬件原型爱好者"],
-      "audience_en": ["Indie Developer", "Product Manager", "Cultural Product Designer", "AI Agent User", "Hardware Prototype Maker"],
-      "tags": ["AI", "实体产品", "灯具", "配置器", "3D Demo", "Manufacturing Plan", "BOM", "Productization", "Idea Parser"],
+      "audience": [
+        "独立开发者",
+        "产品经理",
+        "文创产品设计师",
+        "AI Agent 使用者",
+        "硬件原型爱好者"
+      ],
+      "audience_en": [
+        "Indie Developer",
+        "Product Manager",
+        "Cultural Product Designer",
+        "AI Agent User",
+        "Hardware Prototype Maker"
+      ],
+      "tags": [
+        "AI",
+        "实体产品",
+        "灯具",
+        "配置器",
+        "3D Demo",
+        "Manufacturing Plan",
+        "BOM",
+        "Productization",
+        "Idea Parser",
+        "Polish Fix"
+      ],
       "status": "demo-ready",
       "created_at": "2026-07-03",
       "updated_at": "2026-07-03",
@@ -118,7 +212,7 @@
       "demo_pack_path": "demos/diy-lamp-builder/",
       "md_url": "docs/diy-lamp-builder.md",
       "created_phase": "IDB-6",
-      "updated_phase": "IDB-6B"
+      "updated_phase": "IDB-6B.1"
     }
   ],
   "meta": {
