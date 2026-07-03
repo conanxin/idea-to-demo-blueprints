@@ -1,0 +1,35 @@
+{
+  "phase": "IDB-6H",
+  "prototype_id": "sample-hutong-window-build-001",
+  "core": "ReadingCore-01",
+  "shell_style": "Hutong Window",
+  "material": "PETG",
+  "components": {
+    "led_strip": "24V high-CRI COB candidate",
+    "aluminum_channel": "1m opal diffuser channel cut to 240mm",
+    "diffuser": "opal snap-in diffuser",
+    "adapter": "24V 2A adapter",
+    "dimmer": "inline PWM dimmer",
+    "base_arm": "weighted base mock"
+  },
+  "fit_test": {
+    "m3_holes": "PASS",
+    "diffuser_slot": "WARN",
+    "aluminum_channel": "PASS",
+    "cable_exit": "WARN"
+  },
+  "assembly": {
+    "shell_print": "PASS",
+    "cassette_mount": "PASS",
+    "wiring": "WARN",
+    "base_stability": "PASS"
+  },
+  "measurements": {
+    "lux_grid": "PENDING",
+    "heat_soak": "PENDING",
+    "glare_review": "PENDING"
+  },
+  "readiness_decision": "ITERATE_CAD_BEFORE_SECOND_BUILD",
+  "next_adjustment": "Widen diffuser slot by 0.2mm and add cable strain relief radius.",
+  "not_certification": true
+}

@@ -1,0 +1,36 @@
+{
+  "phase": "IDB-6H",
+  "prototype_id": "",
+  "date": "",
+  "builder": "",
+  "core": "ReadingCore-01",
+  "shell_style": "",
+  "material": "",
+  "components": {
+    "led_strip": "",
+    "aluminum_channel": "",
+    "diffuser": "",
+    "adapter": "",
+    "dimmer": "",
+    "base_arm": ""
+  },
+  "fit_test": {
+    "m3_holes": "PENDING",
+    "diffuser_slot": "PENDING",
+    "aluminum_channel": "PENDING",
+    "cable_exit": "PENDING"
+  },
+  "assembly": {
+    "shell_print": "PENDING",
+    "cassette_mount": "PENDING",
+    "wiring": "PENDING",
+    "base_stability": "PENDING"
+  },
+  "measurements": {
+    "lux_grid": "PENDING",
+    "heat_soak": "PENDING",
+    "glare_review": "PENDING"
+  },
+  "readiness_decision": "PENDING",
+  "not_certification": true
+}

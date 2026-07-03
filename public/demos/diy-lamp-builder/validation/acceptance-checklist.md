@@ -260,3 +260,16 @@
 - [x] Sourcing decision matrix added.
 - [x] Sourcing validation script PASS.
 - [x] No 6th Blueprint added; meta.total remains 5.
+
+## IDB-6H First Build Acceptance
+
+- [x] outputs/first-build/ directory added.
+- [x] First build runbook added.
+- [x] First build report template MD/JSON added.
+- [x] Assembly photo shot list added.
+- [x] Build day checklist added.
+- [x] Troubleshooting guide added.
+- [x] Prototype iteration decision guide added.
+- [x] First-build validation script PASS.
+- [x] First-build report evaluator PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.
