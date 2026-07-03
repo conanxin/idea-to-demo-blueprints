@@ -1,8 +1,66 @@
+# IDB-6C CAD Export Pass
+
+## 产品化目标
+
+在 IDB-6B 的 DIY Lamp Builder 基础上，增加可导出的 CAD 示意文件与可选的 STL 导出脚本，把“想法 → 可定制实体产品”进一步延伸到“可制造几何”：
+
+- 新增 `outputs/cad/` 目录，包含 keepout 与示例外壳 OpenSCAD 文件
+- 新增 `outputs/cad/sample-config.json` 参数配置示例
+- 新增 `scripts/export-openscad-stl.sh` 可选导出脚本
+- 更新 README.md、productization-pass.md、acceptance-checklist.md
+- 同步所有镜像与 Blueprint 文档
+
+## 与 IDB-6B 的差异
+
+| 维度 | IDB-6B | IDB-6C |
+|------|--------|--------|
+| 输出 | 网页配置器 + 产品化文档 | 增加 CAD 示意文件 + 可选 STL 导出脚本 |
+| 制造阶段 | 计划 JSON | 计划 JSON + 可导出几何 |
+| 可制造性 | 规则说明 | 提供 keepout 与示例外壳几何 |
+| 依赖 | 无外部依赖 | 仅脚本可选依赖 OpenSCAD CLI |
+
+## CAD 文件说明
+
+| 文件 | 作用 |
+|------|------|
+| `readingcore-01-keepout.scad` | ReadingCore-01 固定灯芯模块的不可侵犯空间占位 |
+| `sample-hutong-window-shell.scad` | 胡同窗棂风格外壳参数化示例 |
+| `sample-config.json` | 与示例外壳配套的参数配置文件 |
+| `export-notes.md` | 安装、导出命令、设计约束与后续方向 |
+| `scripts/export-openscad-stl.sh` | 可选 STL 导出脚本；未安装 OpenSCAD 时输出 SKIP |
+
+## 导出脚本行为
+
+```bash
+cd demos/diy-lamp-builder/scripts
+bash export-openscad-stl.sh
+```
+
+1. 检查 `openscad` 是否在 PATH 中。
+2. 若未安装：输出 `SKIP` 与安装提示，退出码 0（非错误）。
+3. 若已安装：读取 `outputs/cad/sample-config.json`，创建 `outputs/cad/stl/` 目录，导出两个 STL 文件。
+
+## 结构正确性保留
+
+- ReadingCore-01 固定不变，外壳通过 keepout 与其隔离。
+- LED → 铝槽 + 扩散罩 → 外壳 的三层结构不变。
+- 外壳不承担散热。
+
+## 后续真实方向
+
+- 替换 mock 尺寸为真实 ReadingCore-01 工程图纸尺寸。
+- 为 4 种 Shell Style 分别建立 SCAD 文件。
+- 增加外壳与铝槽的卡扣/螺丝柱细节。
+- 增加 FDM 3D 打印可制造性检查（壁厚、悬空、支撑）。
+- 增加光照方向与扩散罩光学模拟。
+
+---
+
 # IDB-6B Productization Pass
 
 ## 产品化目标
 
-在 IDB-6 的 DIY Lamp Builder 基础上，把它从一个"可配置 Demo"升级为更像"产品原型工具"的可交互页面：
+在 IDB-6 的 DIY Lamp Builder 基础上，把它从一个"可配置 Demo"升级为更像"产品原型工具"的可交互页面，并在 IDB-6C 中进一步扩展为可导出 CAD 示意文件与可选 STL 脚本：
 
 - 4 种 Shell Style 在视觉上明显不同
 - 增加动态 BOM 成本模型，解释成本随 shell / 颜色变化的原因
@@ -68,6 +126,21 @@ Shell 复杂度乘数：
 ## 后续真实方向
 
 - 真实 CAD / STL 导出（OpenSCAD / SVG-to-CAD）
+- 真实元器件 sourcing
+- 真实亮度/照度测试
+- 接入真实 LLM parser 替代规则解析器
+- 更多颜色和材质选项
+
+## 已纳入 IDB-6C 的 CAD 导出方向
+
+- 增加 `outputs/cad/` OpenSCAD 示意文件与 `sample-config.json`
+- 增加可选 `scripts/export-openscad-stl.sh` STL 导出脚本
+- 保持无外部依赖：OpenSCAD 为可选，未安装时脚本输出 SKIP
+
+## 仍待后续真实方向
+
+- 用真实工程尺寸替换所有 mock 尺寸
+- 为 4 种 Shell Style 分别建立 SCAD 文件
 - 真实元器件 sourcing
 - 真实亮度/照度测试
 - 接入真实 LLM parser 替代规则解析器

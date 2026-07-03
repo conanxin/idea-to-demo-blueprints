@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Lamp Builder · IDB-6B Productization Pass</title>
+  <title>DIY Lamp Builder · IDB-6C CAD Export</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,9 +12,9 @@
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
       <div class="header-titles">
         <h1>DIY Lamp Builder</h1>
-        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6B Productization Pass</p>
+        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6C CAD Export</p>
       </div>
-      <span class="badge badge-idb">IDB-6B</span>
+      <span class="badge badge-idb">IDB-6C</span>
     </header>
 
     <main class="demo-main">
@@ -216,12 +216,59 @@
         </div>
       </section>
 
+      <!-- E. CAD Export -->
+      <section class="card cad-card" id="cad-section">
+        <div class="card-head">
+          <span class="step-tag">E</span>
+          <h2>CAD Export</h2>
+        </div>
+        <p class="card-hint">受控生成 OpenSCAD 外壳源码，包含 ReadingCore-01 内核保护区与结构安装位。可直接下载 .scad 或配置 JSON。</p>
+
+        <div class="cad-grid">
+          <div class="cad-source">
+            <div class="cad-code-head">
+              <span id="cad-filename">shell_export.scad</span>
+              <button type="button" id="btn-copy-openscad" class="ghost-btn">Copy OpenSCAD</button>
+            </div>
+            <pre id="cad-openscad" aria-label="OpenSCAD source code"></pre>
+          </div>
+
+          <div class="cad-side">
+            <div class="cad-actions">
+              <button type="button" id="btn-download-scad" class="primary-btn">Download .scad</button>
+              <button type="button" id="btn-download-config" class="secondary-btn">Download Config JSON</button>
+            </div>
+
+            <div class="cad-param-table">
+              <h3>CAD Parameters</h3>
+              <table>
+                <thead>
+                  <tr><th>Parameter</th><th>Value</th></tr>
+                </thead>
+                <tbody id="cad-param-tbody"></tbody>
+              </table>
+            </div>
+
+            <p class="cad-note">
+              <strong>受控设计原则：</strong>
+              <code>shell</code> 只负责造型；LED / 铝槽 / 扩散罩由 <code>readingcore_keepout</code> 保留，不进入实体。
+              需使用 OpenSCAD 2021+ 的 <code>render()</code> 或导出 STL 后进一步处理。
+            </p>
+            <p class="cad-note" style="margin-top:10px;">
+              <strong>Optional STL Export：</strong>
+              <code>openscad -o shell_export.stl shell_export.scad</code>
+              <br>请在本地安装 OpenSCAD CLI 后运行，得到 3D 打印可用的 STL 文件。
+            </p>
+          </div>
+        </div>
+      </section>
+
     </main>
 
     <footer class="demo-footer">
       <p>
         <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
-        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6B · MIT
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6C · MIT
       </p>
     </footer>
   </div>

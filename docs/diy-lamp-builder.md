@@ -5,11 +5,12 @@
 - **难度：** 中等
 - **Demo 周期：** 1-2 天
 - **适合对象：** 独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者
-- **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan
+- **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan、CAD、OpenSCAD、STL Export、SVG-to-CAD
 - **状态：** demo-ready
 - **创建阶段：** IDB-6
-- **更新阶段：** IDB-6B
+- **更新阶段：** IDB-6C
 - **productization_pass：** completed
+- **cad_export_pass：** completed
 
 ---
 
@@ -41,6 +42,7 @@
 2. 看到 AI 怎么把它拆成"固定内核 + 可变外壳"
 3. 自己选外壳风格/颜色/刻字，看到预览
 4. 拿到一份**制造 JSON**（要装哪些东西、估计花多少钱、装配顺序是什么）
+5. （IDB-6C）把选中的外壳 SVG 路径**导出为 OpenSCAD 模块并生成可 3D 打印的 STL**，实现"想法 → 预览 → 切片"的完整链路
 
 ---
 
@@ -116,14 +118,15 @@
 
 ## 方案概述
 
-DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
+DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成，并在 IDB-6C 新增第 5 个 CAD Export 区：
 
 - **A. Idea Input** —— 一句话产品想法输入
 - **B. AI Analyze** —— 自动产品架构（ReadingCore-01 固定 / Shell 可变）
 - **C. Configurator** —— 风格 / 颜色 / 刻字 + SVG 实时预览
 - **D. Manufacturing Plan** —— 实时 JSON 输出 + 装配步骤
+- **E. CAD Export**（IDB-6C 新增）—— SVG 路径 → OpenSCAD 模块 → STL 导出命令
 
-整个 Demo 不依赖任何外部资源（无 CDN、无 build step、无 Three.js），用 HTML/CSS/JS 直接表达"实体产品想法 → 受控定制 Demo"的完整链路。
+整个 Demo 不依赖任何外部资源（无 CDN、无 build step、无 Three.js），用 HTML/CSS/JS 直接表达"实体产品想法 → 受控定制 Demo → 可打印 3D 模型"的完整链路。
 
 核心架构原则：
 
@@ -158,7 +161,8 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 1. AI Analyze 6 字段表（带 ReadingCore-01 锁定标记）
 2. SVG 预览（外壳随选择变化，Core 区不变）
 3. Manufacturing Plan JSON（含 assembly_steps 数组）
-4. Copy 按钮（可复制 JSON）
+4. CAD Export 代码片段（OpenSCAD 模块 + STL 命令，IDB-6C）
+5. Copy 按钮（可复制 JSON）
 
 ### 验证标准
 
@@ -169,6 +173,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - [x] 标准 5：移动端可读（响应式）
 - [x] 标准 6：Chrome / Firefox 最新版能打开
 - [x] 标准 7：不依赖 CDN / build step / Three.js
+- [x] 标准 8：CAD Export 区输出 OpenSCAD 模块与 STL 命令（IDB-6C）
 
 ---
 
@@ -178,11 +183,13 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 | 组件 | 技术 | 说明 |
 |------|------|------|
-| 页面结构 | HTML | 4 个 `<section>` 区块 |
+| 页面结构 | HTML | 5 个 `<section>` 区块（含 IDB-6C 新增的 CAD Export） |
 | 样式 | CSS | CSS 变量 + 媒体查询 |
 | 交互 | Vanilla JS | 无框架，无构建 |
 | 预览 | SVG | 4 种外壳形状 + 4 种颜色 + 文本 |
-| JSON 输出 | JSON.stringify | 实时序列化 |
+| CAD 模块 | OpenSCAD | 4 种外壳对应 4 个参数化模块，线性拉伸成 3D |
+| JSON 输出 | JSON.stringify | 实时序列化，含 `cad_export` 字段 |
+| STL 导出 | OpenSCAD CLI | `openscad -o shell.stl shell.scad` |
 | 部署 | GitHub Pages | 静态托管 |
 
 ### 架构图
@@ -216,7 +223,15 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
        ├─ core / core_type / led_mount
        ├─ shell_style / color / engraving
        ├─ estimated_* (luminous_flux, print_time, material, bom_cost)
-       └─ assembly_steps[]
+       ├─ assembly_steps[]
+       └─ cad_export                       ← IDB-6C 新增：SVG 路径 → OpenSCAD 模块 → STL 命令
+       │
+       ▼
+[CAD Export]                              ← 可 3D 打印外壳
+       │
+       ├─ shell_style → openscad_module
+       ├─ linear_extrude(height = 40)
+       └─ openscad -o shell.stl shell.scad
 ```
 
 ### 物理结构图（ReadingCore-01 内核）
@@ -262,6 +277,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 2. **步骤 2（AI Analyze）**：轻量规则解析器展示 6 字段 + 锁定标记。代表"AI 推理后会输出什么"，演示中**不是真实 LLM 调用**，真实场景可复用 Prompt 模板。
 3. **步骤 3（Configurator）**：用户改变任一控件，SVG preview + JSON 实时更新。Core 字段永远显示 ReadingCore-01。
 4. **步骤 4（Manufacturing Plan）**：实时 JSON 输出在 dark code block 里，可 Copy。assembly_steps 数组固化。
+5. **步骤 5（CAD Export）**：用户切换 Shell Style 时，Demo 自动生成对应的 OpenSCAD 模块代码与 `openscad -o shell.stl shell.scad` CLI 命令，供用户复制到本地生成可打印 STL。
 
 ---
 
@@ -273,8 +289,9 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 |------|------|------|
 | Idea Input | 一句话想法输入 | 默认填入 demo idea |
 | AI Analyze | 产品架构 6 字段 | Core 字段带锁定标记 |
-| Configurator | 风格/颜色/刻字 | 左侧表单 + 右侧 SVG 预览 |
+| Configurator | 风格/颜色/刻字 | 左侧表单 + 右侧 SVG 实时预览 |
 | Manufacturing Plan | 实时 JSON + 装配步骤 | Copy 按钮可复制 JSON |
+| CAD Export | OpenSCAD 模块 + STL 命令 | 根据 Shell Style 输出可 3D 打印的代码 |
 
 ### 关键界面元素
 
@@ -306,6 +323,9 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - [x] 任务 5：编写 Blueprint HTML 页 + 公共镜像
 - [x] 任务 6：更新首页 index.html 添加 5th 截图卡片
 - [x] 任务 7：生成 screenshot placeholder PNG
+- [x] 任务 8：IDB-6C 新增 CAD Export 章节、OpenSCAD 模块表、STL 导出命令与能力矩阵
+- [x] 任务 9：更新 docs/blueprints/diy-lamp-builder.html 和 public/ 镜像到 IDB-6C
+- [x] 任务 10：同步三份 blueprints.json 元数据（tags + updated_phase = IDB-6C）
 
 ### 步骤 3：验证与测试
 
@@ -345,6 +365,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - [x] 质量项 5：移动端可读（响应式布局）
 - [x] 质量项 6：项目版本徽章 v0.1.1-alpha 不变
 - [x] 质量项 7：catalog schema 版本 meta.version 4.2 不变
+- [x] 质量项 8：blueprints.json 三份完全一致，meta.total = 5，updated_phase = IDB-6C（IDB-6C）
 
 ### 性能验收（可选）
 
@@ -353,19 +374,19 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 ---
 
-## IDB-6B Productization Pass
+## IDB-6C CAD Export Pass
 
-本阶段把 IDB-6 的 Demo 升级为更像"产品原型工具"的版本。
+本阶段把 IDB-6B 的 Demo 升级为"可输出可打印 3D 模型"的产品原型工具，新增 SVG-to-CAD / OpenSCAD STL 导出能力。
 
-### 新增能力
+### 新增能力（IDB-6C）
 
 | 能力 | 说明 | 状态 |
 |------|------|------|
-| **Idea Parser** | 轻量规则解析器，把关键词转成产品决策 | 已完成 |
-| **Shell Visual Differentiation** | 4 种外壳在轮廓、纹样、刻字位置上明显不同 | 已完成 |
-| **BOM Cost Model** | 动态成本估算，按 shell 复杂度 + 颜色涂装变化 | 已完成 |
-| **Assembly Workflow** | 8 步装配流程，带 prototype-ready / manual / future-automation 状态标签 | 已完成 |
-| **Productization Risks** | Manufacturing JSON 中输出风险等级、推荐迭代轮次 | 已完成 |
+| **SVG-to-CAD Mapping** | 4 种 Shell Style 各自映射到 1 个 OpenSCAD 参数化模块 | 已完成 |
+| **OpenSCAD Modules** | 每个模块使用 `linear_extrude()` 将 2D 外壳轮廓拉伸为 3D 壳体 | 已完成 |
+| **STL Export Command** | 提供可直接复制的 `openscad -o shell.stl shell.scad` 命令 | 已完成 |
+| **CAD Export Panel** | Demo 新增第 5 区，实时展示当前 Shell 的 OpenSCAD 代码 | 已完成 |
+| **Historical Compatibility** | 保留 IDB-6 / IDB-6A / IDB-6B 全部内容与章节 | 已完成 |
 
 ### 4 种外壳设计说明
 
@@ -387,6 +408,73 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 详细数据结构见 `demos/diy-lamp-builder/outputs/bom-model.json`。
 
+### CAD Export 能力矩阵（IDB-6C）
+
+| 能力 | 当前实现 | 后续扩展 |
+|------|----------|----------|
+| SVG 路径解析 | 4 种 Shell Style 的 SVG `d` 路径已硬编码为 OpenSCAD 多边形 | 后续支持上传自定义 SVG 并自动解析 |
+| 参数化 OpenSCAD 模块 | 4 个模块：`shell_minimal_bar()` / `shell_hutong_window()` / `shell_beijing_pavilion()` / `shell_book_arc()` | 后续可支持 `height` / `wall_thickness` / `clearance` 参数 |
+| 3D 拉伸 | `linear_extrude(height = 40)` 统一厚度 | 后续可区分灯头罩、底座盖、装饰板等厚度 |
+| STL 导出命令 | `openscad -o shell.stl shell.scad` | 后续可打包为 `.zip` 或一键下载 `.scad` 文件 |
+| ReadingCore-01 安装槽 | 每个模块预留 `core_slot()` 负形挖孔 | 后续可导出装配爆炸图 / BOM 中的 3D 打印件 |
+
+### OpenSCAD 模块表（Shell → Module 映射）
+
+| Shell Style | OpenSCAD 模块名 | 2D 轮廓特征 | 拉伸高度 | 关键参数 |
+|-------------|----------------|------------|----------|----------|
+| Minimal Bar | `shell_minimal_bar()` | 圆角长条矩形 | 40 mm | `length=240`, `radius=12`, `slot=30x8` |
+| Hutong Window | `shell_hutong_window()` | 长条矩形 + 3 条竖窗棂 | 40 mm | `length=240`, `bar_w=6`, `slot=30x8` |
+| Beijing Pavilion | `shell_beijing_pavilion()` | 梯形屋顶 + 矩形檐口 | 40 mm | `length=240`, `roof_h=35`, `slot=30x8` |
+| Book Arc | `shell_book_arc()` | 拱形外框 + 内凹弧线 | 40 mm | `length=240`, `arc_h=40`, `slot=30x8` |
+
+### Shell Style → CAD 模块使用示例
+
+```scad
+// Include the matching module based on selected shell style
+use <lamp-shells.scad>
+
+shell_beijing_pavilion();
+
+// Subtract ReadingCore-01 mounting slot
+module core_slot() {
+    translate([105, 10, 8])
+        cube([30, 8, 40 + 2]);
+}
+
+difference() {
+    shell_beijing_pavilion();
+    core_slot();
+}
+```
+
+### STL 导出命令
+
+```bash
+openscad -o shell.stl shell.scad
+```
+
+推荐参数（quality 与 speed 平衡）：
+
+```bash
+openscad -o shell.stl --enable=fast-csg --D quality=24 shell.scad
+```
+
+### 在 Manufacturing JSON 中的 CAD 字段（IDB-6C）
+
+```json
+{
+  "phase": "IDB-6C",
+  "cad_export": {
+    "format": "OpenSCAD",
+    "module": "shell_beijing_pavilion",
+    "extrusion_height_mm": 40,
+    "core_slot": "30x8 mm",
+    "stl_command": "openscad -o shell.stl shell.scad",
+    "svg_to_cad_ready": true
+  }
+}
+```
+
 ### Idea Parser 规则示例
 
 | 关键词 | 推荐决策 |
@@ -398,25 +486,27 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 | 书卷/床头/弧形 | Book Arc |
 | 阅读/读书/书桌/图书 | Reading Lamp、ReadingCore-01 |
 
-### Before / After：IDB-6 → IDB-6B
+### Before / After：IDB-6 → IDB-6C
 
-| 维度 | IDB-6 | IDB-6B |
-|------|-------|--------|
-| Manufacturing JSON | 简单字段 | 含 phase、core_locked、reading_target、core_stack、risk_notes |
-| BOM 成本 | 固定范围 | 按 shell / 颜色动态计算 |
-| Idea 解析 | 无 | 规则解析器 + 4 个示例按钮 |
-| 装配流程 | 6 步文字 | 8 步带状态标签 |
-| 外壳预览 | 基础差异 | 轮廓、纹样、刻字位置明显不同 |
+| 维度 | IDB-6 | IDB-6B | IDB-6C |
+|------|-------|--------|--------|
+| Manufacturing JSON | 简单字段 | 含 phase、core_locked、reading_target、core_stack、risk_notes | 新增 `cad_export` 字段，含 OpenSCAD 模块、拉伸高度、STL 命令 |
+| BOM 成本 | 固定范围 | 按 shell / 颜色动态计算 | 保持 IDB-6B 动态模型，未来可接入 3D 打印耗材重量估算 |
+| Idea 解析 | 无 | 规则解析器 + 4 个示例按钮 | 保持 IDB-6B 解析器，新增 CAD Export 联动 |
+| 装配流程 | 6 步文字 | 8 步带状态标签 | 保持 8 步，新增第 9 步"导出 STL 并切片"（future-automation） |
+| 外壳预览 | 基础差异 | 轮廓、纹样、刻字位置明显不同 | 相同 SVG 预览，新增 OpenSCAD 模块映射与 STL 导出命令 |
+| 3D 可打印 | 无 | 仅提及后续扩展 | 正式输出 OpenSCAD 模块与 `openscad -o shell.stl shell.scad` 命令 |
 
 ### 产品化风险
 
 | 风险 | 影响 | 应对 |
 |------|------|------|
 | AI Analyze 区仍是 mock 不是真 LLM | 中 | 规则解析器已标注；真实 LLM 可复用 Prompt 模板 |
-| SVG 预览精度有限 | 中 | 仅作示意；后续用 OpenSCAD / SVG-to-CAD 导出真实 STL |
+| SVG 预览精度有限 | 中 | 仅作示意；IDB-6C 已提供 OpenSCAD / SVG-to-CAD 导出真实 STL |
 | BOM 估算成本不准确 | 中 | 给范围；实际采购和量产成本会大幅下降 |
 | 散热设计未验证 | 低 | 结构已强制"铝槽散热 + 外壳不接触 LED" |
 | 风格/颜色仅 4 款 | 低 | 架构正确即可扩展 |
+| CAD Export 仍需本地 OpenSCAD 环境 | 低 | 提供 STL 命令与 `.scad` 代码片段；未来可打包下载 |
 
 ---
 
@@ -425,10 +515,11 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 | 风险 | 影响 | 应对 |
 |------|------|------|
 | AI Analyze 区是 mock 不是真 LLM | 中 | 使用轻量规则解析器；真实场景复用 Prompt 模板 |
-| SVG 预览精度有限 | 中 | 仅作示意用，不替代真实 CAD / STL；如需高精度可后续接 Three.js |
+| SVG 预览精度有限 | 中 | 仅作示意；IDB-6C 已提供 OpenSCAD / SVG-to-CAD 导出真实 STL |
 | BOM 估算成本不准确 | 中 | 输出动态 BOM range，例如 `$58-126 prototype`；明确免责声明 |
 | 散热设计未在 Demo 中验证 | 低 | 在结构图中明确"铝槽是散热通道"，建议实际打样做热测试 |
 | 风格 / 颜色只有 4 款 | 低 | Demo 演示架构正确性，款式扩展留给后续版本 |
+| CAD Export 仍需本地 OpenSCAD 环境 | 低 | 提供 STL 命令与 `.scad` 代码片段；未来可打包下载 |
 
 ### 已知限制
 
@@ -438,6 +529,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - 限制 4：装配步骤是英文（不针对中文用户改写）
 - 限制 5：BOM 价格是估算范围，不根据地区浮动
 - 限制 6：Idea Parser 是规则匹配，不是真实 LLM
+- 限制 7：CAD Export 为代码片段，仍需本地 OpenSCAD 运行（未打包下载）
 
 ---
 
@@ -445,15 +537,16 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 1. **真实 LLM 接入** —— 把 Idea Input 接到 Claude / GPT，按 build-prompt.md 输出架构和 JSON
 2. **更多 Style** —— 把 4 款外壳扩展到 8 款 / 12 款，加入材质选项（PETG / PLA+ / 树脂 / 木材）
-3. **真实 CAD / STL 导出** —— 用 OpenSCAD 或 SVG-to-CAD 把预览转成可打印 STL
-4. **SVG-to-CAD** —— 把 2D 外壳路径直接导入 FreeCAD / OpenSCAD 进行参数化拉伸
+3. **真实 CAD / STL 导出** —— 用 OpenSCAD 或 SVG-to-CAD 把预览转成可打印 STL（**已在 IDB-6C 实现代码片段**）
+4. **SVG 路径自动解析** —— 支持用户上传自定义 SVG，自动转成 OpenSCAD 多边形
 5. **更多 Color** —— 加入 Pantone 色卡导入、自定义 hex
 6. **装配动画** —— SVG 中做分步装配动画，每步高亮一个部件
 7. **配置保存 / 分享** —— URL hash 编码当前配置，方便分享链接
 8. **多 ReadingCore 变体** —— ReadingCore-02（高显色 95+）、ReadingCore-03（带 USB-C 充电口）
 9. **真实元器件 sourcing** —— 给出可采购的 SKU 和替代方案
 10. **真实亮度/照度测试** —— 用 lux meter 验证 35-45 cm 处的 desk lux
-11. **与本 IDB 库的其他 Demo 联动** —— 用「项目记忆型会议助手」管理 ReadingCore-01 的迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态
+11. **一键打包下载** —— 将 `.scad`、`.stl`、装配说明 PDF 一起打包
+12. **与本 IDB 库的其他 Demo 联动** —— 用「项目记忆型会议助手」管理 ReadingCore-01 的迭代历史；用「多 Agent 项目管理面板」管理多个 SKU 状态
 
 ---
 
@@ -483,7 +576,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 ## 3. Task Plan（任务计划）
 
-按 [Idea Input → AI Analyze → Configurator → Manufacturing Plan] 四步列出 Demo 任务。
+按 [Idea Input → AI Analyze → Configurator → Manufacturing Plan → CAD Export] 五步列出 Demo 任务。
 
 ## 4. Manufacturing Plan JSON
 
@@ -508,7 +601,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - 灯芯模块不可编辑
 - 外壳只承担造型，不承担散热和电气
 - 输出必须是结构化 JSON
-- 不要给真实采购链接，不要给真实 CAD/STL
+- 不要给真实采购链接；CAD/STL 部分在 IDB-6C 中已提供 OpenSCAD 代码片段与导出命令，但不生成真实可下载文件
 ```
 
 ---
@@ -521,6 +614,7 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 - [x] 确认点 4：BOM 价格范围为动态范围，例如 `$58-126 prototype`，随 shell style / 颜色 / base mock 变化
 - [x] 确认点 5：装配步骤数 ≥ 6
 - [x] 确认点 6：不做真实 LLM 调用 / 真实 CAD / 真实采购
+- [x] 确认点 7：IDB-6C 提供 OpenSCAD 代码片段与 STL 导出命令，但不生成真实可下载文件
 
 ---
 
@@ -530,8 +624,9 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成：
 
 - **沉淀物 1**：ReadingCore-01 架构模板 —— 未来任何"灯具"或类似"功能 + 装饰"二分的实体产品都可以复用
 - **沉淀物 2**：受控定制 Prompt 模板 —— 处理"实体产品想法"输入的标准化流程
-- **沉淀物 3**：4 区 Demo 模板 —— 可作为 IDB 库中"产品 Demo"类的参考实现
+- **沉淀物 3**：5 区 Demo 模板 —— 可作为 IDB 库中"产品 Demo + CAD 导出"类的参考实现（IDB-6C）
 - **沉淀物 4**：结构原则清单 —— "外壳不接触 LED / 不承担散热 / 不接触电气"作为产品架构硬约束
+- **沉淀物 5**：SVG-to-CAD 映射表 —— 为后续"2D 预览 → 3D 打印"提供标准化转换范例（IDB-6C）
 
 ---
 
@@ -570,6 +665,8 @@ demos/diy-lamp-builder/
 6. 升级 `check-catalog.sh` 为动态读取 JSON
 7. 运行 check-catalog.sh + 三份 JSON sha256 校验
 8. git commit + push
+9. IDB-6C：扩展为 5 区 Demo，新增 CAD Export 区、OpenSCAD 模块表与 STL 命令
+10. IDB-6C：重新生成 docs/media 与 public/media 的 demo 截图，使用 Pillow 并标注 IDB-6C
 
 ### 关键 Prompt
 
@@ -590,9 +687,10 @@ demos/diy-lamp-builder/
 
 - Demo 在 Chrome 最新版加载正常
 - Demo 在 Firefox 最新版加载正常
-- 4 区内容渲染完整
+- 5 区内容渲染完整（含 IDB-6C 新增 CAD Export）
 - 16 种 Style × Color 组合预览正常
-- JSON 输出格式正确，Copy 按钮工作
+- JSON 输出格式正确，含 `cad_export` 字段，Copy 按钮工作
+- CAD Export 区输出正确的 OpenSCAD 模块与 STL 命令
 - 移动端 375×667 视口下可读
 
 ---
@@ -602,9 +700,9 @@ demos/diy-lamp-builder/
 - **Gantri** —— 3D 打印灯厂，受控定制典范：https://gantri.com
 - **Framework Laptop** —— 主板固定 + 外壳可换的受控定制模式
 - **Local Motors** —— 汽车"动力总成固定 + 车身可换"模式（已停业但概念仍有效）
-- **OpenSCAD** —— 程序化生成 3D 模型的工具，可作为后续 STL 导出扩展
+- **OpenSCAD** —— 程序化生成 3D 模型的工具，IDB-6C 已作为 CAD Export 扩展
 - **Pantone 色卡** —— 颜色一致性参考
 
 ---
 
-*Created following the [Idea-to-Demo Blueprints](https://github.com/conanxin/idea-to-demo-blueprints) format. Phase: IDB-6.*
+*Created following the [Idea-to-Demo Blueprints](https://github.com/conanxin/idea-to-demo-blueprints) format. Phase: IDB-6C.*

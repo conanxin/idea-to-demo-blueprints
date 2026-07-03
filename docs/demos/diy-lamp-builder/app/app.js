@@ -1,7 +1,8 @@
-/* DIY Lamp Builder Demo — IDB-6B Productization Pass
+/* DIY Lamp Builder Demo — IDB-6C CAD Export
  * Pure vanilla JS. No dependencies. No build step.
  * Drives: SVG shell style + engraving, real-time Manufacturing Plan JSON,
- * BOM cost model, idea-to-config parser, assembly workflow.
+ * BOM cost model, idea-to-config parser, assembly workflow,
+ * OpenSCAD export with controlled core keepout.
  */
 
 (function () {
@@ -195,7 +196,13 @@
     btnCopyJSON:      $('btn-copy-json'),
     bomSummary:       $('bom-summary'),
     bomTbody:         $('bom-tbody'),
-    assemblySteps:    $('assembly-steps')
+    assemblySteps:    $('assembly-steps'),
+    cadOpenScad:      $('cad-openscad'),
+    cadFilename:      $('cad-filename'),
+    cadParamTbody:    $('cad-param-tbody'),
+    btnCopyOpenScad:  $('btn-copy-openscad'),
+    btnDownloadScad:  $('btn-download-scad'),
+    btnDownloadConfig:$('btn-download-config')
   };
 
   // ---------- State ----------
@@ -373,7 +380,7 @@
     var bom = calculateBom(styleName, color);
 
     return {
-      phase: 'IDB-6B',
+      phase: 'IDB-6C',
       core_locked: true,
       idea_summary: (dom.ideaInput.value || '').trim().substring(0, 120),
       use_case: parsed.useCase,

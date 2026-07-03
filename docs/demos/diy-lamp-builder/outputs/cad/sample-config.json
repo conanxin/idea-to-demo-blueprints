@@ -1,0 +1,32 @@
+{
+  "demo_stage": "IDB-6C",
+  "cad_export_pack": "diy-lamp-builder-cad-demo",
+  "core_module": {
+    "name": "ReadingCore-01",
+    "keepout_file": "readingcore-01-keepout.scad",
+    "notes": "固定灯芯模块占位几何，外壳不可侵犯。"
+  },
+  "sample_shell": {
+    "name": "Hutong Window Shell",
+    "style": "hutong-window",
+    "scad_file": "sample-hutong-window-shell.scad",
+    "parameters": {
+      "shell_length": 340,
+      "shell_width": 40,
+      "shell_height": 35,
+      "wall_thickness": 2.5,
+      "window_count": 5,
+      "cutout_ratio": 0.55
+    },
+    "color": "Hutong Gray",
+    "engraving": " hutong window"
+  },
+  "export_settings": {
+    "format": "STL",
+    "target_directory": "outputs/cad/stl",
+    "render_options": {
+      "openscad_args": "--export-format stl -o"
+    }
+  },
+  "notes": "本配置文件为演示用途，所有尺寸为示意值。后续需用真实工程测量值替换。"
+}

@@ -1,4 +1,4 @@
-/* DIY Lamp Builder Demo — companion demo / 配置器原型 */
+/* DIY Lamp Builder Demo — IDB-6C CAD Export */
 
 /* ---------- 基础变量 ---------- */
 :root {
@@ -526,6 +526,141 @@ code {
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
   color: #5a4521;
+}
+
+.secondary-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.secondary-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.secondary-btn:active {
+  transform: translateY(1px);
+}
+
+/* ---------- E. CAD Export ---------- */
+.cad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.cad-source {
+  background: var(--code-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cad-code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2a2722;
+  color: #b8ad94;
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+}
+
+#cad-openscad {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--code-text);
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
+  max-height: 520px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+.cad-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cad-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cad-actions .primary-btn,
+.cad-actions .secondary-btn {
+  margin-top: 0;
+}
+
+.cad-param-table h3,
+.cad-param-table table {
+  width: 100%;
+}
+
+.cad-param-table h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cad-param-table table {
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.cad-param-table th,
+.cad-param-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cad-param-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cad-param-table td:nth-child(2) {
+  font-family: var(--mono-stack);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cad-note {
+  margin: 0;
+  padding: 10px 12px;
+  background: #fff8ee;
+  border: 1px solid #f0dfb8;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: #5a4521;
+  line-height: 1.6;
+}
+
+.cad-note code {
+  background: #fce7c4;
+  padding: 1px 4px;
+  border-radius: 3px;
 }
 
 /* ---------- A. Idea Input chips ---------- */

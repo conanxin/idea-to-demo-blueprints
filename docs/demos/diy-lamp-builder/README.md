@@ -3,7 +3,7 @@
 > **方案：** DIY 可定制阅读台灯构建器
 > **Demo 场景：** 把"做一个北京风格、可定制外壳、适合桌旁阅读"的台灯想法，转成可交互配置器 + 产品架构 + 制造计划
 > **状态：** demo-ready
-> **阶段：** IDB-6B
+> **阶段：** IDB-6C
 
 ---
 
@@ -15,7 +15,9 @@
 4. 查看 `outputs/brief.md` 中 AI 生成的方案 Brief
 5. 查看 `outputs/task-plan.md` 中 AI 生成的任务计划
 6. 打开 `app/index.html` 体验可交互 Demo
-7. 对照 `validation/acceptance-checklist.md` 逐项验收
+7. 查看 `outputs/cad/` 中的 CAD 示意文件与 `export-notes.md`
+8. （可选）运行 `scripts/export-openscad-stl.sh` 导出 STL
+9. 对照 `validation/acceptance-checklist.md` 逐项验收
 
 ---
 
@@ -79,11 +81,19 @@ demos/diy-lamp-builder/
 │   ├── task-plan.md            # AI 生成的任务计划
 │   ├── generated-demo-notes.md # Demo 构建说明
 │   ├── productization-pass.md  # IDB-6B 产品化目标与变化
-│   └── bom-model.json          # BOM 成本模型数据结构
+│   ├── bom-model.json          # BOM 成本模型数据结构
+│   └── cad/                    # IDB-6C CAD 示意文件与导出说明
+│       ├── README.md
+│       ├── readingcore-01-keepout.scad
+│       ├── sample-hutong-window-shell.scad
+│       ├── sample-config.json
+│       └── export-notes.md
 ├── app/
 │   ├── index.html              # 4 区单页应用
 │   ├── style.css               # 样式
 │   └── app.js                  # 交互与 JSON 输出
+├── scripts/
+│   └── export-openscad-stl.sh # 可选 STL 导出脚本
 └── validation/
     └── acceptance-checklist.md # 验收清单
 ```
@@ -98,8 +108,8 @@ demos/diy-lamp-builder/
 - **手势实时视觉实验室** — 解决"手势怎么驱动视觉"
 - **DIY Lamp Builder（这个）** — 解决"实体产品想法怎么变成可定制 Demo"
 
-它跟前四个最大的不同是：**输出可以是一个真实存在的物体**。但 Demo 本身仍然是网页原型，不做真实 CAD、不做采购、不做支付。
+它跟前四个最大的不同是：**输出可以是一个真实存在的物体**。在 IDB-6C 中，我们增加了 OpenSCAD 示意文件与可选的 STL 导出脚本，展示“想法 → 可定制配置 → 可制造几何”的链路。但 Demo 本身不做真实采购、不做支付、不做真实加工。
 
 ---
 
-*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6B.*
+*Created following the Idea-to-Demo Blueprints format. Phase: IDB-6C.*

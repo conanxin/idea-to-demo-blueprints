@@ -28,7 +28,7 @@
           <span>Demo 周期：1-2 天</span>
           <span>适合：独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者</span>
           <span class="tag tag-green" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-size:0.75rem;">demo-ready</span>
-          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6B</span>
+          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6C</span>
         </div>
         <p class="intro">把"一个实体产品想法"在 5 分钟内转成"可演示的受控定制产品 Demo"——固定内核 ReadingCore-01 + 可换外壳 Shell，让独立开发者和文创团队能低成本验证产品可行性。</p>
         <p style="margin-top:16px;">
@@ -54,7 +54,7 @@
             <li><a href="#structure">物理结构</a></li>
             <li><a href="#demo-pack">Demo Pack</a></li>
             <li><a href="#config-json">配置 JSON</a></li>
-            <li><a href="#idb-6b">IDB-6B Productization Pass</a></li>
+            <li><a href="#idb-6c">IDB-6C CAD Export Pass</a></li>
             <li><a href="#prompt">关键 Prompt</a></li>
             <li><a href="#risks">风险与限制</a></li>
             <li><a href="#acceptance">验收</a></li>
@@ -257,10 +257,10 @@ demos/diy-lamp-builder/
           <p><strong>本地体验入口</strong>：<a href="../demos/diy-lamp-builder/">docs/demos/diy-lamp-builder/index.html</a> （会自动跳转到 <code>app/index.html</code>）</p>
 
           <h2 id="config-json">配置 JSON 示例</h2>
-          <p>Demo 实时输出的 Manufacturing Plan JSON 结构（IDB-6B 格式，用户在 Configurator 改变选择时整段 JSON 会更新）：</p>
+          <p>Demo 实时输出的 Manufacturing Plan JSON 结构（IDB-6C 格式，用户在 Configurator 改变选择时整段 JSON 会更新）：</p>
           <div class="workflow-box">
 {
-  "phase": "IDB-6B",
+  "phase": "IDB-6C",
   "core_locked": true,
   "idea_summary": "北京风格阅读台灯，外壳可定制，适合书桌使用",
   "use_case": "Reading desk lamp",
@@ -296,8 +296,17 @@ demos/diy-lamp-builder/
     { "step": "Attach arm and base", "status": "manual" },
     { "step": "Run 30-min heat check", "status": "prototype-ready" },
     { "step": "Run glare check at 35-45 cm reading distance", "status": "prototype-ready" },
-    { "step": "Save configuration JSON as prototype spec", "status": "future-automation" }
-  ]
+    { "step": "Save configuration JSON as prototype spec", "status": "future-automation" },
+    { "step": "Export STL with OpenSCAD and send to slicer", "status": "future-automation" }
+  ],
+  "cad_export": {
+    "format": "OpenSCAD",
+    "generated_file": "shell_export.scad",
+    "optional_stl_command": "openscad -o shell_export.stl shell_export.scad",
+    "cad_scope": "shell_only",
+    "core_keepout_included": true,
+    "stl_export_requires": "local OpenSCAD CLI"
+  }
 }
           </div>
 
@@ -310,6 +319,72 @@ demos/diy-lamp-builder/
                 <tr><td>B. AI Analyze</td><td>产品架构 6 字段</td><td>Core 字段带锁定标记</td></tr>
                 <tr><td>C. Configurator</td><td>风格 / 颜色 / 刻字</td><td>左侧表单 + 右侧 SVG 实时预览</td></tr>
                 <tr><td>D. Manufacturing Plan</td><td>JSON + 装配步骤</td><td>Copy 按钮复制 JSON</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="idb-6c">IDB-6C CAD Export Pass</h2>
+          <p>本阶段把 IDB-6B 的 Demo 升级为"可输出可打印 3D 模型"的产品原型工具，新增 SVG-to-CAD / OpenSCAD STL 导出能力。</p>
+
+          <h3>新增能力（IDB-6C）</h3>
+          <div class="article">
+            <table>
+              <thead><tr><th>能力</th><th>说明</th><th>状态</th></tr></thead>
+              <tbody>
+                <tr><td><strong>SVG-to-CAD Mapping</strong></td><td>4 种 Shell Style 各自映射到 1 个 OpenSCAD 参数化模块</td><td>已完成</td></tr>
+                <tr><td><strong>OpenSCAD Modules</strong></td><td>每个模块使用 <code>linear_extrude()</code> 将 2D 外壳轮廓拉伸为 3D 壳体</td><td>已完成</td></tr>
+                <tr><td><strong>STL Export Command</strong></td><td>提供可直接复制的 <code>openscad -o shell.stl shell.scad</code> 命令</td><td>已完成</td></tr>
+                <tr><td><strong>CAD Export Panel</strong></td><td>Demo 新增第 5 区，实时展示当前 Shell 的 OpenSCAD 代码</td><td>已完成</td></tr>
+                <tr><td><strong>Historical Compatibility</strong></td><td>保留 IDB-6 / IDB-6B 全部内容与章节</td><td>已完成</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>OpenSCAD 模块表（Shell → Module 映射）</h3>
+          <div class="article">
+            <table>
+              <thead><tr><th>Shell Style</th><th>OpenSCAD 模块名</th><th>2D 轮廓特征</th><th>拉伸高度</th><th>关键参数</th></tr></thead>
+              <tbody>
+                <tr><td>Minimal Bar</td><td><code>shell_minimal_bar()</code></td><td>圆角长条矩形</td><td>40 mm</td><td><code>length=240</code>, <code>radius=12</code>, <code>slot=30x8</code></td></tr>
+                <tr><td>Hutong Window</td><td><code>shell_hutong_window()</code></td><td>长条矩形 + 3 条竖窗棂</td><td>40 mm</td><td><code>length=240</code>, <code>bar_w=6</code>, <code>slot=30x8</code></td></tr>
+                <tr><td>Beijing Pavilion</td><td><code>shell_beijing_pavilion()</code></td><td>梯形屋顶 + 矩形檐口</td><td>40 mm</td><td><code>length=240</code>, <code>roof_h=35</code>, <code>slot=30x8</code></td></tr>
+                <tr><td>Book Arc</td><td><code>shell_book_arc()</code></td><td>拱形外框 + 内凹弧线</td><td>40 mm</td><td><code>length=240</code>, <code>arc_h=40</code>, <code>slot=30x8</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>STL 导出命令</h3>
+          <div class="workflow-box">
+openscad -o shell.stl shell.scad
+
+# 推荐参数（quality 与 speed 平衡）
+openscad -o shell.stl --enable=fast-csg --D quality=24 shell.scad
+          </div>
+
+          <h3>Manufacturing JSON 中的 CAD 字段</h3>
+          <div class="workflow-box">
+{
+  "cad_export": {
+    "format": "OpenSCAD",
+    "generated_file": "shell_export.scad",
+    "optional_stl_command": "openscad -o shell_export.stl shell_export.scad",
+    "cad_scope": "shell_only",
+    "core_keepout_included": true,
+    "stl_export_requires": "local OpenSCAD CLI"
+  }
+}
+          </div>
+
+          <h3>Before / After：IDB-6 → IDB-6C</h3>
+          <div class="article">
+            <table>
+              <thead><tr><th>维度</th><th>IDB-6</th><th>IDB-6B</th><th>IDB-6C</th></tr></thead>
+              <tbody>
+                <tr><td>Manufacturing JSON</td><td>简单字段</td><td>含 phase、core_locked、reading_target、core_stack、risk_notes</td><td>新增 <code>cad_export</code> 字段，含 OpenSCAD 模块、拉伸高度、STL 命令</td></tr>
+                <tr><td>BOM 成本</td><td>固定范围</td><td>按 shell / 颜色动态计算</td><td>保持 IDB-6B 动态模型</td></tr>
+                <tr><td>Idea 解析</td><td>无</td><td>规则解析器 + 4 个示例按钮</td><td>保持 IDB-6B 解析器，新增 CAD Export 联动</td></tr>
+                <tr><td>装配流程</td><td>6 步文字</td><td>8 步带状态标签</td><td>保持 8 步，新增第 9 步"导出 STL 并切片"</td></tr>
+                <tr><td>3D 可打印</td><td>无</td><td>仅提及后续扩展</td><td>正式输出 OpenSCAD 模块与 STL 导出命令</td></tr>
               </tbody>
             </table>
           </div>

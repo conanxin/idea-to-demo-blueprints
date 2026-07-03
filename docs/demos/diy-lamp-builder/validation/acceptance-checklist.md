@@ -64,7 +64,7 @@
 - [x] Manufacturing Plan 包含 `assembly_steps` 数组，8 步，带状态标签
 - [x] BOM 成本随 shell style 和颜色变化
 - [x] 4 个示例 idea button 可更新配置
-- [x] Manufacturing JSON 含 `phase: IDB-6B`
+- [x] Manufacturing JSON 含 `phase: IDB-6C`
 
 ## 结构正确性验收
 
@@ -121,3 +121,20 @@
 - [x] Updated updated_phase to IDB-6B.2 in all synchronized blueprint JSON files.
 - [x] Did not add a 6th Blueprint; meta.total remains 5.
 - [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
+
+## IDB-6C CAD Export Acceptance
+
+- [ ] `demos/diy-lamp-builder/outputs/cad/README.md` 存在并说明 IDB-6C 目标
+- [ ] `demos/diy-lamp-builder/outputs/cad/readingcore-01-keepout.scad` 存在，定义 ReadingCore-01 不可侵犯空间
+- [ ] `demos/diy-lamp-builder/outputs/cad/sample-hutong-window-shell.scad` 存在，参数化示例外壳
+- [ ] `demos/diy-lamp-builder/outputs/cad/sample-config.json` 存在，可配置关键参数
+- [ ] `demos/diy-lamp-builder/outputs/cad/export-notes.md` 存在，包含安装、导出命令与约束
+- [ ] `demos/diy-lamp-builder/scripts/export-openscad-stl.sh` 存在且可执行（chmod +x）
+- [ ] 脚本在未安装 OpenSCAD 时输出 `SKIP` 并给出安装提示
+- [ ] 脚本在已安装 OpenSCAD 时导出 `readingcore-01-keepout.stl` 和 `sample-hutong-window-shell.stl`
+- [ ] `README.md` 阶段更新为 IDB-6C，并包含 CAD/脚本引用
+- [ ] `outputs/productization-pass.md` 包含 IDB-6C CAD Export Pass 章节
+- [ ] `validation/acceptance-checklist.md` 包含 IDB-6C CAD Export Acceptance 章节
+- [ ] `docs/demos/diy-lamp-builder/` 镜像包含上述更新
+- [ ] `public/demos/diy-lamp-builder/` 镜像包含上述更新
+- [ ] 未引入新的外部依赖（OpenSCAD 为可选，脚本不强制安装）
