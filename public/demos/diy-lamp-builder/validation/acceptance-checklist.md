@@ -189,3 +189,12 @@
 - [x] updated_phase set to IDB-6C.1 in all three synchronized blueprint JSON files.
 - [x] Did not add a 6th Blueprint; meta.total remains 5.
 - [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
+
+## IDB-6E.1 Duplicate Section Cleanup Acceptance
+
+- [x] Blueprint pages contain exactly one IDB-6E Physical Testing Pass content section.
+- [x] IDB-6D Print Validation Pass and IDB-6C CAD Export Pass sections are preserved.
+- [x] Demo App IDB-6E functionality remains unchanged.
+- [x] updated_phase set to IDB-6E.1 in all synchronized blueprint JSON files.
+- [x] Did not add a 6th Blueprint; meta.total remains 5.
+- [x] Preserved project version v0.1.1-alpha and catalog schema 4.2.
