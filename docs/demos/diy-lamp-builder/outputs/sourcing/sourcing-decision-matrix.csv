@@ -1,0 +1,8 @@
+component,candidate,price_score,spec_confidence,fit_confidence,delivery_confidence,risk_level,decision,notes
+LED strip,SuperBrightLEDs COB kit,4,4,3,4,medium,shortlist,verify width and accessories
+LED strip,Armacost tunable COB,3,4,3,4,medium,shortlist,controller complexity
+LED strip,low-cost marketplace COB,5,2,2,3,high,backup,visual mock only
+Aluminum channel,1m opal profile,4,3,3,3,medium,shortlist,measure inner width
+Aluminum channel,V-shape profile,3,3,2,3,medium,maybe,requires CAD angle check
+Power,24V 2A adapter,3,3,4,4,medium,shortlist,verify connector and marks
+Dimmer,inline PWM 12-24V,5,3,4,4,medium,shortlist,test flicker

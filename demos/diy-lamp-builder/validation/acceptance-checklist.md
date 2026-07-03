@@ -249,3 +249,14 @@
 - [x] Purchase decision gate added.
 - [x] Build package validation script PASS.
 - [x] No 6th Blueprint added; meta.total remains 5.
+
+## IDB-6G Sourcing Pack Acceptance
+
+- [x] outputs/sourcing/ directory added.
+- [x] Real component candidate CSV/JSON added.
+- [x] Supplier shortlist added.
+- [x] Purchase search keywords added.
+- [x] First prototype shopping list added.
+- [x] Sourcing decision matrix added.
+- [x] Sourcing validation script PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.

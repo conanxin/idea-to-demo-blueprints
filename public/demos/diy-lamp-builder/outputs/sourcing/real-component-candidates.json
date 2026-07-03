@@ -1,0 +1,62 @@
+{
+  "phase": "IDB-6G",
+  "purpose": "real component candidate shortlist for first physical prototype",
+  "not_final_purchase_recommendation": true,
+  "candidates": [
+    {
+      "category": "LED strip",
+      "candidate_name": "5m White COB LED Strip Light Kit",
+      "supplier_or_platform": "superbrightleds.com",
+      "observed_price_usd": 35.99,
+      "source_url": "https://www.superbrightleds.com/led-strips-and-bars/complete-led-strip-kits/stk-nxk90-5m420-rf-01",
+      "key_specs": ["24V", "COB", "90+ CRI", "warm 3000K option"],
+      "risk": "confirm width and included accessories before purchase"
+    },
+    {
+      "category": "LED strip",
+      "candidate_name": "Armacost RibbonFlex Pro 24V Tunable White COB LED Strip",
+      "supplier_or_platform": "Home Depot / Armacost",
+      "observed_price_usd": 36.88,
+      "source_url": "https://www.homedepot.com/p/Armacost-Lighting-RibbonFlex-Pro-24V-Tunable-White-COB-8-2-ft-Hardwired-Dimmable-Cuttable-Color-Changing-Integrated-LED-Strip-Light-Tape-174610/330280161",
+      "key_specs": ["24V", "COB", "tunable white"],
+      "risk": "CCT control adds controller complexity"
+    },
+    {
+      "category": "Aluminum channel",
+      "candidate_name": "Aluminium LED Profile 1m CD20 with Opal Cover",
+      "supplier_or_platform": "CEZOS",
+      "observed_price_usd": 10.35,
+      "source_url": "https://cezos.com/en/SETS/39964-Aluminium-LED-Profile-1m-CD20-with-Opal-Cover-and-Accessories-Set-5907426121263.html",
+      "key_specs": ["1m profile", "opal cover", "accessories"],
+      "risk": "confirm inner width against LED strip"
+    },
+    {
+      "category": "Aluminum channel",
+      "candidate_name": "LED Light Diffuser Channel Aluminum for 12mm LED Strip",
+      "supplier_or_platform": "superlightingled.com",
+      "observed_price_usd": 8.99,
+      "source_url": "https://www.superlightingled.com/led-light-diffuser-channel-aluminum-for-12mm-led-lighting-strip-p-4556.html",
+      "key_specs": ["1m option", "12mm strip support", "diffuser"],
+      "risk": "diffuser opacity and channel depth must be tested"
+    },
+    {
+      "category": "Power",
+      "candidate_name": "48W 24VDC 2A Desktop LED strip power adapter",
+      "supplier_or_platform": "bestledstrip.com",
+      "observed_price_usd": 16.50,
+      "source_url": "https://www.bestledstrip.com/24-vdc-2amp-desktop-led-strip-light-power-adapter/",
+      "key_specs": ["24V", "2A", "48W"],
+      "risk": "verify connector type and safety marks"
+    },
+    {
+      "category": "Dimmer",
+      "candidate_name": "LED PWM Dimmer Inline 12V/24V 2A",
+      "supplier_or_platform": "Ecolocity LED",
+      "observed_price_usd": 3.99,
+      "source_url": "https://www.ecolocityled.com/product/led_pwm_dimmer_inline_12V",
+      "key_specs": ["12-24V", "2A", "inline PWM"],
+      "risk": "must test flicker and current capacity"
+    }
+  ],
+  "decision": "buy one prototype set only after confirming voltage compatibility, physical dimensions, and adapter/dimmer requirements"
+}
