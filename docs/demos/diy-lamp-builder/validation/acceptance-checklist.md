@@ -226,3 +226,12 @@
 - [x] Preserved CAD export, print validation, and physical testing functions.
 - [x] No 6th Blueprint added; meta.total remains 5.
 - [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.
+
+## IDB-6E.5 Code-aware Chinese UI Pass Acceptance
+- [x] Removed obvious English UI remnants from the Demo App.
+- [x] Preserved JavaScript identifiers such as workflow, highlight, colorTemperature, cable_exit, low, and high.
+- [x] Preserved CAD export, print validation, and physical testing functionality.
+- [x] Added rendered-copy guard for stale English UI strings.
+- [x] No broad substring replacement used.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version v0.1.1-alpha and catalog schema 4.2 preserved.

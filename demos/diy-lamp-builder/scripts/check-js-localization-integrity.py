@@ -47,6 +47,13 @@ REQUIRED_IDENTIFIERS = [
     "downloadMeasurementLogCsv",
 ]
 
+BAD_VISIBLE_COPY = [
+    "Idea Parser & BOM Cost Model",
+    "300–500 lux at reading zone",
+    "reading-zone lux grid",
+    "PENDING_PHYSICAL_TESTS",
+]
+
 errors = []
 
 for path in FILES:
@@ -67,6 +74,10 @@ for path in FILES:
     for ident in REQUIRED_IDENTIFIERS:
         if ident not in text:
             errors.append(f"{path}: required identifier missing: {ident}")
+
+    for copy in BAD_VISIBLE_COPY:
+        if copy in text:
+            errors.append(f"{path}: stale visible UI copy found: {copy}")
 
 if errors:
     print("JS localization integrity: FAIL")
