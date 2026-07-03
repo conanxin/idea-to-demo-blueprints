@@ -124,20 +124,41 @@
 
 ## IDB-6C CAD Export Acceptance
 
-- [ ] `demos/diy-lamp-builder/outputs/cad/README.md` 存在并说明 IDB-6C 目标
-- [ ] `demos/diy-lamp-builder/outputs/cad/readingcore-01-keepout.scad` 存在，定义 ReadingCore-01 不可侵犯空间
-- [ ] `demos/diy-lamp-builder/outputs/cad/sample-hutong-window-shell.scad` 存在，参数化示例外壳
-- [ ] `demos/diy-lamp-builder/outputs/cad/sample-config.json` 存在，可配置关键参数
-- [ ] `demos/diy-lamp-builder/outputs/cad/export-notes.md` 存在，包含安装、导出命令与约束
-- [ ] `demos/diy-lamp-builder/scripts/export-openscad-stl.sh` 存在且可执行（chmod +x）
-- [ ] 脚本在未安装 OpenSCAD 时输出 `SKIP` 并给出安装提示
-- [ ] 脚本在已安装 OpenSCAD 时导出 `readingcore-01-keepout.stl` 和 `sample-hutong-window-shell.stl`
-- [ ] `README.md` 阶段更新为 IDB-6C，并包含 CAD/脚本引用
-- [ ] `outputs/productization-pass.md` 包含 IDB-6C CAD Export Pass 章节
-- [ ] `validation/acceptance-checklist.md` 包含 IDB-6C CAD Export Acceptance 章节
-- [ ] `docs/demos/diy-lamp-builder/` 镜像包含上述更新
-- [ ] `public/demos/diy-lamp-builder/` 镜像包含上述更新
-- [ ] 未引入新的外部依赖（OpenSCAD 为可选，脚本不强制安装）
+- [x] `demos/diy-lamp-builder/outputs/cad/README.md` 存在并说明 IDB-6C 目标
+- [x] `demos/diy-lamp-builder/outputs/cad/readingcore-01-keepout.scad` 存在，定义 ReadingCore-01 不可侵犯空间
+- [x] `demos/diy-lamp-builder/outputs/cad/sample-hutong-window-shell.scad` 存在，参数化示例外壳
+- [x] `demos/diy-lamp-builder/outputs/cad/sample-config.json` 存在，可配置关键参数
+- [x] `demos/diy-lamp-builder/outputs/cad/export-notes.md` 存在，包含安装、导出命令与约束
+- [x] `demos/diy-lamp-builder/scripts/export-openscad-stl.sh` 存在且可执行（chmod +x）
+- [x] 脚本在未安装 OpenSCAD 时输出 `SKIP` 并给出安装提示
+- [x] 脚本在已安装 OpenSCAD 时导出 `readingcore-01-keepout.stl` 和 `sample-hutong-window-shell.stl`
+- [x] `README.md` 阶段更新为 IDB-6C，并包含 CAD/脚本引用
+- [x] `outputs/productization-pass.md` 包含 IDB-6C CAD Export Pass 章节
+- [x] `validation/acceptance-checklist.md` 包含 IDB-6C CAD Export Acceptance 章节
+- [x] `docs/demos/diy-lamp-builder/` 镜像包含上述更新
+- [x] `public/demos/diy-lamp-builder/` 镜像包含上述更新
+- [x] 未引入新的外部依赖（OpenSCAD 为可选，脚本不强制安装）
+
+## IDB-6D CAD Validation + Print Orientation + Slicer Profile Acceptance
+
+- [x] Print Validation section visible in `app/index.html`.
+- [x] `validateCadParams` implemented in `app.js`.
+- [x] `buildPrintOrientationPlan` implemented in `app.js`.
+- [x] `buildSlicerProfile` implemented in `app.js`.
+- [x] `generateFitTestCouponScad` implemented in `app.js`.
+- [x] Download Fit-Test .scad button present.
+- [x] Download Slicer Profile button present.
+- [x] Download Validation Report JSON button present.
+- [x] `outputs/cad-validation/` directory added with README, rules, orientation, slicer profiles, coupon, logs, report template.
+- [x] `fit-test-coupon.scad` exists and contains required modules.
+- [x] `slicer-profile-prusaslicer.ini` exists with baseline values.
+- [x] `validate-cad-export.py` runs and reports PASS.
+- [x] OpenSCAD export reports PASS or SKIP if CLI missing.
+- [x] `bash scripts/check-catalog.sh` still PASS.
+- [x] No 6th Blueprint added; meta.total remains 5.
+- [x] Project version remains v0.1.1-alpha and catalog schema remains 4.2.
+- [x] Updated `docs/diy-lamp-builder.md` and blueprints HTML with IDB-6D section.
+- [x] Synchronized all three mirrors (demos, docs, public).
 
 ## IDB-6C.1 Pages Demo Refresh Fix Acceptance
 

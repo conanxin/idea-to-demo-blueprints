@@ -1,0 +1,2 @@
+date,printer,material,nozzle_mm,layer_height_mm,shell_style,test_piece,m3_3_0_fit,m3_3_2_fit,m3_3_4_fit,diffuser_17_8_fit,diffuser_18_0_fit,diffuser_18_2_fit,diffuser_18_4_fit,cable_exit_fit,notes,next_adjustment
+2026-07-03,Prusa i3 MK4,PETG,0.4,0.2,Hutong Window,fit-test-coupon,PENDING,PENDING,PENDING,PENDING,PENDING,PENDING,PENDING,PENDING,first coupon,measure and decide

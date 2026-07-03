@@ -1,0 +1,25 @@
+{
+  "phase": "IDB-6D",
+  "readingcore_keepout": {
+    "length_mm": 240,
+    "width_mm": 24,
+    "height_mm": 18,
+    "rule": "shell geometry must not intersect keepout volume"
+  },
+  "diffuser_slot": {
+    "nominal_width_mm": 18,
+    "test_widths_mm": [17.8, 18.0, 18.2, 18.4]
+  },
+  "m3_mount_holes": {
+    "nominal_diameter_mm": 3.2,
+    "test_diameters_mm": [3.0, 3.2, 3.4]
+  },
+  "wall_thickness": {
+    "minimum_mm": 2.0,
+    "recommended_mm": 2.4
+  },
+  "cable_exit": {
+    "minimum_radius_mm": 4,
+    "recommended_radius_mm": 5
+  }
+}

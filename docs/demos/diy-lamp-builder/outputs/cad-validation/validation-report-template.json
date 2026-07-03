@@ -1,0 +1,9 @@
+{
+  "phase": "IDB-6D",
+  "configuration_id": "sample-hutong-window",
+  "cad_validation": "PASS",
+  "openscad_export": "PASS_or_SKIP",
+  "fit_test_coupon": "PENDING",
+  "measured_fit": "PENDING",
+  "ready_for_full_shell_print": false
+}

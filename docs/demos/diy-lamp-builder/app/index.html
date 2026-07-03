@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Lamp Builder · IDB-6C CAD Export</title>
+  <title>DIY Lamp Builder · IDB-6D Print Validation</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,9 +12,9 @@
       <a href="../../blueprints/diy-lamp-builder.html" class="back-link">← 返回方案页</a>
       <div class="header-titles">
         <h1>DIY Lamp Builder</h1>
-        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6C CAD Export</p>
+        <p class="subtitle">ReadingCore-01 · 受控定制 · IDB-6D Print Validation</p>
       </div>
-      <span class="badge badge-idb">IDB-6C</span>
+      <span class="badge badge-idb">IDB-6D</span>
     </header>
 
     <main class="demo-main">
@@ -263,12 +263,67 @@
         </div>
       </section>
 
+      <!-- F. Print Validation -->
+      <section class="card print-validation-card" id="print-validation-section">
+        <div class="card-head">
+          <span class="step-tag">F</span>
+          <h2>Print Validation</h2>
+        </div>
+        <p class="card-hint">CAD validation · print orientation · slicer profile</p>
+
+        <div class="validation-grid">
+          <div class="validation-card" id="cad-validation-card">
+            <h3>CAD Validation</h3>
+            <ul class="check-list" id="cad-validation-list"></ul>
+            <div class="risk-row">
+              <span class="risk-label">Risk level:</span>
+              <span class="risk-value" id="cad-risk-level">medium</span>
+            </div>
+            <div class="risk-row">
+              <span class="risk-label">Next test:</span>
+              <span class="risk-value" id="cad-next-test">Print fit-test coupon before full shell</span>
+            </div>
+          </div>
+
+          <div class="validation-card orientation-card" id="print-orientation-card">
+            <h3>Print Orientation</h3>
+            <div class="orientation-body" id="print-orientation-body"></div>
+          </div>
+
+          <div class="validation-card slicer-card" id="slicer-profile-card">
+            <h3>Slicer Profile</h3>
+            <div class="slicer-body" id="slicer-profile-body"></div>
+          </div>
+
+          <div class="validation-card coupon-card" id="fit-test-coupon-card">
+            <h3>Fit-Test Coupon</h3>
+            <p class="card-hint" style="margin-top:0;">Print a small coupon before committing to the full shell to validate M3 holes, diffuser slot, and cable exit.</p>
+            <ul class="coupon-list">
+              <li>M3 hole ladder: 3.0 / 3.2 / 3.4 mm</li>
+              <li>Diffuser slot ladder: 17.8 / 18.0 / 18.2 / 18.4 mm</li>
+              <li>Aluminum channel clearance test</li>
+              <li>Cable exit radius test</li>
+              <li>Small engraving text sample</li>
+            </ul>
+            <div class="cad-actions" style="margin-top:12px;">
+              <button type="button" id="btn-download-fit-test" class="primary-btn">Download Fit-Test .scad</button>
+              <button type="button" id="btn-download-slicer-profile" class="secondary-btn">Download Slicer Profile</button>
+              <button type="button" id="btn-download-validation-report" class="secondary-btn">Download Validation Report JSON</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="cad-note" style="margin-top:16px;">
+          <strong>First-prototype validation only:</strong> this is not engineering certification, thermal simulation, or electrical approval. Print the fit-test coupon, measure the critical features, and decide whether to adjust the shell before the full build.
+        </p>
+      </section>
+
     </main>
 
     <footer class="demo-footer">
       <p>
         <a href="../../blueprints/diy-lamp-builder.html">DIY Lamp Builder Blueprint</a>
-        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6C · MIT
+        · Idea-to-Demo Blueprints · v0.1.1-alpha · IDB-6D · MIT
       </p>
     </footer>
   </div>

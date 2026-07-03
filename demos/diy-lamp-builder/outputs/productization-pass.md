@@ -1,3 +1,77 @@
+# IDB-6D CAD Validation + Print Orientation + Slicer Profile Pass
+
+## 产品化目标
+
+在 IDB-6C 可导出 CAD 的基础上，把 DIY Lamp Builder 延伸到“真实 FDM 打样前的验证包”：
+
+- 新增 Demo 内 **Print Validation** 区块（CAD validation · print orientation · slicer profile）
+- 新增 `outputs/cad-validation/` 目录，包含验证规则、打印方向指南、切片配置、fit-test coupon、测量日志模板
+- 新增 `scripts/validate-cad-export.py` 本地验证脚本（标准库，无外部依赖）
+- 新增 `scripts/export-fit-test-coupon-stl.sh` 可选 fit-test coupon STL 导出脚本
+- 更新 README.md、productization-pass.md、acceptance-checklist.md
+- 同步所有镜像与 Blueprint 文档
+
+## 与 IDB-6C 的差异
+
+| 维度 | IDB-6C | IDB-6D |
+|------|--------|--------|
+| 输出 | 网页配置器 + OpenSCAD 源码 | 增加打印前验证、方向、切片配置、测试件 |
+| 制造阶段 | 计划 JSON + 可导出几何 | 计划 JSON + 几何 + 验证检查 + 测量日志 |
+| 可制造性 | 提供 keepout 与示例外壳 | 增加 fit-test coupon、壁厚检查、支撑建议 |
+| 依赖 | 无外部依赖 | 仅脚本可选依赖 OpenSCAD CLI |
+
+## CAD Validation 文件说明
+
+| 文件 | 作用 |
+|------|------|
+| `cad-validation-rules.json` | 关键尺寸规则：keepout、diffuser slot、M3 孔、壁厚、cable exit |
+| `print-orientation-guide.md` | 4 种 shell style 的打印方向与风险 |
+| `slicer-profile-prusaslicer.ini` | PrusaSlicer 基线配置 |
+| `slicer-profile-cura.md` | Cura 人类可读配置 |
+| `fit-test-coupon.scad` | 可打印 OpenSCAD 测试件 |
+| `measured-fit-test-log-template.csv` | 实测记录 CSV 模板 |
+| `measured-fit-test-log-template.md` | 实测记录 Markdown 模板 |
+| `validation-report-template.json` | 最终验证状态模板 |
+| `scripts/validate-cad-export.py` | 本地验证脚本，OpenSCAD CLI 存在时可选导出 STL |
+| `scripts/export-fit-test-coupon-stl.sh` | fit-test coupon 单独导出脚本 |
+
+## 验证脚本行为
+
+```bash
+cd demos/diy-lamp-builder/scripts
+python3 validate-cad-export.py
+```
+
+1. 检查必需文件存在。
+2. 检查 SCAD 文件包含必需 modules。
+3. 检查 JSON 规则阈值。
+4. 检查 slicer profile 关键字段。
+5. 如果 `openscad` 在 PATH 中，导出 `/tmp/idb-6d-*.stl` 并检查非空；否则输出 SKIP，退出码 0。
+
+## 结构正确性保留
+
+- ReadingCore-01 固定不变，外壳通过 keepout 与其隔离。
+- LED → 铝槽 + 扩散罩 → 外壳 的三层结构不变。
+- 外壳不承担散热。
+- 不新增第 6 个 Blueprint。
+- `meta.total` 保持 5，`meta.version` 保持 4.2，项目版本保持 `v0.1.1-alpha`。
+
+## 限制
+
+- IDB-6D 是**第一轮 FDM 打样前验证包**，不是工程合格承诺。
+- 不包含热仿真、电气认证、结构强度计算或最终量产图纸。
+- 所有建议尺寸都需要根据实际打印机、耗材、环境和后处理校准。
+
+## 后续真实方向
+
+- 替换 mock 尺寸为真实 ReadingCore-01 工程图纸尺寸。
+- 为 4 种 Shell Style 分别建立完整 SCAD 文件。
+- 增加外壳与铝槽的卡扣/螺丝柱细节。
+- 增加光照方向与扩散罩光学模拟。
+- 增加实测 lux/heat/glare 工作流。
+
+---
+
 # IDB-6C CAD Export Pass
 
 ## 产品化目标

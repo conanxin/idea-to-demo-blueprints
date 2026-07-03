@@ -28,7 +28,8 @@
           <span>Demo 周期：1-2 天</span>
           <span>适合：独立开发者 / 产品经理 / 文创产品设计师 / AI Agent 使用者 / 硬件原型爱好者</span>
           <span class="tag tag-green" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-size:0.75rem;">demo-ready</span>
-          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6C</span>
+          <span class="tag" style="background:#1f1d18;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6D</span>
+          <span class="tag" style="background:#a83232;color:#fff;padding:4px 10px;border-radius:4px;font-size:0.75rem;margin-left:6px;">IDB-6D Print Validation Pass</span>
         </div>
         <p class="intro">把"一个实体产品想法"在 5 分钟内转成"可演示的受控定制产品 Demo"——固定内核 ReadingCore-01 + 可换外壳 Shell，让独立开发者和文创团队能低成本验证产品可行性。</p>
         <p style="margin-top:16px;">
@@ -54,6 +55,7 @@
             <li><a href="#structure">物理结构</a></li>
             <li><a href="#demo-pack">Demo Pack</a></li>
             <li><a href="#config-json">配置 JSON</a></li>
+            <li><a href="#idb-6d">IDB-6D Print Validation Pass</a></li>
             <li><a href="#idb-6c">IDB-6C CAD Export Pass</a></li>
             <li><a href="#prompt">关键 Prompt</a></li>
             <li><a href="#risks">风险与限制</a></li>
@@ -322,6 +324,65 @@ demos/diy-lamp-builder/
               </tbody>
             </table>
           </div>
+
+          <h2 id="idb-6d">IDB-6D Print Validation Pass</h2>
+          <p>本阶段在 IDB-6C CAD Export 之后增加“第一轮 FDM 打样前验证包”：CAD validation、打印方向、切片配置、fit-test coupon、测量日志。它不是工程合格认证，而是让 DIY 台灯在真实打印前有一个结构化的检查清单。</p>
+
+          <h3>新增数据链路</h3>
+          <div class="workflow-box">
+Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Measured Fit Log → Full Shell Print
+          </div>
+
+          <h3>CAD Validation 检查项</h3>
+          <table>
+            <thead><tr><th>检查项</th><th>规则</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>ReadingCore-01 keepout</td><td>外壳不能与 240×24×18 mm 内核保护区相交</td><td>PASS</td></tr>
+              <tr><td>Diffuser slot clearance</td><td>标称 18 mm，测试 17.8 / 18.0 / 18.2 / 18.4 mm</td><td>实测</td></tr>
+              <tr><td>M3 mount holes</td><td>标称 3.2 mm，测试 3.0 / 3.2 / 3.4 mm</td><td>实测</td></tr>
+              <tr><td>Cable exit</td><td>最小半径 4 mm，推荐 5 mm</td><td>PASS</td></tr>
+              <tr><td>Minimum wall thickness</td><td>≥ 2.0 mm，推荐 2.4 mm</td><td>WARN</td></tr>
+              <tr><td>Engraving manufacturability</td><td>高度 ≥ 0.3 mm、线条宽度 ≥ 0.4 mm</td><td>WARN</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Shell Style → Print Orientation</h3>
+          <table>
+            <thead><tr><th>Shell Style</th><th>推荐方向</th><th>支撑策略</th><th>风险</th></tr></thead>
+            <tbody>
+              <tr><td>Minimal Bar</td><td>扩散罩开口向上或侧向上</td><td>通常无需支撑</td><td>低</td></tr>
+              <tr><td>Hutong Window</td><td>背面贴床，格栅向上</td><td>格栅细节需要支撑</td><td>中</td></tr>
+              <tr><td>Beijing Pavilion</td><td>屋脊向上，背面贴床</td><td>屋檐需要支撑</td><td>高</td></tr>
+              <tr><td>Book Arc</td><td>弧形向上，背面贴床</td><td>弧形下方需要支撑</td><td>中高</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Slicer Profile</h3>
+          <ul>
+            <li>Nozzle: 0.4 mm</li>
+            <li>Layer height: 0.20 mm</li>
+            <li>Perimeters: 3</li>
+            <li>Top / bottom layers: 5</li>
+            <li>Infill: 18%（PLA+ 15%，PETG 20%）</li>
+            <li>Supports: 按 shell style 决定</li>
+            <li>Brim: 5 mm</li>
+            <li>Seam: 背面</li>
+            <li>Material: PETG 功能原型 / PLA+ 视觉 mock-up</li>
+          </ul>
+
+          <h3>Fit-Test Coupon</h3>
+          <p>先打印 <code>demos/diy-lamp-builder/outputs/cad-validation/fit-test-coupon.scad</code>，测试 M3 孔、diffuser slot、cable exit、刻字后再决定是否打印完整外壳。</p>
+
+          <h3>Measurement Log</h3>
+          <p>使用 <code>outputs/cad-validation/measured-fit-test-log-template.csv</code> 或 <code>.md</code> 记录实测结果，只有 fit-test coupon 通过后才把 <code>ready_for_full_shell_print</code> 改为 true。</p>
+
+          <h3>限制</h3>
+          <ul>
+            <li>不含热仿真</li>
+            <li>不含电气认证</li>
+            <li>不保证结构强度</li>
+            <li>只是 first prototype validation</li>
+          </ul>
 
           <h2 id="idb-6c">IDB-6C CAD Export Pass</h2>
           <p>本阶段把 IDB-6B 的 Demo 升级为"可输出可打印 3D 模型"的产品原型工具，新增 SVG-to-CAD / OpenSCAD STL 导出能力。</p>

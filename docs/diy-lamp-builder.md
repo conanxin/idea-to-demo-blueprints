@@ -8,9 +8,10 @@
 - **标签：** AI、实体产品、灯具、配置器、3D Demo、Manufacturing Plan、CAD、OpenSCAD、STL Export、SVG-to-CAD
 - **状态：** demo-ready
 - **创建阶段：** IDB-6
-- **更新阶段：** IDB-6C
+- **更新阶段：** IDB-6D
 - **productization_pass：** completed
 - **cad_export_pass：** completed
+- **print_validation_pass：** completed
 
 ---
 
@@ -365,12 +366,114 @@ DIY Lamp Builder 是一个**纯静态单页 Demo**，由 4 个区组成，并在
 - [x] 质量项 5：移动端可读（响应式布局）
 - [x] 质量项 6：项目版本徽章 v0.1.1-alpha 不变
 - [x] 质量项 7：catalog schema 版本 meta.version 4.2 不变
-- [x] 质量项 8：blueprints.json 三份完全一致，meta.total = 5，updated_phase = IDB-6C（IDB-6C）
+- [x] 质量项 8：blueprints.json 三份完全一致，meta.total = 5，updated_phase = IDB-6D
 
 ### 性能验收（可选）
 
 - [x] 性能项 1：3 个 JS / CSS / HTML 文件总大小 < 30 KB
 - [x] 性能项 2：页面加载到首次渲染 < 200 ms（本地静态文件）
+
+---
+
+## IDB-6D CAD Validation + Print Orientation + Slicer Profile
+
+本阶段在 IDB-6C CAD Export 之后增加"第一轮 FDM 打样前验证包"：CAD validation、打印方向、切片配置、fit-test coupon、测量日志。它不是工程合格认证，而是让 DIY 台灯在真实打印前有一个结构化的检查清单。
+
+### 为什么需要 IDB-6D
+
+OpenSCAD 能生成几何，但不代表这个几何适合你的打印机。FDM 打印常见失败点：
+
+- M3 孔径太小，螺丝拧不进去或太松。
+- Diffuser slot 宽度不对，铝槽装不进或晃动。
+- Cable exit 半径太小，线缆弯折或接口断裂。
+- 壁厚太薄，薄壁壳体在打印时塌陷。
+- 打印方向错误，支撑面破坏外观。
+- 支撑策略错误，格栅/屋檐细节打失败。
+
+IDB-6D 在真实打印前给出一个可执行的检查流程：
+
+```
+Idea → Config → SVG Preview → OpenSCAD → CAD Validation → Fit-Test Coupon → Slicer Profile → Measured Fit Log → Full Shell Print
+```
+
+### CAD Validation 检查项
+
+| 检查项 | 规则 | 当前状态 |
+|--------|------|----------|
+| ReadingCore-01 keepout | 外壳不能与 240×24×18 mm 内核保护区相交 | PASS |
+| Diffuser slot clearance | 标称 18 mm，测试 17.8 / 18.0 / 18.2 / 18.4 mm | 依赖实测 |
+| M3 mount holes | 标称 3.2 mm，测试 3.0 / 3.2 / 3.4 mm | 依赖实测 |
+| Cable exit | 最小半径 4 mm，推荐 5 mm | PASS |
+| Minimum wall thickness | ≥ 2.0 mm，推荐 2.4 mm | WARN（需按具体 shell 检查） |
+| Engraving manufacturability | 刻字高度 ≥ 0.3 mm、线条宽度 ≥ 0.4 mm | WARN（需按具体刻字检查） |
+
+### 4 种 Shell Style 打印方向
+
+| Shell Style | 推荐方向 | 支撑策略 | 风险等级 |
+|-------------|----------|----------|----------|
+| Minimal Bar | 扩散罩开口向上或侧向上 | 通常无需支撑 | 低 |
+| Hutong Window | 背面贴床，格栅向上 | 格栅细节需要支撑 | 中 |
+| Beijing Pavilion | 屋脊向上，背面贴床 | 屋檐需要支撑 | 高 |
+| Book Arc | 弧形向上，背面贴床 | 弧形下方需要支撑 | 中高 |
+
+### Slicer Profile 基线
+
+- Nozzle: 0.4 mm
+- Layer height: 0.20 mm
+- Perimeters: 3
+- Top / bottom layers: 5
+- Infill: 18%（PLA+ 可降至 15%，PETG 建议 20%）
+- Supports: 按 shell style 决定
+- Brim: 5 mm（推荐，尤其长条形外壳）
+- Seam: 背面
+
+材料建议：
+
+- **PETG**：功能原型首选，更耐热、更耐摔。
+- **PLA+**：视觉 mock-up 首选，表面更好、更容易打印。
+
+### Fit-Test Coupon
+
+`demos/diy-lamp-builder/outputs/cad-validation/fit-test-coupon.scad` 包含：
+
+- M3 孔径阶梯：3.0 / 3.2 / 3.4 mm
+- Diffuser slot 宽度阶梯：17.8 / 18.0 / 18.2 / 18.4 mm
+- Cable exit 半径测试：4 / 5 mm
+- 小字刻印样本
+
+先打印这个 coupon，用真实螺丝、铝槽、线缆验证尺寸，再决定是否调整 CAD 并打印完整外壳。
+
+### Measurement Log
+
+使用 `outputs/cad-validation/measured-fit-test-log-template.csv` 或 `.md` 记录：
+
+- 打印机、材料、喷嘴、层高
+- 每个 M3 孔 / slot 的实测结果
+- 铝槽是否能滑入
+- 线缆出口是否舒适
+- 下一次 CAD 调整
+
+只有 fit-test coupon 的实测结果落在可接受范围内，才把 `ready_for_full_shell_print` 标记为 true。
+
+### Validation Report Template
+
+```json
+{
+  "phase": "IDB-6D",
+  "configuration_id": "sample-hutong-window",
+  "cad_validation": "PASS",
+  "openscad_export": "PASS_or_SKIP",
+  "fit_test_coupon": "PENDING",
+  "measured_fit": "PENDING",
+  "ready_for_full_shell_print": false
+}
+```
+
+### 限制
+
+- IDB-6D 是**第一轮 FDM 打样前验证包**，不是工程合格承诺。
+- 不包含热仿真、电气认证、结构强度计算或最终量产图纸。
+- 所有尺寸和参数都需要根据实际打印机、耗材、环境和后处理校准。
 
 ---
 

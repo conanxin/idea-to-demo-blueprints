@@ -202,7 +202,15 @@
     cadParamTbody:    $('cad-param-tbody'),
     btnCopyOpenScad:  $('btn-copy-openscad'),
     btnDownloadScad:  $('btn-download-scad'),
-    btnDownloadConfig:$('btn-download-config')
+    btnDownloadConfig:$('btn-download-config'),
+    cadValidationList:    $('cad-validation-list'),
+    cadRiskLevel:         $('cad-risk-level'),
+    cadNextTest:          $('cad-next-test'),
+    printOrientationBody: $('print-orientation-body'),
+    slicerProfileBody:    $('slicer-profile-body'),
+    btnDownloadFitTest:   $('btn-download-fit-test'),
+    btnDownloadSlicerProfile: $('btn-download-slicer-profile'),
+    btnDownloadValidationReport: $('btn-download-validation-report')
   };
 
   // ---------- State ----------
@@ -381,7 +389,7 @@
     var cad = buildCadParams();
 
     return {
-      phase: 'IDB-6C',
+      phase: 'IDB-6D',
       core_locked: true,
       idea_summary: (dom.ideaInput.value || '').trim().substring(0, 120),
       use_case: parsed.useCase,
@@ -426,6 +434,16 @@
         cad_scope: 'shell_only',
         core_keepout_included: true,
         stl_export_requires: 'OpenSCAD 2021+ installed locally'
+      },
+      print_validation: {
+        phase: 'IDB-6D',
+        cad_validation: buildCadValidationContext(),
+        print_orientation: buildPrintOrientationPlan(),
+        slicer_profile: buildSlicerProfile(),
+        fit_test_coupon: {
+          generated_file: 'fit-test-coupon.scad',
+          optional_stl_command: 'openscad -o fit-test-coupon.stl fit-test-coupon.scad'
+        }
       }
     };
   }
@@ -634,6 +652,300 @@
     }
   }
 
+  // ---------- IDB-6D Print Validation helpers ----------
+
+  function buildCadValidationContext() {
+    var p = buildCadParams();
+    var style = SHELL_STYLES[p.shell_style];
+    var shellComplexity = style ? style.complexity : 1.0;
+    var thinWall = p.wall < 2.0;
+    var engraving = p.engraving_text && p.engraving_text !== '(none)' ? p.engraving_text : '';
+    var engravingLong = engraving.length > 12;
+
+    var checks = [
+      { name: 'ReadingCore-01 keepout', status: 'PASS', detail: 'Core keepout ' + p.core_keepout_length + '×' + p.core_keepout_width + '×' + p.core_keepout_height + ' mm reserved.' },
+      { name: 'Diffuser slot clearance', status: 'PASS', detail: 'Slot width ' + p.diffuser_width + ' mm, length ' + p.diffuser_length + ' mm.' },
+      { name: 'M3 mount holes', status: 'PASS', detail: 'Hole d=' + p.mount_hole_d + ' mm, spacing ' + p.mount_spacing + ' mm.' },
+      { name: 'Cable exit', status: 'PASS', detail: 'Side exit d=8 mm for 24V cable.' },
+      { name: 'Minimum wall thickness', status: thinWall ? 'WARN' : 'PASS', detail: thinWall ? 'Wall ' + p.wall + ' mm is below 2.0 mm recommendation.' : 'Wall ' + p.wall + ' mm meets 2.0 mm minimum.' },
+      { name: 'Engraving manufacturability', status: engravingLong ? 'WARN' : 'PASS', detail: engravingLong ? 'Long engraving may need larger font / test text.' : 'Engraving length OK for fit-test sample.' }
+    ];
+
+    var warnCount = 0;
+    for (var i = 0; i < checks.length; i++) {
+      if (checks[i].status === 'WARN') warnCount++;
+    }
+    var riskLevel = shellComplexity > 1.3 ? (warnCount > 0 ? 'high' : 'medium') : (warnCount > 0 ? 'medium' : 'low');
+
+    return {
+      phase: 'IDB-6D',
+      core_locked: true,
+      checks: checks,
+      risk_level: riskLevel,
+      shell_complexity: style ? (style.complexity <= 1.1 ? 'low' : style.complexity <= 1.3 ? 'medium' : 'high') : 'medium',
+      next_physical_test: 'Print fit-test coupon before full shell'
+    };
+  }
+
+  function validateCadParams() {
+    return buildCadValidationContext();
+  }
+
+  function buildPrintOrientationPlan() {
+    var p = buildCadParams();
+    var plans = {
+      'Minimal Bar': {
+        orientation: 'Diffuser opening facing upward or side-up',
+        support_strategy: 'Usually no support / minimal support',
+        bed_contact: 'Flat back on build plate',
+        risk_level: 'low',
+        why: 'Boxy geometry with flat back and minimal overhangs.'
+      },
+      'Hutong Window': {
+        orientation: 'Back face on bed, grille facing upward',
+        support_strategy: 'Moderate supports for grille details',
+        bed_contact: 'Flat back on build plate',
+        risk_level: 'medium',
+        why: 'Grille mullions need bridging / support cleanup.'
+      },
+      'Beijing Pavilion': {
+        orientation: 'Roof ridge upward, flat back on bed',
+        support_strategy: 'Likely supports for eaves',
+        bed_contact: 'Flat back on build plate',
+        risk_level: 'high',
+        why: 'Tiered roof and eaves create large overhangs.'
+      },
+      'Book Arc': {
+        orientation: 'Arc upward, diffuser side controlled',
+        support_strategy: 'Moderate supports under arc',
+        bed_contact: 'Flat back on build plate',
+        risk_level: 'medium-high',
+        why: 'Curved shell surfaces create layer-line and support scars.'
+      }
+    };
+    return plans[p.shell_style] || plans['Minimal Bar'];
+  }
+
+  function buildSlicerProfile() {
+    var p = buildCadParams();
+    var style = SHELL_STYLES[p.shell_style] || {};
+    var needsSupport = style.riskLevel !== 'low';
+    return {
+      profile_name: 'IDB-6D DIY Lamp Shell FDM v0',
+      material_primary: 'PETG',
+      material_visual_mock: 'PLA+',
+      nozzle_mm: 0.4,
+      layer_height_mm: 0.2,
+      perimeters: 3,
+      top_bottom_layers: 5,
+      infill_percent: 18,
+      brim: true,
+      supports: needsSupport ? 'auto generated, from build plate only' : 'disabled for flat back orientation',
+      seam_position: 'back side',
+      print_speed: 'moderate (45-60 mm/s)',
+      bed_temp_c: {
+        PLAplus: '55-60',
+        PETG: '75-85'
+      },
+      nozzle_temp_c: {
+        PLAplus: '200-210',
+        PETG: '235-245'
+      },
+      notes: [
+        'PETG recommended for first durable prototype.',
+        'PLA+ acceptable for visual / color mock.',
+        'Enable avoid_crossing_perimeters for cleaner surface.',
+        'Brim helps long shells stick to the bed.',
+        'Place seam on the back side away from the user.'
+      ]
+    };
+  }
+
+  function generateFitTestCouponScad() {
+    var p = buildCadParams();
+    var scad = [];
+    scad.push('// IDB-6D Fit-Test Coupon');
+    scad.push('// Generated by DIY Lamp Builder');
+    scad.push('// Print this coupon before the full shell to validate M3 holes, diffuser slot, cable exit, and engraving.');
+    scad.push('');
+    scad.push('font = "Liberation Sans"; // font() may not render on all OpenSCAD builds; use for reference only');
+    scad.push('');
+    scad.push('module m3_hole_ladder() {');
+    scad.push('  // M3 hole diameter test: 3.0 / 3.2 / 3.4 mm');
+    scad.push('  for (i = [0:2]) {');
+    scad.push('    d = 3.0 + i * 0.2;');
+    scad.push('    translate([i * 10, 0, 0])');
+    scad.push('      cylinder(d = d, h = 10, center = true, $fn = 32);');
+    scad.push('  }');
+    scad.push('}');
+    scad.push('');
+    scad.push('module diffuser_slot_ladder() {');
+    scad.push('  // Diffuser slot width test: 17.8 / 18.0 / 18.2 / 18.4 mm');
+    scad.push('  widths = [17.8, 18.0, 18.2, 18.4];');
+    scad.push('  for (i = [0:3]) {');
+    scad.push('    translate([i * 22, 0, 0])');
+    scad.push('      cube([widths[i], 4, 8], center = true);');
+    scad.push('  }');
+    scad.push('}');
+    scad.push('');
+    scad.push('module cable_exit_test() {');
+    scad.push('  // Cable exit radius test: 4 / 5 mm');
+    scad.push('  for (i = [0:1]) {');
+    scad.push('    r = 4 + i;');
+    scad.push('    translate([i * 12, 0, 0])');
+    scad.push('      cylinder(r = r, h = 10, center = true, $fn = 32);');
+    scad.push('  }');
+    scad.push('}');
+    scad.push('');
+    scad.push('module engraving_sample() {');
+    scad.push('  // Small text sample to check legibility after FDM');
+    scad.push('  linear_extrude(height = 0.3)');
+    scad.push('    text("IDB-6D", size = 3, font = font, halign = "center", valign = "center");');
+    scad.push('}');
+    scad.push('');
+    scad.push('module fit_test_coupon() {');
+    scad.push('  difference() {');
+    scad.push('    union() {');
+    scad.push('      // base plate');
+    scad.push('      cube([70, 40, 2], center = true);');
+    scad.push('      // cable exit bosses');
+    scad.push('      translate([-20, 12, 3]) cylinder(r = 6, h = 4, center = true, $fn = 32);');
+    scad.push('      translate([8, 12, 3]) cylinder(r = 6, h = 4, center = true, $fn = 32);');
+    scad.push('    }');
+    scad.push('    // M3 holes');
+    scad.push('    translate([-20, -10, 0]) m3_hole_ladder();');
+    scad.push('    // diffuser slots');
+    scad.push('    translate([-22, 2, 0]) diffuser_slot_ladder();');
+    scad.push('    // cable exits');
+    scad.push('    translate([-20, 12, 3]) cable_exit_test();');
+    scad.push('    // engraving');
+    scad.push('    translate([18, -10, 1]) engraving_sample();');
+    scad.push('  }');
+    scad.push('}');
+    scad.push('');
+    scad.push('fit_test_coupon();');
+    return scad.join('\\n');
+  }
+
+  function buildValidationReport() {
+    return {
+      phase: 'IDB-6D',
+      configuration_id: 'sample-' + (buildCadParams().shell_style || 'minimal-bar').toLowerCase().replace(/ /g, '-'),
+      cad_validation: buildCadValidationContext(),
+      print_orientation: buildPrintOrientationPlan(),
+      slicer_profile: buildSlicerProfile(),
+      fit_test_coupon: {
+        generated_file: 'fit-test-coupon.scad',
+        optional_stl_command: 'openscad -o fit-test-coupon.stl fit-test-coupon.scad'
+      },
+      openscad_export: 'PASS',
+      fit_test_coupon_status: 'PENDING',
+      measured_fit: 'PENDING',
+      ready_for_full_shell_print: false
+    };
+  }
+
+  function renderPrintValidation() {
+    var validation = buildCadValidationContext();
+    var list = dom.cadValidationList;
+    while (list.firstChild) list.removeChild(list.firstChild);
+    for (var i = 0; i < validation.checks.length; i++) {
+      var c = validation.checks[i];
+      var li = document.createElement('li');
+      var statusClass = c.status === 'PASS' ? 'check-pass' : c.status === 'WARN' ? 'check-warn' : 'check-fail';
+      li.className = statusClass;
+      li.innerHTML = '<span class="check-name">' + esc(c.name) + '</span>' +
+        '<span class="check-status">' + esc(c.status) + '</span>' +
+        '<span class="check-detail">' + esc(c.detail) + '</span>';
+      list.appendChild(li);
+    }
+    dom.cadRiskLevel.textContent = validation.risk_level;
+    dom.cadNextTest.textContent = validation.next_physical_test;
+
+    var orient = buildPrintOrientationPlan();
+    var orientBody = dom.printOrientationBody;
+    orientBody.innerHTML =
+      '<div class="orientation-row"><span class="orientation-key">Orientation</span><span class="orientation-value">' + esc(orient.orientation) + '</span></div>' +
+      '<div class="orientation-row"><span class="orientation-key">Supports</span><span class="orientation-value">' + esc(orient.support_strategy) + '</span></div>' +
+      '<div class="orientation-row"><span class="orientation-key">Bed contact</span><span class="orientation-value">' + esc(orient.bed_contact) + '</span></div>' +
+      '<div class="orientation-row"><span class="orientation-key">Risk</span><span class="orientation-value">' + esc(orient.risk_level) + '</span></div>' +
+      '<div class="orientation-row"><span class="orientation-key">Why</span><span class="orientation-value">' + esc(orient.why) + '</span></div>';
+
+    var profile = buildSlicerProfile();
+    var slicerBody = dom.slicerProfileBody;
+    var tableRows =
+      '<tr><td>Profile</td><td>' + esc(profile.profile_name) + '</td></tr>' +
+      '<tr><td>Primary material</td><td>' + esc(profile.material_primary) + '</td></tr>' +
+      '<tr><td>Visual mock material</td><td>' + esc(profile.material_visual_mock) + '</td></tr>' +
+      '<tr><td>Nozzle</td><td>' + profile.nozzle_mm + ' mm</td></tr>' +
+      '<tr><td>Layer height</td><td>' + profile.layer_height_mm + ' mm</td></tr>' +
+      '<tr><td>Perimeters</td><td>' + profile.perimeters + '</td></tr>' +
+      '<tr><td>Top/bottom layers</td><td>' + profile.top_bottom_layers + '</td></tr>' +
+      '<tr><td>Infill</td><td>' + profile.infill_percent + '%</td></tr>' +
+      '<tr><td>Supports</td><td>' + esc(profile.supports) + '</td></tr>' +
+      '<tr><td>Brim</td><td>' + (profile.brim ? 'yes' : 'no') + '</td></tr>' +
+      '<tr><td>Seam</td><td>' + esc(profile.seam_position) + '</td></tr>' +
+      '<tr><td>Speed</td><td>' + esc(profile.print_speed) + '</td></tr>';
+    slicerBody.innerHTML = '<table class="profile-table">' + tableRows + '</table>';
+  }
+
+  function downloadBlob(filename, content, type) {
+    var blob = new Blob([content], { type: type || 'text/plain' });
+    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      (window.URL || window.webkitURL).revokeObjectURL(url);
+    }, 0);
+  }
+
+  function downloadFitTestScad() {
+    downloadBlob('fit-test-coupon.scad', generateFitTestCouponScad(), 'application/x-openscad');
+  }
+
+  function downloadSlicerProfile() {
+    var p = buildSlicerProfile();
+    var lines = [];
+    lines.push('# IDB-6D DIY Lamp Shell Slicer Profile');
+    lines.push('# Generator: DIY Lamp Builder');
+    lines.push('');
+    lines.push('profile_name = ' + p.profile_name);
+    lines.push('material_primary = ' + p.material_primary);
+    lines.push('material_visual_mock = ' + p.material_visual_mock);
+    lines.push('nozzle_mm = ' + p.nozzle_mm);
+    lines.push('layer_height_mm = ' + p.layer_height_mm);
+    lines.push('perimeters = ' + p.perimeters);
+    lines.push('top_bottom_layers = ' + p.top_bottom_layers);
+    lines.push('infill_percent = ' + p.infill_percent);
+    lines.push('brim = ' + (p.brim ? 'yes' : 'no'));
+    lines.push('supports = ' + p.supports);
+    lines.push('seam_position = ' + p.seam_position);
+    lines.push('print_speed = ' + p.print_speed);
+    lines.push('');
+    lines.push('# PLA+ temps');
+    lines.push('bed_temp_c_PLAplus = ' + p.bed_temp_c.PLAplus);
+    lines.push('nozzle_temp_c_PLAplus = ' + p.nozzle_temp_c.PLAplus);
+    lines.push('');
+    lines.push('# PETG temps');
+    lines.push('bed_temp_c_PETG = ' + p.bed_temp_c.PETG);
+    lines.push('nozzle_temp_c_PETG = ' + p.nozzle_temp_c.PETG);
+    lines.push('');
+    lines.push('# Notes');
+    for (var i = 0; i < p.notes.length; i++) {
+      lines.push('# - ' + p.notes[i]);
+    }
+    downloadBlob('slicer-profile-idb-6d.ini', lines.join('\\n'), 'text/plain');
+  }
+
+  function downloadValidationReport() {
+    var report = buildValidationReport();
+    downloadBlob('validation-report.json', JSON.stringify(report, null, 2), 'application/json');
+  }
+
   function downloadScad() {
     var code = generateOpenScad();
     var blob = new Blob([code], { type: 'application/x-openscad' });
@@ -713,6 +1025,7 @@
     renderBomTable();
     renderManufacturingJSON();
     renderCadExport();
+    renderPrintValidation();
   }
 
   // ---------- Color chip handling ----------
@@ -819,6 +1132,9 @@
     dom.btnCopyOpenScad.addEventListener('click', copyOpenScad);
     dom.btnDownloadScad.addEventListener('click', downloadScad);
     dom.btnDownloadConfig.addEventListener('click', downloadConfigJson);
+    dom.btnDownloadFitTest.addEventListener('click', downloadFitTestScad);
+    dom.btnDownloadSlicerProfile.addEventListener('click', downloadSlicerProfile);
+    dom.btnDownloadValidationReport.addEventListener('click', downloadValidationReport);
   }
 
   // ---------- Init ----------

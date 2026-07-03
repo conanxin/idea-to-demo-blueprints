@@ -1,4 +1,4 @@
-/* DIY Lamp Builder Demo — companion demo / 配置器原型 */
+/* DIY Lamp Builder Demo — IDB-6C CAD Export */
 
 /* ---------- 基础变量 ---------- */
 :root {
@@ -528,6 +528,337 @@ code {
   color: #5a4521;
 }
 
+.secondary-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.secondary-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.secondary-btn:active {
+  transform: translateY(1px);
+}
+
+/* ---------- E. CAD Export ---------- */
+.cad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.cad-source {
+  background: var(--code-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cad-code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2a2722;
+  color: #b8ad94;
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+}
+
+#cad-openscad {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--code-text);
+  font-family: var(--mono-stack);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
+  max-height: 520px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+.cad-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cad-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cad-actions .primary-btn,
+.cad-actions .secondary-btn {
+  margin-top: 0;
+}
+
+.cad-param-table h3,
+.cad-param-table table {
+  width: 100%;
+}
+
+.cad-param-table h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cad-param-table table {
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.cad-param-table th,
+.cad-param-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cad-param-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cad-param-table td:nth-child(2) {
+  font-family: var(--mono-stack);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cad-note {
+  margin: 0;
+  padding: 10px 12px;
+  background: #fff8ee;
+  border: 1px solid #f0dfb8;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: #5a4521;
+  line-height: 1.6;
+}
+
+.cad-note code {
+  background: #fce7c4;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ---------- F. Print Validation ---------- */
+.print-validation-card .card-head {
+  margin-bottom: 8px;
+}
+
+.validation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.validation-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.validation-card h3 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.check-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  font-size: 0.82rem;
+}
+
+.check-list li .check-status {
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.check-pass .check-status {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.check-warn .check-status {
+  background: #fff8ee;
+  color: #8a6d3b;
+}
+
+.check-fail .check-status {
+  background: #fce8e8;
+  color: #b71c1c;
+}
+
+.check-detail {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  width: 100%;
+}
+
+.risk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.risk-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.risk-value {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.orientation-body,
+.slicer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.orientation-row,
+.slicer-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.orientation-row:last-child,
+.slicer-row:last-child {
+  border-bottom: none;
+}
+
+.orientation-key,
+.slicer-key {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.orientation-value,
+.slicer-value {
+  color: var(--text-primary);
+  text-align: right;
+  font-weight: 500;
+}
+
+.coupon-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  margin-top: 6px;
+}
+
+.profile-table th,
+.profile-table td {
+  padding: 5px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.profile-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.7rem;
+}
+
+.profile-table td:nth-child(2) {
+  font-family: var(--mono-stack);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-pass {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.status-warn {
+  background: #fff8ee;
+  color: #8a6d3b;
+}
+
+.status-skip {
+  background: #eef2f7;
+  color: #4a6fa5;
+}
+
 /* ---------- A. Idea Input chips ---------- */
 .idea-buttons {
   display: flex;
@@ -567,7 +898,9 @@ code {
   }
 
   .config-layout,
-  .mfg-layout {
+  .mfg-layout,
+  .cad-grid,
+  .validation-grid {
     grid-template-columns: 1fr;
   }
 
@@ -577,6 +910,14 @@ code {
 
   .card {
     padding: 18px;
+  }
+
+  .validation-card {
+    padding: 12px;
+  }
+
+  .check-list li {
+    flex-wrap: wrap;
   }
 }
 
